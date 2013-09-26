@@ -1,31 +1,60 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<title>{SURVEYNAME}</title>
-<meta name="generator" content="LimeSurvey http://www.limesurvey.org" />
-
-<!-- The following line includes jquery-ui.css or jquery-ui-custom.css from template dir, template.css and needed specific css file for survey -->
-{TEMPLATECSS}
+	<title>{SURVEYNAME} – {GROUPNAME}</title>
+	<meta name="viewport" content="width=device-width" />
+	<link rel="stylesheet" type="text/css" href="{TEMPLATEURL}jquery.qtip.min.css" />
+	<link rel="stylesheet" type="text/css"  href="{TEMPLATEURL}tango/skin.css" />
+	<!-- The following line includes template.css and if an RTL-language is used template-rtl.css -->
+	{TEMPLATECSS}
 
 <!--[if lte IE 6]>
-<link rel="stylesheet" type="text/css" href="{TEMPLATEURL}ie_fix_6.css" />
+	<link rel="stylesheet" type="text/css" href="{TEMPLATEURL}ie_fix_6.css" />
 <![endif]-->
 <!--[if IE 7]>
-<link rel="stylesheet" type="text/css" href="{TEMPLATEURL}ie_fix_7.css" />
+	<link rel="stylesheet" type="text/css" href="{TEMPLATEURL}ie_fix_7.css" />
 <![endif]-->
 <!--[if IE 8]>
-<link rel="stylesheet" type="text/css" href="{TEMPLATEURL}ie_fix_8.css" />
+	<link rel="stylesheet" type="text/css" href="{TEMPLATEURL}ie_fix_8.css" />
 <![endif]-->
-
-<!-- The following CSS hides visual elements of the progress bar from screen readers. -->
-<style type="text/css" media="aural tty">
-    progress-graph .zero, progress-graph .graph, progress-graph .cent { display: none; }
-		</style>
-	<!-- The following line includes jquery.js, jquery-ui.js, survey_runtime.js , template.js and needed specific js file for survey -->
+	<!-- The following CSS hides visual elements of the progress bar from screen readers. -->
+	<style type="text/css" media="aural tty">
+		progress-graph .zero, progress-graph .graph, progress-graph .cent { display: none; }
+	</style>
+	<link rel="stylesheet" type="text/css" media="print" href="{TEMPLATEURL}print.css" />
 	{TEMPLATEJS}
-<link rel="shortcut icon" href="{TEMPLATEURL}favicon.ico" />
-{GOOGLE_ANALYTICS_JAVASCRIPT}
+	<script type="text/javascript" src="{TEMPLATEURL}jquery.meiomask.js" charset="utf-8"></script> 
+	<script type="text/javascript" src="{TEMPLATEURL}jquery.qtip.min.js" charset="utf-8"></script> 
+	<script type="text/javascript" src="{TEMPLATEURL}jquery.notify.min.js" charset="utf-8"></script> 
+	<script type="text/javascript" src="{TEMPLATEURL}sortable-question.js"></script>
+	<script type="text/javascript" src="{TEMPLATEURL}jquery.jcarousel.min.js"></script>
+	<!--<script type="text/javascript" src="{TEMPLATEURL}template.js"></script>-->
+	<link rel="shortcut icon" href="{TEMPLATEURL}favicon.ico" />
 </head>
-<body class="default lang-{SURVEYLANGUAGE} {SURVEYFORMAT}">
-    <div class="outerframe">
-        <table class="innerframe">
-            <tr>
-                <td>
+
+<body id="page_bg" class="no-js lang-{SURVEYLANGUAGE} {SURVEYFORMAT}">
+<script type='text/javascript'>/*<![CDATA[*/(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.getElementsByTagName('body')[0]);/*]]>*/</script>
+    <div id="global-wrapper">
+	<div id="navbar">
+	    <div class="pagewidth">
+			<div class="brand">
+<!--			    <a href="/home.php"><img src='{TEMPLATEURL}pl-header.jpg' class='logo' alt="Practice Lab"></img></a>-->
+			    <img src='{TEMPLATEURL}pl-header.jpg' class='logo' alt="Practice Lab"></img>
+			    <div class="nav-bar nav-right">
+			        <ul class="nav">
+			        <li></li>
+			        </ul>
+			    </div>
+		    </div>
+		</div>
+	</div>
+
+	<div class="outerframe pagewidth">
+
+		<div class = "titleblock">
+			<div class="surveyname">{SURVEYNAME} <!-- <i class='icon-question-sign'> --> </i></div>
+			<div class="survey-survey-percent jsstarthide">{PERCENTCOMPLETE}</div>
+			<div id="navigator_top" class="navigator navigatoralt"></div>
+
+		</div>
+        <div id="jswaiting"><img src="{TEMPLATEURL}loader.gif" alt="" width="48px" height="48px" style="height:48px;width:48px"></div>
+		<div id="survey-wrapper">
+			<div class="survey-main">

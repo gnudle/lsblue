@@ -1,0 +1,28 @@
+<table>
+	<thead>
+		<tr>
+			<th>
+			</th>
+			<th>2012</th>
+			<th>2011</th>
+			<th>2012 % change</th>
+			<th>2012 per employee</th>
+			<th>2011 per employee</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+
+		<tr>
+			<th></th>
+			<td></td>
+			<td></td>
+			<td><span class="suffix">%</span></td>
+			<td><span class="prefix">$</span></td>
+			<td><span class="prefix">$</span></td>
+		</tr>
+
+		<tr><th></th><td></td><td></td><td></td><td></td><td></td></tr>
+
+	</tbody>
+</table>

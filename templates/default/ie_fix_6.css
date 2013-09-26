@@ -1,3 +1,15 @@
+.pagewidth{width:1170px;}
+table textarea,table input[type="text"],table input[type="password"],table input.text{width:90%}
+  .survey-groupdescription table input[type="text"],.survey-groupdescription table input.text
+, .survey-question-text table input[type="text"],.survey-question-text table input.text
+, table.question input[type="text"],table.question input.text
+, .survey-groupdescription table .formula,table.question .formula
+    {width:85%}
+  .survey-groupdescription .more4 table input[type="text"],.survey-groupdescription .more4 table input.text
+, .survey-question-text .more4 table input[type="text"],.survey-question-text .more4 table input.text
+, .survey-groupdescription table .more4 .formula
+    {max-width:80%}
+
 /* The following styles are for versions of IE 6 and older */
 .choice-5-pt-radio ul {
   margin-left: 2.5em;
@@ -58,6 +70,11 @@
   margin: 0px 0px 0px 0px;
 }
 
+.numeric-multi label {
+  width: 400px;
+  text-align: right;
+}
+
 .rank select {
   margin-top: 4px !important;
 }
@@ -73,23 +90,15 @@
   width: 22px;
 }
 
-td.survey-question-help {
-  text-align: left;
-}
-
 .numeric-multi ul li label {
   float: left;
   width: auto;
 }
 
-.numeric-multi ul {
-  float: left;
-  margin: 0 0 1.5em 0 !important;
-  padding: 0;
-}
-
 .numeric-multi ul li {
-  width: 98%;
+  float: left;
+  clear: left;
+  width: 100%;
 }
 
 .numeric-multi ul li span {
@@ -113,12 +122,12 @@ input.submit {
 
 .slider_lefttext {
   float: left;
-  padding-top: 1.4em;
+  padding-top: 1.5em;
 }
 
 .slider_righttext {
   float: left;
-  padding-top: 1.4em;
+  padding-top: 1.5em;
 }
 
 .ui-slider-1 {
@@ -127,13 +136,22 @@ input.submit {
 
 .slider_showmin {
   margin: 0;
+  float: none;
   position: absolute;
-  top: 15px;
+  top: 17px;
 }
 
 .slider_showmax {
   margin: 0;
+  float: none;
   position: absolute;
-  top: 15px;
+  top: 17px;
   left: 150px;
+}
+[class^="icon-"],[class*=" icon-"] {
+  background-image: url(glyphicons-halflings_ie.png);
+}
+.icon-white
+ {
+  display:none;
 }

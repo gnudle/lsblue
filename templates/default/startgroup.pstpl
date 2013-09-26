@@ -1,4 +1,2 @@
-<table class="group">
-	<tr>
-		<td align="center">
-			<span class="group-name">{GROUPNAME}</span>
+<div class="survey-groupname">{GROUPNAME}</div>	
+<div class="survey-groupdescription">{GROUPDESCRIPTION}</div>

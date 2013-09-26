@@ -1,10 +1,7 @@
-<table class="register-table">
-    <tr>
-        <td>
-            <span class="warning-text">{REGISTERERROR}</span>
-            <p class="register-message-1">{REGISTERMESSAGE1}</p>
-            <p class="register-message-2">{REGISTERMESSAGE2}</p>
-            <div class="register-form">{REGISTERFORM}</div>
-        </td>
-    </tr>
-</table>
+
+<div class="register">
+	<span class="warning-text">{REGISTERERROR}</span>
+	<p class="register-message-1">{REGISTERMESSAGE1}</p>
+	<p class="register-message-2">{REGISTERMESSAGE2}</p>
+	<div class="register-form">{REGISTERFORM}</div>
+</div>

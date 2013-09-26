@@ -1,0 +1,255 @@
+body{font-size: 11pt;}
+.surveyname {
+  color: #000;
+ text-shadow: none; 
+  font-size: 1em;
+}
+.survey-groupname {
+  color: #222;
+  text-shadow: none;
+  font-size:.9em;
+  font-weight:700;
+}
+.survey-survey-percent{display:none}
+.navigator{display:none}
+
+
+.survey-groupdescription {
+	font-size: 9pt;
+}
+
+.survey-question-text {
+	font-size: 9pt;
+}
+
+.survey-question-help {
+		font-size: 9pt;
+}
+
+.survey-question-answer{
+		font-size: 9pt;
+}
+.survey-groupdescription table, .survey-question-text table {
+    font-size: 9pt;
+}
+.survey-groupdescription table .survey-question-text, table.summary .survey-question-text {
+    font-size: 9pt;
+}
+.survey-groupdescription table .survey-question-answer, table.summary .survey-question-answer {
+    font-size: 9pt;
+}
+.table600{max-width:6in;}
+.table700{max-width:7in;}
+.survey-question-answer select {
+    background-color: #fff;border:1px solid #999;
+}
+.global-wrapper textarea, input[type="text"], input[type="password"], input.text,select{
+    font-size: 9pt;border-radius:0;box-shadow:none;
+}
+
+.global-wrapper .survey-groupdescription table textarea, .survey-groupdescription table input[type="text"], .survey-groupdescription table input[type="password"], .survey-groupdescription table input.text,
+.global-wrapper table.summary textarea, table.summary input[type="text"], table.summary input[type="password"], table.summary input.text
+    {font-size: 9pt;}
+.global-wrapper{margin:0 8pt}
+.surveyname{font-weight:700}
+ div.question-wrapper
+{
+	border: none 0 #fff;
+	padding: 3pt 0;
+	margin: 8pt 0;
+	clear: both;
+	page-break-inside: avoid;
+	page-break-before: auto;
+}
+table td div.question-wrapper,table th div.question-wrapper
+{
+	border: none 0 #fff;
+	padding: 0;
+	margin: 0;
+	clear: none;
+	page-break-inside: avoid;
+	page-break-before: avoid;
+}
+ .survey-question-answer ul
+,.survey-question-answer ul li
+{
+	margin-left: 0%;
+	padding-left: 0%;
+	font-size: 9pt;
+	line-height: 11pt;
+	list-style: none;
+}
+.survey-question-answer li,
+.choice-5-pt-radio .survey-question-answer li, .list-radio-flexible .survey-question-answer li, .list-radio .survey-question-answer li, .list-with-comment .survey-question-answer li, .multiple-opt .survey-question-answer li, .multiple-opt-comments .survey-question-answer li, .multiple-short-txt .survey-question-answer li, .numeric-multi .survey-question-answer li, .yes-no .survey-question-answer li, .gender .survey-question-answer li {
+    margin-bottom: 0;
+}
+
+/*.radio { font-size: 8pt; line-height: 8pt; }*/
+.survey-question {margin: 0; padding: 0;}
+.survey-groupdescription{margin: 0;padding: 0;}
+.nav-right{display:none}
+
+#index {display:none}
+.indexed div#survey-wrapper {
+    float: none;
+    margin: 0;
+}
+.indexed .titleblock {
+    margin: 0;
+}
+.indexed div.survey-main {
+    margin: 0;
+}
+.indexed .survey-main {
+    background: #fff;
+    border: 0 none #fff;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 15px 15px 0;
+}
+
+#navbar {
+    background: #fff;
+    box-shadow: none;
+    position: relative;
+}
+#stickyfooter{
+    background: #fff;
+    box-shadow: none;
+    position: relative;
+    top:0;
+    clear:both;
+    height: auto;
+}
+div.survey-main {
+    border: 0 none #fff;
+    border-radius: 0;
+    box-shadow: none;
+    padding:5pt 0;
+}
+#container{display:none;}
+.qtip,.qtip-tip{display:none !important;}
+.outerframe {padding: 0;}
+.pagewidth {
+    margin: 0 auto;
+    max-width: none;
+    width: 100%;
+    padding:0;
+}
+
+#global-wrapper {
+    height: auto;
+    margin: 0;
+    min-height: none;
+}
+ td textarea, td input[type="text"], td input[type="password"], input.text
+ {
+    background-color: #FFFFFF;
+    border: 1px dashed #CCCCCC;
+    border-radius: 0;
+    box-shadow: none;
+    display: inline;
+    border-width:0 0 1px;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance:none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select:none;
+    display:inline;
+}
+
+.mandatory td textarea.empty, td.mandatory input.empty[type="text"], td .mandatory input.text.empty {
+    border-color: #ccc;
+    box-shadow: none;
+}
+td textarea.error, td input.error[type="text"], td input.text.error
+{
+    border-color: #ccc;
+    box-shadow: none;
+}
+ td textarea, td input[type="text"], td input[type="password"], input.text
+ {
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
+}
+.mandatory-block{display:none;}
+.survey-groupdescription table thead th, .survey-groupdescription table thead td {
+    padding-bottom: 2px;
+}
+
+.print{display:none}
+#stickyfooter {
+    background: #fff;
+    border: solid 1px #E5E5E5;
+    border-image: none;
+    border-radius: none;
+    border-style: solid;
+    border-width: 1px 0 0;
+    height: 11pt;
+    font-size:8pt;
+    }
+
+.footnote-wrapper {
+    margin-left: 0;
+}
+.footnote {
+    color: #696969;
+    float: none;
+    font-size: 8pt;
+    margin-left: 0;
+    min-height: 1px;
+    display:inline;
+}
+.footnote p{
+    display:inline;display:inline-block;
+}
+.showallq{display:none;}
+.js .survey-groupdescription table th .survey-question-help,.js table.summary th .survey-question-help
+  {display:block;}
+ .survey-groupdescription table .survey-question-text .icon-question-sign, table.summary .survey-question-text .icon-question-sign
+    {display:none;}
+ .survey-groupdescription table .survey-question-help .icon-question-sign, table.summary .survey-question-help .icon-question-sign
+    {margin-right:0.3em;}
+.survey-groupdescription table .survey-question-help, table.summary .survey-question-help
+    {font-size:7pt}
+.survey-question-text {
+    margin: 0 0 5pt;
+}
+
+.questionhelp, .questionbasehelp {
+    padding-top: 0;
+}
+
+.survey-question-answer ul {
+    margin: 0;
+}
+.mandatory textarea.empty, .mandatory input.empty[type="text"], .mandatory input.text.empty {
+    box-shadow: 0 0 0;
+}
+.answertext{font-size:9pt;}
+
+td input.text{display:none}
+.dontprint{display:none}
+.toprint{display:block}
+span.toprint{display:inline}
+
+/* Replace checkbox and radio by image*/
+/* use :not(#foo) to don't apply to old browser */
+/* No need hover/focus system : only for print */
+body:not(#foo) input[type="radio"],body:not(#foo) input[type="checkbox"]{
+display:none;
+}
+body:not(#foo) input[type="radio"] + label:before {
+ content:url('input-print/radio.png')
+ }
+body:not(#foo) input[type="radio"]:checked + label:before {
+ content:url('input-print/radio-checked.png')
+ }
+body:not(#foo) input[type="checkbox"] + label:before {
+ content:url('input-print/cbox.png')
+ }
+body:not(#foo) input[type="checkbox"]:checked + label:before {
+ content:url('input-print/cbox-checked.png')
+ }
