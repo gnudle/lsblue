@@ -1,3 +1,18 @@
-<div class="survey-survey">
-	<div class="survey-survey-language">{LANGUAGECHANGER}</div>
-</div>
+<table class="survey-header-table">
+    <tr>
+        <td class="survey-description">
+            <h2>{SURVEYNAME}</h2><br />
+            <p>{SURVEYDESCRIPTION}</p>
+        </td>
+    </tr>
+    <tr>
+        <td class="graph">
+            {PERCENTCOMPLETE}
+        </td>
+    </tr>
+    <tr>
+        <td class="language-changer">
+            {LANGUAGECHANGER}
+        </td>
+    </tr>
+</table>

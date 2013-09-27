@@ -1,3 +1,13 @@
-<div class="navigator whitenavigatoralt bignavigator noprevious"></div>
-<div id="official-navigator" class="navigator">{NAVIGATOR}</div>
-<div id="saveall" class="navigator jsstarthide">{SAVE}</div>
+<table class="navigator-table">
+    <tr>
+        <td class="save-all">
+            {SAVE}
+        </td>
+        <td class="submit-buttons">
+            {NAVIGATOR}
+        </td>
+        <td class="clear-all">
+            {CLEARALL}
+        </td>
+    </tr>
+</table>

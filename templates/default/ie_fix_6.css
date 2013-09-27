@@ -1,15 +1,3 @@
-.pagewidth{width:1170px;}
-table textarea,table input[type="text"],table input[type="password"],table input.text{width:90%}
-  .survey-groupdescription table input[type="text"],.survey-groupdescription table input.text
-, .survey-question-text table input[type="text"],.survey-question-text table input.text
-, table.question input[type="text"],table.question input.text
-, .survey-groupdescription table .formula,table.question .formula
-    {width:85%}
-  .survey-groupdescription .more4 table input[type="text"],.survey-groupdescription .more4 table input.text
-, .survey-question-text .more4 table input[type="text"],.survey-question-text .more4 table input.text
-, .survey-groupdescription table .more4 .formula
-    {max-width:80%}
-
 /* The following styles are for versions of IE 6 and older */
 .choice-5-pt-radio ul {
   margin-left: 2.5em;
@@ -70,11 +58,6 @@ table textarea,table input[type="text"],table input[type="password"],table input
   margin: 0px 0px 0px 0px;
 }
 
-.numeric-multi label {
-  width: 400px;
-  text-align: right;
-}
-
 .rank select {
   margin-top: 4px !important;
 }
@@ -90,15 +73,23 @@ table textarea,table input[type="text"],table input[type="password"],table input
   width: 22px;
 }
 
+td.survey-question-help {
+  text-align: left;
+}
+
 .numeric-multi ul li label {
   float: left;
   width: auto;
 }
 
-.numeric-multi ul li {
+.numeric-multi ul {
   float: left;
-  clear: left;
-  width: 100%;
+  margin: 0 0 1.5em 0 !important;
+  padding: 0;
+}
+
+.numeric-multi ul li {
+  width: 98%;
 }
 
 .numeric-multi ul li span {
@@ -122,12 +113,12 @@ input.submit {
 
 .slider_lefttext {
   float: left;
-  padding-top: 1.5em;
+  padding-top: 1.4em;
 }
 
 .slider_righttext {
   float: left;
-  padding-top: 1.5em;
+  padding-top: 1.4em;
 }
 
 .ui-slider-1 {
@@ -136,22 +127,13 @@ input.submit {
 
 .slider_showmin {
   margin: 0;
-  float: none;
   position: absolute;
-  top: 17px;
+  top: 15px;
 }
 
 .slider_showmax {
   margin: 0;
-  float: none;
   position: absolute;
-  top: 17px;
+  top: 15px;
   left: 150px;
-}
-[class^="icon-"],[class*=" icon-"] {
-  background-image: url(glyphicons-halflings_ie.png);
-}
-.icon-white
- {
-  display:none;
 }

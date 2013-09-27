@@ -1,8 +1,20 @@
-<div class="save-survey">
-	<span class="warning-text">{SAVEERROR}</span>
-	<span class="save-heading">{SAVEHEADING}</span><br />
-	<p class="save-message">{SAVEMESSAGE}</p>
-	<span class="warning">{SAVEALERT}</span></p>
-	<div class="save-form">{SAVEFORM}</div>
-	<p class="return-to-survey">{RETURNTOSURVEY}</p>
-</div>
+<table id='savetable'>
+    <tr>
+        <td class="save-heading">
+            <h3>{SAVEHEADING}</h3>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <br />
+            <p class="save-error">{SAVEERROR}</p>
+            <p class="save-message">{SAVEMESSAGE}</p>
+            <span class="warning">{SAVEALERT}</span></p>
+            <br />
+            <div class="save-form">{SAVEFORM}</div>
+            <br />
+            <span class="return-to-survey">{RETURNTOSURVEY}</span>
+            <br /><br />
+        </td>
+    </tr>
+</table>

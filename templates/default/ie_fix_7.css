@@ -1,15 +1,24 @@
-.pagewidth{width:1170px;}
-table textarea,table input[type="text"],table input[type="password"],table input.text{width:90%}
-  .survey-groupdescription table input[type="text"],.survey-groupdescription table input.text
-, .survey-question-text table input[type="text"],.survey-question-text table input.text
-, table.question input[type="text"],table.question input.text
-, .survey-groupdescription table .formula,table.question .formula
-    {width:85%}
-  .survey-groupdescription .more4 table input[type="text"],.survey-groupdescription .more4 table input.text
-, .survey-question-text .more4 table input[type="text"],.survey-question-text .more4 table input.text
-, .survey-groupdescription table .more4 .formula
-    {max-width:80%}
 /* The following styles are for all versions of IE 7 */
+
+/*** Start jQuery UI Theme Styles ***/
+
+.ui-button,
+input.ui-button { 
+	padding: 0.1em 0; 
+}
+
+.ui-button-icon-only .ui-icon,
+.ui-button-text-icon-primary .ui-icon,
+.ui-button-text-icon-secondary .ui-icon,
+.ui-button-text-icons .ui-icon,
+.ui-button-icons-only .ui-icon {
+	margin-top: -9px;
+}
+/*** End jQuery UI Theme Styles ***/
+.save-all {
+  padding-left: 5px;
+}
+
 .choice-5-pt-radio ul {
   margin-left: 2.5em;
 }
@@ -85,6 +94,10 @@ table textarea,table input[type="text"],table input[type="password"],table input
   width: 22px;
 }
 
+td.survey-question-help {
+  text-align: left;
+}
+
 .numeric-multi ul li label {
   float: left;
   width: auto;
@@ -117,17 +130,10 @@ input.submit {
 
 .slider_lefttext {
   float: left;
-  padding-top: 1.5em;
+  padding-top: 1.4em;
 }
 
 .slider_righttext {
   float: left;
-  padding-top: 1.5em;
-}
-[class^="icon-"],[class*=" icon-"] {
-  background-image: url(glyphicons-halflings_ie.png);
-}
-.icon-white
- {
-  display:none;
+  padding-top: 1.4em;
 }
