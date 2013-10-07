@@ -32,7 +32,7 @@ class practicelabHelper
         $sHeaderlocationurl=Yii::app()->getConfig('headerlocationurl');
         $sErrorscript=Yii::app()->getConfig('errorscript');
         $sSavescript=Yii::app()->getConfig('savecript');
-        $sSubmitcript=Yii::app()->getConfig('submitscript');
+        $sSubmitscript=Yii::app()->getConfig('submitscript');
 #        if(!isset($headerlocationurl) || !$headerlocationurl){
 #            if(!isset($thisurl['path']) || (str_replace("/","",$thisurl['path'])==""))
 #            {
@@ -63,17 +63,17 @@ class practicelabHelper
             $sSavescript.="&";
          }
         }
-        if(!$sSubmitcript) 
-            $sSubmitcript="finish";
+        if(!$sSubmitscript) 
+            $sSubmitscript="finish";
         // Correction on submits (adding ? or &)
-        if(substr($sSubmitcript, -1) !="?" && substr($sSubmitcript, -1) !="&"){
-         if( strpos($sSubmitcript,"?")=== false){
-            $sSubmitcript.="?";
+        if(substr($sSubmitscript, -1) !="?" && substr($sSubmitscript, -1) !="&"){
+         if( strpos($sSubmitscript,"?")=== false){
+            $sSubmitscript.="?";
          }else{
-            $sSubmitcript.="&";
+            $sSubmitscript.="&";
          }
         }
-        return array('headerlocationurl'=>$sHeaderlocationurl,'errorscript'=>$sErrorscript,'savescript'=>$sSavescript,'submitcript'=>$sSubmitcript);
+        return array('headerlocationurl'=>$sHeaderlocationurl,'errorscript'=>$sErrorscript,'savescript'=>$sSavescript,'submitscript'=>$sSubmitscript);
     }
 
 }
