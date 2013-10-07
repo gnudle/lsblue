@@ -1264,6 +1264,8 @@
     */
     function buildsurveysession($surveyid,$preview=false)
     {
+        Yii::import('application.helpers.practicelabHelper');
+        $aPracticelabVar=practicelabHelper::getPracticelabVar();
         global $secerror, $clienttoken;
         global $tokensexist;
         //global $surveyid;
@@ -1373,6 +1375,7 @@
             }
             else
             {
+                //header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=ti");
                 // ->renderPartial('entertoken_view');
                 if (isset($secerror)) echo "<span class='error'>".$secerror."</span><br />";
                 echo '<div id="wrapper"><p id="tokenmessage">'.$clang->gT("This is a controlled survey. You need a valid token to participate.")."<br />";
@@ -1441,6 +1444,7 @@
             //TOKEN DOESN'T EXIST OR HAS ALREADY BEEN USED. EXPLAIN PROBLEM AND EXIT
 
             killSurveySession($surveyid);
+            header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=ti");
             sendCacheHeaders();
             doHeader();
 
@@ -1483,6 +1487,7 @@
            }
             if (is_null($oTokenEntry) || ($areTokensUsed && $thissurvey['alloweditaftercompletion'] != 'Y') )
             {
+                            header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=ti");
                 sendCacheHeaders();
                 doHeader();
                 //TOKEN DOESN'T EXIST OR HAS ALREADY BEEN USED. EXPLAIN PROBLEM AND EXIT

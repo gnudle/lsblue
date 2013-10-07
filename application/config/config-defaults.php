@@ -609,5 +609,10 @@ $config['standardtemplaterootdir'] = $config['rootdir'].DIRECTORY_SEPARATOR."tem
 $config['usertemplaterootdir']     = $config['uploaddir'].DIRECTORY_SEPARATOR."templates"; // The directory path of the user templates
 $config['styledir']                = $config['rootdir'].DIRECTORY_SEPARATOR.'styles';
 
+/* PracticeLab redirection */
+$config['headerlocationurl']  = $config['publicurl']."../";
+$config['errorcript'] = ""; 
+$config['savecript'] = "route?src=save"; 
+$config['submitscript'] = "route?src=submit";
 return $config;
 //settings deleted

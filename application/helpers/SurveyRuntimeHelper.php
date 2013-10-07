@@ -291,6 +291,8 @@ class SurveyRuntimeHelper {
                 }
                 else 
                 {
+                    $token= (isset($clienttoken)) ? $clienttoken : "";
+                    header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['savescript']}s={$surveyid}&t={$clienttoken}");exit;
                     // TODO : update lastpage to $_SESSION[$LEMsessid]['step'] in Survey_dynamic
                 }
             }
@@ -503,7 +505,11 @@ class SurveyRuntimeHelper {
                         //Automatically redirect the page to the "url" setting for the survey
                         header("Location: {$thissurvey['surveyls_url']}");
                     }
-
+                    else
+                    {
+                        $clienttoken=(isset($_SESSION['survey_'.$surveyid]['thistoken']))?$_SESSION['survey_'.$surveyid]['thistoken']:"";
+                        header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['submitscript']}s={$surveyid}&t={$clienttoken}");
+                    }
                     doHeader();
                     echo $content;
                 }
