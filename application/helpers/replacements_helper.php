@@ -198,6 +198,7 @@ function templatereplace($line, $replacements = array(), &$redata = array(), $de
             }
         }
         $_templatejs.= "<script type='text/javascript' src='".Yii::app()->getConfig('generalscripts')."survey_runtime.js'></script>\n";
+        $_templatejs.= "<script type='text/javascript' src='".Yii::app()->getConfig('generalscripts')."checkconditionfunction.js'></script>\n";
         $_templatejs.= "<script type='text/javascript' src='{$templateurl}template.js'></script>\n";
         $_templatejs.= useFirebug();
     }

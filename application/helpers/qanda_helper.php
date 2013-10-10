@@ -3135,7 +3135,7 @@ function do_multiplenumeric($ia)
     global $thissurvey;
 
     $clang = Yii::app()->lang;
-    $extraclass ="";
+    $extraclass ="";$answertypeclass ="";
     $checkconditionFunction = "fixnum_checkconditions";
     $aQuestionAttributes = getQuestionAttributeValues($ia[0], $ia[4]);
     $answer='';
@@ -3154,7 +3154,20 @@ function do_multiplenumeric($ia)
     {
         $maxlength= " maxlength='25' ";
     }
-
+    $sThousandseperator=trim($aQuestionAttributes['thousand_seperator']);
+    $sThousandseperator=($sThousandseperator==$sSeperator)?"":$sThousandseperator;
+    if($sThousandseperator)
+        $answertypeclass .=" havethousand";
+    if (trim($aQuestionAttributes['num_value_int_only'])==1)
+    {
+        $extraclass .=" integeronly";
+        $answertypeclass .= " integeronly";
+        $integeronly=1;
+    }
+    else
+    {
+        $integeronly=0;
+    }
     //    //EQUALS VALUE
     //    if (trim($aQuestionAttributes['equals_num_value']) != ''){
     //        $equals_num_value = $aQuestionAttributes['equals_num_value'];
@@ -3225,7 +3238,7 @@ function do_multiplenumeric($ia)
     if ($thissurvey['nokeyboard']=='Y')
     {
         includeKeypad();
-        $kpclass = "num-keypad";
+        $$answertypeclass .= " num-keypad";
         $extraclass .=" keypad";
     }
     else
@@ -3410,14 +3423,20 @@ function do_multiplenumeric($ia)
                 $sSeperator = getRadixPointData($thissurvey['surveyls_numberformat']);
                 $sSeperator = $sSeperator['seperator'];
 
-                $answer_main .= "<span class=\"input\">\n\t".$prefix."\n\t<input class=\"text $kpclass\" type=\"text\" size=\"".$tiwidth.'" name="'.$myfname.'" id="answer'.$myfname.'" value="';
+                $answer_main .= "<span class=\"input\">\n\t".$prefix."\n\t<input class=\"text $answertypeclass\" type=\"text\" size=\"".$tiwidth.'" name="'.$myfname.'" id="answer'.$myfname.'"';
+                if($sThousandseperator)
+                    $answer_main .= " data-thousand='{$sThousandseperator}' ";
+                $answer_main .= ' value="';
                 if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]))
                 {
-                    $dispVal = str_replace('.',$sSeperator,$_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]);
+                    $dispVal = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname];
+                    if($integeronly && $dispVal!="")
+                        $dispVal = intval($dispVal);
+                    else
+                        $dispVal = str_replace('.',$sSeperator,$dispVal);
                     $answer_main .= $dispVal;
                 }
-
-                $answer_main .= '" onkeyup="'.$checkconditionFunction.'(this.value, this.name, this.type);" '." {$maxlength} />\n\t".$suffix."\n</span>\n\t</li>\n";
+                $answer_main .= '" onkeyup="'.$checkconditionFunction.'(this.value, this.name, this.type,\'onchange\','.$integeronly.',\''.$sThousandseperator.'\');" '." {$maxlength} />\n\t".$suffix."\n</span>\n\t</li>\n";
             }
             else
             {
@@ -3672,6 +3691,8 @@ function do_numerical($ia)
     $extraclass ="";
     $answertypeclass = "numeric";
     $checkconditionFunction = "fixnum_checkconditions";
+    $sSeperator = getRadixPointData($thissurvey['surveyls_numberformat']);
+    $sSeperator = $sSeperator['seperator'];
     $aQuestionAttributes = getQuestionAttributeValues($ia[0], $ia[4]);
     if (trim($aQuestionAttributes['prefix'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']])!='') {
         $prefix=$aQuestionAttributes['prefix'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']];
@@ -3709,7 +3730,11 @@ function do_numerical($ia)
     {
         $tiwidth=10;
     }
-
+    
+    $sThousandseperator=trim($aQuestionAttributes['thousand_seperator']);
+    $sThousandseperator=($sThousandseperator==$sSeperator)?"":$sThousandseperator;
+    if($sThousandseperator)
+        $answertypeclass .=" havethousand";
     $fValue=$_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$ia[1]];
     if(strpos($fValue,"."))
     {
@@ -3732,9 +3757,6 @@ function do_numerical($ia)
         $acomma = $acomma['seperator'];
         $integeronly=0;
     }
-
-    $sSeperator = getRadixPointData($thissurvey['surveyls_numberformat']);
-    $sSeperator = $sSeperator['seperator'];
     $fValue = str_replace('.',$sSeperator,$fValue);
 
     if ($thissurvey['nokeyboard']=='Y')
@@ -3750,8 +3772,10 @@ function do_numerical($ia)
     // --> START NEW FEATURE - SAVE
     $answer = "<p class='question answer-item text-item numeric-item {$extraclass}'>"
     . " <label for='answer{$ia[1]}' class='hide label'>{$clang->gT('Answer')}</label>\n$prefix\t"
-    . "<input class='text {$answertypeclass}' type=\"text\" size=\"$tiwidth\" name=\"$ia[1]\"  title=\"".$clang->gT('Only numbers may be entered in this field.')."\" "
-    . "id=\"answer{$ia[1]}\" value=\"{$fValue}\" onkeyup=\"{$checkconditionFunction}(this.value, this.name, this.type,'onchange',{$integeronly})\" "
+    . "<input class='text {$answertypeclass}' type=\"text\" size=\"$tiwidth\" name=\"$ia[1]\"  title=\"".$clang->gT('Only numbers may be entered in this field.')."\" ";
+    if($sThousandseperator)
+        $answer .= " data-thousand='{$sThousandseperator}' ";
+    $answer .= "id=\"answer{$ia[1]}\" value=\"{$fValue}\" onkeyup=\"{$checkconditionFunction}(this.value, this.name, this.type,'onchange',{$integeronly},'{$sThousandseperator}')\" "
     . " {$maxlength} />\t{$suffix}\n</p>\n";
     if ($aQuestionAttributes['hide_tip']==0)
     {
