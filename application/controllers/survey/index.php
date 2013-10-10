@@ -181,7 +181,7 @@ class index extends CAction {
             AND ((expires >= '".date("Y-m-d H:i")."') OR (expires is null))
             AND ((startdate <= '".date("Y-m-d H:i")."') OR (startdate is null))
             ORDER BY surveyls_title";
-            $result = dbExecuteAssoc($query,false,true) or safeDie("Could not connect to database. If you try to install LimeSurvey please refer to the <a href='http://docs.limesurvey.org'>installation docs</a> and/or contact the system administrator of this webpage."); //Checked
+            $result = dbExecuteAssoc($query,false,true) or safeDie("Could not connect to database. If you try to install LimeSurvey please refer to the <a href='http://manual.limesurvey.org'>installation docs</a> and/or contact the system administrator of this webpage."); //Checked
             $list=array();
 
             foreach($result->readAll() as $rows)
@@ -388,7 +388,7 @@ class index extends CAction {
             $this->_niceExit($redata, __LINE__, $thissurvey['templatedir'], $asMessage);
         }
 
-        if (returnGlobal('loadname',true)=="reload")
+        if (returnGlobal('loadall',true)=="reload") // Used if reload is done by URL (GET)
         {
             $_POST['loadall']="reload";
         }

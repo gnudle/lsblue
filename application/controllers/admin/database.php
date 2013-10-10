@@ -393,20 +393,9 @@ class database extends Survey_Common_Action
                 $_POST['question_'.$baselang] = html_entity_decode(Yii::app()->request->getPost('question_'.$baselang), ENT_QUOTES, "UTF-8");
                 $_POST['help_'.$baselang] = html_entity_decode(Yii::app()->request->getPost('help_'.$baselang), ENT_QUOTES, "UTF-8");
 
-
-                // Fix bug with FCKEditor saving strange BR types
-                if ($xssfilter)
-                {
-                    $_POST['title']=$filter->purify($_POST['title']);
-                    $_POST['question_'.$baselang]=$filter->purify($_POST['question_'.$baselang]);
-                    $_POST['help_'.$baselang]=$filter->purify($_POST['help_'.$baselang]);
-                }
-                else
-                {
-                    $_POST['title']=fixCKeditorText(Yii::app()->request->getPost('title'));
-                    $_POST['question_'.$baselang]=fixCKeditorText(Yii::app()->request->getPost('question_'.$baselang));
-                    $_POST['help_'.$baselang]=fixCKeditorText(Yii::app()->request->getPost('help_'.$baselang));
-                }
+                $_POST['title']=fixCKeditorText(Yii::app()->request->getPost('title'));
+                $_POST['question_'.$baselang]=fixCKeditorText(Yii::app()->request->getPost('question_'.$baselang));
+                $_POST['help_'.$baselang]=fixCKeditorText(Yii::app()->request->getPost('help_'.$baselang));
 
                 $data = array(
                 'sid' => $surveyid,
@@ -1027,9 +1016,7 @@ class database extends Survey_Common_Action
             }
             $updatearray= array('admin'=> Yii::app()->request->getPost('admin'),
             'expires'=>$expires,
-            'adminemail'=> Yii::app()->request->getPost('adminemail'),
             'startdate'=>$startdate,
-            'bounce_email'=> Yii::app()->request->getPost('bounce_email'),
             'anonymized'=> Yii::app()->request->getPost('anonymized'),
             'faxto'=> Yii::app()->request->getPost('faxto'),
             'format'=> Yii::app()->request->getPost('format'),
@@ -1070,6 +1057,24 @@ class database extends Survey_Common_Action
             'googleanalyticsstyle'=>trim(Yii::app()->request->getPost('googleanalyticsstyle')),
             'tokenlength'=>$tokenlength
             );
+        
+
+            $warning = '';
+            // make sure we only update admin email if it is valid
+            if (Yii::app()->request->getPost('adminemail', '') == ''
+                || validateEmailAddress(Yii::app()->request->getPost('adminemail'))) {
+                $updatearray['adminemail'] = Yii::app()->request->getPost('adminemail');
+            } else {
+                $warning .= $clang->gT("Warning! Notification email was not updated because it was not valid.").'<br/>'; 
+            }
+            // make sure we only update bounce email if it is valid
+            if (Yii::app()->request->getPost('bounce_email', '') == ''
+                || validateEmailAddress(Yii::app()->request->getPost('bounce_email'))) {
+                $updatearray['bounce_email'] = Yii::app()->request->getPost('bounce_email');
+            } else {
+                $warning .= $clang->gT("Warning! Bounce email was not updated because it was not valid.").'<br/>'; 
+            }
+
             // use model
             $Survey=Survey::model()->findByPk($surveyid);
             foreach ($updatearray as $k => $v)
@@ -1117,7 +1122,7 @@ class database extends Survey_Common_Action
 
             if ($usresult)
             {
-                Yii::app()->session['flashmessage'] = $clang->gT("Survey settings were successfully saved.");
+                Yii::app()->session['flashmessage'] = $warning.$clang->gT("Survey settings were successfully saved.");
             }
             else
             {

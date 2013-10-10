@@ -272,6 +272,13 @@ class tokens extends Survey_Common_Action
         {
             self::_newtokentable($iSurveyId);
         }
+
+	/* build JS variable to hide buttons forbidden for the current user */
+	$aData['showDelButton'] = hasSurveyPermission($iSurveyId, 'tokens', 'delete')?'true':'false';
+	$aData['showInviteButton'] = hasSurveyPermission($iSurveyId, 'tokens', 'update')?'true':'false';
+	$aData['showBounceButton'] = hasSurveyPermission($iSurveyId, 'tokens', 'update')?'true':'false';
+	$aData['showRemindButton'] = hasSurveyPermission($iSurveyId, 'tokens', 'update')?'true':'false';
+
         // Javascript
         $this->getController()->_js_admin_includes(Yii::app()->getConfig('adminscripts') . "tokens.js");
         $this->getController()->_js_admin_includes(Yii::app()->getConfig('generalscripts') . "jquery/jquery.multiselect.min.js");
@@ -490,7 +497,7 @@ class tokens extends Survey_Common_Action
             if(hasSurveyPermission($iSurveyId, 'tokens', 'update'))
                 $action .= viewHelper::getImageLink('edit_16.png', null, $clang->gT("Edit token entry"), null, 'imagelink token_edit');
             if(!empty($token['participant_id']) && $token['participant_id'] != "" && hasGlobalPermission('USER_RIGHT_PARTICIPANT_PANEL')) {
-                $action .= viewHelper::getImageLink('cpdb_16.png', "admin/participants/sa/displayParticipants/searchurl/participant_id||equal||" . $token['participant_id'], $clang->gT("View this person in the central participants database"), '_top');
+                $action .= viewHelper::getImageLink('cpdb_16.png', null, $clang->gT("View this person in the central participants database"), null, 'imagelink cpdb',array('onclick'=>"sendPost('".$this->getController()->createUrl('admin/participants/sa/displayParticipants')."','',['searchcondition'],['participant_id||equal||{$token['participant_id']}']);"));
             } else {
                 $action .= '<div style="width: 20px; height: 16px; float: left;"></div>';
             }

@@ -1446,8 +1446,8 @@ function getSurveyInfo($surveyid, $languagecode='')
 * @param string $mode Escape mode for the translation function
 * @return array
 */
-function templateDefaultTexts($oLanguage, $mode='html'){
-    return array(
+function templateDefaultTexts($oLanguage, $mode='html', $sNewlines='text'){
+    $aDefaultTexts=array(
     'admin_detailed_notification_subject'=>$oLanguage->gT("Response submission for survey {SURVEYNAME} with results",$mode),
     'admin_detailed_notification'=>$oLanguage->gT("Hello,\n\nA new response was submitted for your survey '{SURVEYNAME}'.\n\nClick the following link to reload the survey:\n{RELOADURL}\n\nClick the following link to see the individual response:\n{VIEWRESPONSEURL}\n\nClick the following link to edit the individual response:\n{EDITRESPONSEURL}\n\nView statistics by clicking here:\n{STATISTICSURL}\n\n\nThe following answers were given by the participant:\n{ANSWERTABLE}",$mode),
     'admin_detailed_notification_css'=>'<style type="text/css">
@@ -1497,6 +1497,11 @@ function templateDefaultTexts($oLanguage, $mode='html'){
     'registration_subject'=>$oLanguage->gT("Survey registration confirmation",$mode),
     'registration'=>$oLanguage->gT("Dear {FIRSTNAME},\n\nYou, or someone using your email address, have registered to participate in an online survey titled {SURVEYNAME}.\n\nTo complete this survey, click on the following URL:\n\n{SURVEYURL}\n\nIf you have any questions about this survey, or if you did not register to participate and believe this email is in error, please contact {ADMINNAME} at {ADMINEMAIL}.",$mode)
     );
+    if ($sNewlines=='html')
+    {
+        $aDefaultTexts=array_map('nl2br',$aDefaultTexts);
+    }
+    return $aDefaultTexts;
 }
 
 /**
@@ -3134,6 +3139,8 @@ function questionAttributes($returnByName=false)
     // help - a short explanation
 
     // If you insert a new attribute please do it in correct alphabetical order!
+    // Please also list the new attribute in the function &TSVSurveyExport($sid) in em_manager_helper.php,
+    // so your new attribute will not be "forgotten" when the survey is exported to Excel/CSV-format!
 
     $qattributes["alphasort"]=array(
     "types"=>"!LOWZ",
@@ -3796,8 +3803,8 @@ function questionAttributes($returnByName=false)
     //,2=>$clang->gT('Randomize once on survey start')  //Mdekker: commented out as code to handle this was removed in refactoring
     ),
     'default'=>0,
-    "help"=>$clang->gT('Present answers in random order'),
-    "caption"=>$clang->gT('Random answer order'));
+    "help"=>$clang->gT('Present subquestions/answer options in random order'),
+    "caption"=>$clang->gT('Random order'));
 
     /*
     $qattributes['relevance']=array(
