@@ -81,7 +81,7 @@ function fixnum_checkconditions(value, name, type, evt_type, intonly,thousandsep
     {
         evt_type = 'onchange';
     }
-    checkconditions(value, name, type, evt_type);
+    checkconditions(newval, name, type, evt_type);
 }
 
 function formatNumber(value,intonly,thousands_sep) {
