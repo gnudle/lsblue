@@ -42,7 +42,7 @@ function checkconditions(value, name, type, evt_type)
     {
         $('#java'+name).val(value);
     }
-    if(j$.isFunction(window.ExprMgr_process_relevance_and_tailoring )
+    if($.isFunction(window.ExprMgr_process_relevance_and_tailoring ))
         ExprMgr_process_relevance_and_tailoring(evt_type,name,type);
 }
 /**
