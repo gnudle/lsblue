@@ -33,6 +33,7 @@ class practicelabHelper
         $sErrorscript=Yii::app()->getConfig('errorscript');
         $sSavescript=Yii::app()->getConfig('savecript');
         $sSubmitscript=Yii::app()->getConfig('submitscript');
+        $sRabbitPath=Yii::app()->getConfig('rabbitpath');
 #        if(!isset($headerlocationurl) || !$headerlocationurl){
 #            if(!isset($thisurl['path']) || (str_replace("/","",$thisurl['path'])==""))
 #            {
@@ -73,7 +74,9 @@ class practicelabHelper
             $sSubmitscript.="&";
          }
         }
-        return array('headerlocationurl'=>$sHeaderlocationurl,'errorscript'=>$sErrorscript,'savescript'=>$sSavescript,'submitscript'=>$sSubmitscript);
+        if(!$sRabbitPath) 
+            $sRabbitPath= dirname(Yii::app()->request->scriptFile).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR;
+        return array('headerlocationurl'=>$sHeaderlocationurl,'errorscript'=>$sErrorscript,'savescript'=>$sSavescript,'submitscript'=>$sSubmitscript,'rabbitpah'=>$sRabbitPath);
     }
 
 }
