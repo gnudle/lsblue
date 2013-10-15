@@ -1055,7 +1055,14 @@ class database extends Survey_Common_Action
             'emailnotificationto'=>trim(Yii::app()->request->getPost('emailnotificationto')),
             'googleanalyticsapikey'=>trim(Yii::app()->request->getPost('googleanalyticsapikey')),
             'googleanalyticsstyle'=>trim(Yii::app()->request->getPost('googleanalyticsstyle')),
-            'tokenlength'=>$tokenlength
+            'tokenlength'=>$tokenlength,
+            'supersurvey'=>trim(Yii::app()->request->getPost('supersurvey')),
+            'supersurvey_order'=>trim(Yii::app()->request->getPost('supersurvey_order')),
+            'threshold'=>trim(Yii::app()->request->getPost('threshold')),
+            'published'=>trim(Yii::app()->request->getPost('published')),
+            'period_unit'=>trim(Yii::app()->request->getPost('period_unit')),
+            'admission'=>trim(Yii::app()->request->getPost('admission')),
+            'mobile'=>trim(Yii::app()->request->getPost('mobile')),
             );
         
 

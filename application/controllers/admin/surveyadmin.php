@@ -1132,6 +1132,13 @@ class SurveyAdmin extends Survey_Common_Action
             $esrow['navigationdelay'] = 0;
             $esrow['googleanalyticsapikey']    = '';
             $esrow['googleanalyticsstyle']     = '0';
+            $esrow['supersurvey']     = '';
+            $esrow['supersurvey_order']     = 0;
+            $esrow['threshold']     = 50;
+            $esrow['published']     = 'N';
+            $esrow['admission']     = 'C';
+            $esrow['period_unit']     = 'Y';
+            $esrow['mobile']     = 'N';
         }
         elseif ($action == 'editsurvey')
         {
@@ -1230,7 +1237,6 @@ class SurveyAdmin extends Survey_Common_Action
     {
         $clang = $this->getController()->lang;
         global $showxquestions, $showgroupinfo, $showqnumcode;
-
         Yii::app()->loadHelper('globalsettings');
 
         $shownoanswer = getGlobalSetting('shownoanswer') ? getGlobalSetting('shownoanswer') : 'Y';
@@ -1241,6 +1247,7 @@ class SurveyAdmin extends Survey_Common_Action
         $aData['showxquestions'] = $showxquestions;
         $aData['showgroupinfo'] = $showgroupinfo;
         $aData['showqnumcode'] = $showqnumcode;
+        
         return $aData;
     }
 

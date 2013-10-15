@@ -15,6 +15,43 @@
              ><?php $clang->eT("No"); ?></option>
             </select>
             </li>
+
+        <li><label for='threshold'><?php $clang->eT("Threshold:") ?></label>
+            <?php echo CHtml::textField('threshold', $esrow['threshold'], array('size'=>'12','maxlength'=>'12','pattern'=>'\d*')); ?>
+        </li>
+        
+        <?php $aRowArray=array("Y"=>$clang->gT("Yes"),"N"=>$clang->gT("No")); 
+            if(!array_key_exists($esrow['published'],$aRowArray))
+                $esrow['published']="N";// default value
+        ?>
+        <li><label for='published'><?php $clang->eT("Publish survey results:") ?></label>
+            <?php echo CHtml::dropDownList('published', $esrow['published'], $aRowArray); ?>
+        </li>
+
+        <?php $aRowArray=array("Y"=>$clang->gT("Year"),"Q"=>$clang->gT("Quarter"),"M"=>$clang->gT("Month"),"W"=>$clang->gT("Week"),"D"=>$clang->gT("Day")); 
+            if(!array_key_exists($esrow['period_unit'],$aRowArray))
+                $esrow['period_unit']="Y";// default value
+        ?>
+        <li><label for='period_unit'><?php $clang->eT("Period Unit:") ?></label>
+            <?php echo CHtml::dropDownList('period_unit', $esrow['period_unit'], $aRowArray); ?>
+        </li>
+
+        <?php $aRowArray=array("O"=>$clang->gT("Open"),"C"=>$clang->gT("Closed"),"S"=>$clang->gT("Screened")); 
+            if(!array_key_exists($esrow['admission'],$aRowArray))
+                $esrow['admission']="C";// default value
+        ?>
+        <li><label for='admission'><?php $clang->eT("Admission restrictions:") ?></label>
+            <?php echo CHtml::dropDownList('admission', $esrow['admission'], $aRowArray); ?>
+        </li>
+
+        <?php $aRowArray=array("Y"=>$clang->gT("Yes"),"N"=>$clang->gT("No")); 
+            if(!array_key_exists($esrow['mobile'],$aRowArray))
+                $esrow['mobile']="N";// default value
+        ?>
+        <li><label for='mobile'><?php $clang->eT("Mobile survey?") ?></label>
+            <?php echo CHtml::dropDownList('mobile', $esrow['mobile'], $aRowArray); ?>
+        </li>
+
              <li><label for='startdate'><?php $clang->eT("Start date/time:"); ?></label>
             <input type='text' class='popupdatetime' id='startdate' size='20' name='startdate' value="<?php echo $startdate; ?>" /></li>
 

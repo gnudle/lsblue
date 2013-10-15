@@ -43,7 +43,7 @@ function checkconditions(value, name, type, evt_type)
         $('#java'+name).val(value);
     }
     if($.isFunction(window.ExprMgr_process_relevance_and_tailoring ))
-        ExprMgr_process_relevance_and_tailoring(evt_type,name,type);
+        {ExprMgr_process_relevance_and_tailoring(evt_type,name,type);}
 }
 /**
  * fixnum_checkconditions : javascript function attach to some element 
