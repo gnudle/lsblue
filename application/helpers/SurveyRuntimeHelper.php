@@ -812,6 +812,7 @@ class SurveyRuntimeHelper {
         intRegex = new RegExp('[^-0-9]','g');\n
         // -->\n
         </script>";
+
         $showpopups=Yii::app()->getConfig('showpopups');
         //Display the "mandatory" message on page if necessary
         if (!$showpopups && $stepInfo['mandViolation'] && $okToShowErrors)
