@@ -100,7 +100,10 @@
 }
 
 .ui-widget-content {
-  background-color: #fafafa;
+  border: 1px solid #D2E0F2;
+  background: #F8F8FF url(images/ui-bg_inset-hard_100_F8F8FF_1x100.png)
+    50% bottom repeat-x;
+  color: #222222;
 }
 
 .ui-widget-content a {
@@ -108,8 +111,10 @@
 }
 
 .ui-widget-header {
-  background-color: #fefefe;
-  color: #666;
+  border: 1px solid #D2E0F2;
+  background: #D2E0F2 url(images/ui-bg_gloss-wave_90_D2E0F2_500x100.png)
+    50% 50% repeat-x;
+  color: #1D2D45;
   font-weight: bold;
 }
 
@@ -120,51 +125,56 @@
 /* Interaction states
 ----------------------------------*/
 .ui-state-default,.ui-widget-content .ui-state-default {
+  border: 1px solid #79B7E7;
+  background: #dfeffc url(images/ui-bg_glass_85_dfeffc_1x400.png) 50% 50%
+    repeat-x;
   font-weight: bold;
-  color: #666;
+  color: #5670A1;
   outline: none;
 }
 
 .ui-state-default a,.ui-state-default a:link,.ui-state-default a:visited
   {
-  color: #000;
+  color: #5670A1;
   text-decoration: none;
   outline: none;
 }
 
 .ui-state-hover,.ui-widget-content .ui-state-hover,.ui-state-focus,.ui-widget-content .ui-state-focus
   {
+  border: 1px solid #79b7e7;
+  background: #d0e5f5 url(images/ui-bg_glass_75_d0e5f5_1x400.png) 50% 50%
+    repeat-x;
   font-weight: bold;
-  color: #333;
+  color: #1d5987;
   outline: none;
 }
 
-#pager_left .ui-state-hover {
-	border: 1px solid #85BD00;
-}
-
 .ui-state-hover a,.ui-state-hover a:hover {
-  color: #333;
+  color: #1d5987;
   text-decoration: none;
   outline: none;
 }
 
 .ui-state-active,.ui-widget-content .ui-state-active {
-  background-color: #EFFBDB;
+  border: 1px solid #79b7e7;
+  background: #ffffff url(images/ui-bg_inset-hard_100_ffffff_1x100.png)
+    50% 50% repeat-x;
   font-weight: bold;
   color: #4e8632;
   outline: none;
 }
 
 .ui-state-active a,.ui-state-active a:link,.ui-state-active a:visited {
+  color: #4e8632;
   outline: none;
   text-decoration: none;
 }
 
 /* Interaction Cues
 ----------------------------------*/
-.ui-state-highlight, .ui-widget-content .ui-state-highlight {border: 2px solid #85BD00; background: #fff; color: #666; }
-.ui-state-highlight a, .ui-widget-content .ui-state-highlight a { }
+.ui-state-highlight, .ui-widget-content .ui-state-highlight {border: 1px solid #96b1e3; background: #fbf8bc url(images/ui-bg_glass_60_fbf8bc_1x400.png) 50% 50% repeat-x; color: #363636; }
+.ui-state-highlight a, .ui-widget-content .ui-state-highlight a { color: #363636; }
 
 .ui-state-error,.ui-widget-content .ui-state-error {
   border: 1px solid #cd0a0a;
@@ -202,29 +212,30 @@
 .ui-icon {
   width: 16px;
   height: 16px;
-  background-image: url(images/ui-icons_94d200_256x240.png);
+  background-image: url(images/ui-icons_056b93_256x240.png);
 }
 
 .ui-widget-content .ui-icon {
-  
+  background-image: url(images/ui-icons_056b93_256x240.png);
 }
 
 .ui-widget-header .ui-icon {
+  background-image: url(images/ui-icons_85a2c7_256x240.png);
 }
 
 .ui-state-default .ui-icon {
-  background-image: url(images/ui-icons_94d200_256x240.png);
+  background-image: url(images/ui-icons_6da8d5_256x240.png);
 }
 
 .ui-state-hover .ui-icon,.ui-state-focus .ui-icon {
-  background-image: url(images/ui-icons_94d200_256x240.png);
+  background-image: url(images/ui-icons_4582b0_256x240.png);
 }
 
 .ui-state-active .ui-icon {
   background-image: url(images/ui-icons_5fab2b_256x240.png);
 }
 
-.ui-state-highlight .ui-icon {background-image: url(images/ui-icons_94d200_256x240.png); }
+.ui-state-highlight .ui-icon {background-image: url(images/ui-icons_056b93_256x240.png); }
 
 .ui-state-error .ui-icon,.ui-state-error-text .ui-icon {
   background-image: url(images/ui-icons_cd0a0a_256x240.png);
@@ -926,63 +937,63 @@
 /* Misc visuals
 ----------------------------------*/ /* Corner radius */
 .ui-corner-tl {
-  -moz-border-radius-topleft: 7px;
-  -webkit-border-top-left-radius: 7px;
+  -moz-border-radius-topleft: 5px;
+  -webkit-border-top-left-radius: 5px;
 }
 
 .ui-corner-tr {
-  -moz-border-radius-topright: 7px;
-  -webkit-border-top-right-radius: 7px;
+  -moz-border-radius-topright: 5px;
+  -webkit-border-top-right-radius: 5px;
 }
 
 .ui-corner-bl {
-  -moz-border-radius-bottomleft: 7px;
-  -webkit-border-bottom-left-radius: 7px;
+  -moz-border-radius-bottomleft: 5px;
+  -webkit-border-bottom-left-radius: 5px;
 }
 
 .ui-corner-br {
-  -moz-border-radius-bottomright: 7px;
-  -webkit-border-bottom-right-radius: 7px;
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-right-radius: 5px;
 }
 
 .ui-corner-top {
-  -moz-border-radius-topleft: 7px;
-  -webkit-border-top-left-radius: 7px;
-  -moz-border-radius-topright: 7px;
-  -webkit-border-top-right-radius: 7px;
+  -moz-border-radius-topleft: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  -webkit-border-top-right-radius: 5px;
 }
 
 .ui-corner-bottom {
-  -moz-border-radius-bottomleft: 7px;
-  -webkit-border-bottom-left-radius: 7px;
-  -moz-border-radius-bottomright: 7px;
-  -webkit-border-bottom-right-radius: 7px;
+  -moz-border-radius-bottomleft: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-right-radius: 5px;
 }
 
 .ui-corner-right {
-  -moz-border-radius-topright: 7px;
-  -webkit-border-top-right-radius: 7px;
-  -moz-border-radius-bottomright: 7px;
-  -webkit-border-bottom-right-radius: 7px;
+  -moz-border-radius-topright: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-right-radius: 5px;
 }
 
 .ui-corner-left {
-  -moz-border-radius-topleft: 7px;
-  -webkit-border-top-left-radius: 7px;
-  -moz-border-radius-bottomleft: 7px;
-  -webkit-border-bottom-left-radius: 7px;
+  -moz-border-radius-topleft: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  -webkit-border-bottom-left-radius: 5px;
 }
 
 .ui-corner-all {
-  -moz-border-radius: 7px;
-  -webkit-border-radius: 7px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 /* Overlays */
 .ui-widget-overlay {
   background: #aaaaaa url(images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50%
     repeat-x;
-  opacity: .30 !important;
+  opacity: .30;
   filter: Alpha(Opacity =           30);
 }
 
@@ -1351,7 +1362,7 @@
 }
 
 .ui-progressbar .ui-progressbar-value {
-  margin: 0px;
+  margin: -1px;
   height: 100%;
 }  /* Resizable
 ----------------------------------*/
@@ -1500,16 +1511,13 @@
 
 .ui-slider-vertical .ui-slider-range-max {
   top: 0;
-}/*!
- * jQuery UI Tabs 1.8.20
- *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT or GPL Version 2 licenses.
- * http://jquery.org/license
- *
- * http://docs.jquery.com/UI/Tabs#theming
- */
-.ui-tabs { position: relative; padding: .2em; zoom: 1; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+}  /* Tabs
+----------------------------------*/
+.ui-tabs {
+  padding: .2em;
+  zoom: 1;
+}
+
 .ui-tabs .ui-tabs-nav {
   list-style: none;
   position: relative;
@@ -1567,11 +1575,3 @@
 
 /* initially hide datepicker */
 #ui-datepicker-div { display:none;}
-
-.ui-widget-content.ui-progressbar { 
-    border: 1px solid #8CCE00;
-}
-
-.ui-progressbar-value {
-    background-color: #8CCE00;
-}

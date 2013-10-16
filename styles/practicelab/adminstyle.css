@@ -9,8 +9,7 @@ html, body {
 body {
     font-family: verdana, arial, sans-serif;
     text-align: left;
-    background-color: #fefefe;
-    color: #666;
+    background-color: #5670A1;
     margin: 0;
     font-size: 9pt;
 }
@@ -24,18 +23,14 @@ div, form {
 ul,ol {
     text-align: left;
     font-size: 10pt;
+    color: #000;
 }
 
 p {
     clear: left;
     text-align:center;
-    padding-bottom: 1em;
+    margin:1em 0;
 }
-
-hr{
-    color:#efefef;
-}
-
 
 /* Wrapper */
 .wrapper {
@@ -43,18 +38,18 @@ hr{
     height: auto !important;
     height: 100%;
     margin: 0 auto -40px;
-    background-color:#fefefe;
+    background-color:#f8f8ff;
     width:100%;
 }
 
 /* Administration footer box */
 .footer {
     text-align: center;
+    color: #9C0;
     height: 30px;
+    background: #121a28;
     margin: 0 auto;
-    padding-top:0.4em;
-    border-top: 1px solid #eee;
-    width:98%;
+    padding: 5px;
     clear: both;
 }
 
@@ -83,26 +78,29 @@ th, p, div {
 }
 
 fieldset {
-    padding:4px 8px 4px 8px;
+    padding:0 6px 0px 6px;
     margin: 3px;
-    border-color:#DDD;
+    border-color:#D2E0F2 #8195BA #8195BA #D2E0F2;
     border-style: solid;
     border-width: 1px;
 }
 
 legend {
     font-weight: bold;
+    color:#2D466B;
 }
 
 .maintitle {
     font-size: 14pt;
     font-weight: 700;
-    color: #8CCE00;
-    text-align: left;
-    padding:0.2em 1em 0.2em 0.2em;
-    border-bottom: 1px solid #eee;
-    width:96%;
-    margin:0 auto;
+    color: #328639;
+    text-align: center;
+    background: #C4C4C4;
+    border-top: 2px solid #C9EF50;
+    border-bottom: 2px solid #6a8b03;
+    background-image: url(bkgmaintitle.gif);
+    background-repeat: repeat-x;
+    width:100%;
 }
 
 table.statisticstable {
@@ -123,11 +121,12 @@ span.basic {
 
 /* Start menubar */
 div.menubar {
-    background-color: #fefefe;
+    background-color: #EEF6FF;
     clear:left;
     padding:0;
-    margin:0 auto 58px auto !important;
-    width: 99%;
+    margin:3px auto 3px auto;
+    width: 99.5%;
+    min-height: 60px;
 }
 
 div.menubar .ui-widget-header
@@ -136,29 +135,33 @@ div.menubar .ui-widget-header
 }
 
 .menubar-main {
+    background-color: #EEF6FF;
     width: 99.6%;
     float: left;
-    border-color: #efefef;
+    border-color: #D2E0F2 #8195BA #8195BA #D2E0F2;
     border-style: solid;
     border-width: 1px;
     padding:0 0.2%;
+    min-height: 43px;
+
 }
 
 .menubar img {
     vertical-align: middle;
     max-height:40px;
     border:0;
-    margin:0;
-    padding:0;
+    margin:0 -2px;
 }
 
 .menubar-title {
+    background-color: #EEF6FF;
     float: left;
     width: 99.6%;
     font-size: 11px;
     text-align: left;
-    border-color: #efefef;
-    background-color:#EFFBDB;
+    border-color: #D2E0F2 #8195BA #D2E0F2 #D2E0F2;
+    border-style: solid;
+    border-width: 1px;
     padding:0 0.2%;
     min-height:14px;
 }
@@ -184,6 +187,7 @@ div.menubar .ui-widget-header
 }
 
 .menubar-left {
+    background-color: #EEF6FF;
     text-align: left;
     float: left;
     clear: none;
@@ -192,18 +196,8 @@ div.menubar .ui-widget-header
 
 }
 
-.menubar-left img{
-    float:left;
-    border:0;
-    padding:3px 1px;
-}
-
-.menubar-right > img{
-    border:0;
-    padding:2px 1px;
-}
-
 .menubar-right {
+    background-color: #EEF6FF;
     float: right;
     line-height: 1em;
     white-space: nowrap;
@@ -220,6 +214,7 @@ div.menubar .ui-widget-header
 .menubar-right .arrow-wrapper {
     display: inline; /* For IE */
     position: relative;
+    margin: 0 5px 0 5px;
     width: 20px;
     vertical-align: bottom;
 }
@@ -233,9 +228,9 @@ html>body .menubar-right .arrow-wrapper { /* For real browsers */
     display: block;
 }
 
-.menubar-right .arrow-wrapper img:first-child {
+.menubar-right .arrow-wrapper img {
     display: block;
-    margin-bottom: 2px;
+    margin: 0;
 }
 
 /* END menubar CSS */
@@ -243,6 +238,8 @@ html>body .menubar-right .arrow-wrapper { /* For real browsers */
 #surveydetails, #groupdetails, #questiondetails {
     background-color: #FFF;
     width: 100%;
+    border: 1px solid;
+    border-color: #fff #8195BA #8195BA #D2E0F2;
     margin-top:-2px;
     margin-bottom:4px;
     padding:5px 0;
@@ -265,7 +262,9 @@ html>body .menubar-right .arrow-wrapper { /* For real browsers */
 }
 #questionactioncopy{
     float: right;
-    margin-top: -60px
+}
+#questionactioncopy p{
+    margin: 0
 }
 .outlinetable {
     border: 1px solid #111;
@@ -285,6 +284,7 @@ html>body .menubar-right .arrow-wrapper { /* For real browsers */
 
 td {
     font-size: 10pt;
+    color: #1D2D45;
 }
 
 .btstyle {
@@ -311,7 +311,7 @@ td {
 }
 
 input, select, button {
-    color: #000;
+    color: navy;
     font: 10px verdana, arial, sans-serif;
 }
 
@@ -341,17 +341,14 @@ input[disabled], textarea[disabled], select[disabled], button[disabled] {
 
 textarea {
     font-size: 10px;
-    color: #000;
+    color: navy;
     font-family: verdana, arial, sans-serif;
 }
 
-.markedrow
-{
-    background-color: lightyellow;
-}
 
 .subtitle {
     font-size: 10px;
+    color: #FFF;
 }
 
 .listboxtemplates {
@@ -373,8 +370,8 @@ textarea {
 }
 
 .settingentryhighlight {
-    color: #94D200;
-    font-weight: bold;
+    color: navy;
+    font-weight: 700;
 }
 
 .statusentryhighlight {
@@ -384,7 +381,7 @@ textarea {
 
 .annotationasterisk
 {
-    color: #FF9D00;
+    color: #E00;
 }
 
 .hint {
@@ -393,8 +390,8 @@ textarea {
 
 .annotation {
     font-size: 10px;
-    color: #FF9D00;
-    vertical-align: top;    
+    color: #E00;
+    vertical-align: top;
 }
 
 .errortitle {
@@ -460,14 +457,10 @@ li.cancellink
 
 tr.even, .evenrow
 {
-    background-color: #fff;
+    background-color: #EFF4F9;
 }
-tr.odd,.oddrow,.answertable tr.highlight {
-    background-color: #EFFBDB;
-}
-
-tr.editedrow{
-    background-color: #B7FF0C;
+tr.odd,.oddrow {
+    background-color: #E3ECF5;
 }
 
 .choicelist {
@@ -492,11 +485,11 @@ th.admincell {
 }
 
 .header, .formheader, .headertwo {
-    text-align: left;
-    font-size: 16px;
-    font-weight: bold;
-    padding-left:1em;
-    padding-bottom:0.2em;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    background-color: #D2E0F2;
+    color: #1D2D45;
 }
 
 .header_statistics {
@@ -506,7 +499,7 @@ th.admincell {
 }
 .statisticsfilters {
     width: 99%;
-    border: 1px solid #85BD00;
+    border: 1px solid #C0FFC0;
     margin-bottom: 20px;
 }
 .scrollheight_400 {
@@ -535,7 +528,7 @@ img.handle {
 }
 
 a:link, a:visited {
-    color: #000;
+    color: #819D26;
     text-decoration: none;
 }
 
@@ -582,10 +575,11 @@ a.optoutemail {
 /* Browse response css */
 
 .browsetable {
+    border: 1px solid;
+    border-color: #D2E0F2 #8195BA #8195BA #D2E0F2;
     clear:left;
 }
 
-.ui-jqgrid-btable tr:hover td,
 .browsetable tr:hover {
     background-color: #C5D0F2;
 }
@@ -609,11 +603,11 @@ a.optoutemail {
 .users,
 .assessmentlist,
 .listsurveys,
-.surveysecurity {
+.surveysecurity,
+.answertable {
     text-align:center;
     margin:0 auto;
 }
-
 
 .conditionlist table,
 #filterchoices
@@ -629,8 +623,7 @@ a.optoutemail {
 
 .detailbrowsetable th:first-child,
 #responsedetail td:first-child,
-.conditionlist table td:first-child
-{
+.conditionlist table td:first-child {
     width:45%;
     text-align:right;
     padding-right:1em;
@@ -640,7 +633,6 @@ a.optoutemail {
 {
     font-weight:bold;
 }
-
 
 .conditionlist table td:nth-child(2)
 {
@@ -652,7 +644,6 @@ a.optoutemail {
     width:35%;
     text-align:left;
 }
-
 
 .conditionlist,
 .scenarioheader,
@@ -724,14 +715,13 @@ ul.assessmentscope li label:first-child {
 .surveysecurity th,
 .users th,
 .listsurveys th {
-    background-color: #fff;
-    text-align: center;
+    background-color: #D2E0F2;
     font-size:0.8em;
     padding:2px 14px 2px 10px;
 }
 
 .browsetable th {
-    background-color: #fff;
+    background-color: #D2E0F2;
     font-size:9pt;
     padding:2px;
     text-align: center;
@@ -746,7 +736,7 @@ ul.assessmentscope li label:first-child {
 
 .browsetable tfoot td {
     text-align: left;
-    background-color: #EFFBDB;
+    background-color: #D2E0F2;
     padding:4px;
 }
 
@@ -772,12 +762,6 @@ ul.assessmentscope li label:first-child {
     min-width: 0px;
 }
 
-.answertable {
-    margin:0 auto;
-    text-align:center;
-}
-
-
 .answertable th {
     font-weight:bold;
     font-size: 8pt;
@@ -792,24 +776,13 @@ ul.assessmentscope li label:first-child {
     text-align:right;
 }
 
-.answertable td *
-{
-    vertical-align: middle;
-}
-
-.answertable a
-{
-    font-size:0;
-}
-
-.answertable td img {
-    padding:4px 2px;
-}
-
-
 #languagetabs {
     width:60%;
     margin:0 auto;
+}
+
+.answertable tr.highlight {
+    background-color:#EAF2FF;
 }
 
 .badtokenlist {
@@ -817,8 +790,7 @@ ul.assessmentscope li label:first-child {
     background-color: #FFF;
     border: 1px solid #CCC;
     height: 80px;
-    overflow: auto;
-    overflow-y: scroll;
+    overflow-y: auto;
     text-align: left;
     margin-bottom: 0px;
     font-size: 8pt
@@ -888,6 +860,7 @@ ul.assessmentscope li label:first-child {
 
 table.templatecontrol {
     width: 100%;
+    background-color: #EEF6FF;
     border-color: #8195BA;
     border-style: solid;
     border-width: 1px;
@@ -902,6 +875,7 @@ table.templatecontrol select
 .subheader {
     font-size:10px;
     font-weight:bold;
+    background-color: #EEF6FF;
     text-align: left;
 }
 
@@ -950,7 +924,7 @@ table#user-template-rights tbody tr td:first-child
 
 
 table.statisticstable, table.statisticssummary {
-    background-color:#fff;
+    background-color:#EEF6FF;
     border-collapse:collapse;
     border-width: 0px;
     border-style: none;
@@ -999,7 +973,6 @@ table.statisticstable, table.statisticssummary {
 .statisticsbrowsecolumn {
     text-align: left;
     width: 100%;
-    background-color: #EFFBDB;
 }
 .statisticscolumnid {
     float: left;
@@ -1015,7 +988,9 @@ table.statisticstable, table.statisticssummary {
 div.messagebox {
     width: 550px;
     margin:10px auto;
-    background-color: #EFFBDB;
+    border: 1px solid;
+    border-color: #D2E0F2 #8195BA #8195BA #D2E0F2;
+    background-color: #F8F8FF;
     text-align: center;
     padding:10px;
 }
@@ -1026,15 +1001,15 @@ div.messagebox .header{
 
 div.successheader{
     font-weight:bold;
-    color:#fff;
-    background-color: #85BD00;
+    color:#008000;
+    background-color: #C0FFC0;
     margin: 5px 0;
     padding:2px;
 }
 div.errorheader{
     font-weight:bold;
-    color:#fff;
-    background-color: #94D200;
+    color:#800000;
+    background-color: #FFC0C0;
     margin: 5px 0;
     padding:2px;
 }
@@ -1042,10 +1017,10 @@ div.uploadsummary li {
     width: 95%;
     margin-left: -10px;
 }
-div.warningheader, div.messagebox .warningheader{
+div.warningheader{
     font-weight:bold;
-    color:#85BD00;
-    background-color: #EFFBDB;
+    color:#808000;
+    background-color: #FFC0C0;
     margin: 5px 0;
     padding:2px;
 }
@@ -1057,6 +1032,13 @@ div.partialheader{
     padding:2px;
 }
 
+div.messagebox .warningheader {
+    font-weight:bold;
+    color:#ee0000;
+    background-color: #ffeeee;
+    margin: 5px 0;
+    padding:2px;
+}
 
 /* Conditions designer interface */
 
@@ -1146,7 +1128,7 @@ div.partialheader{
 .data-entry-tbl .data-entry-separator td {
     padding: 0;
     height: 2px;
-    background-color: #EFFBDB;
+    background-color: #D2E0F2;
 }
 
 .data-entry-explanation {
@@ -1184,7 +1166,9 @@ textarea.updater-changelog {
     text-align: right;
     margin-right: 0.5em;
     float: left;
+    clear:left;
     font-weight: bold;
+    color: #1d2d45;
 }
 
 #loginform li label:first-child {
@@ -1193,6 +1177,7 @@ textarea.updater-changelog {
     margin-right: 0.5em;
     float: left;
     font-weight: bold;
+    color: #1d2d45;
 }
 
 .form30newtabs li label:first-child,
@@ -1201,7 +1186,9 @@ textarea.updater-changelog {
     text-align: right;
     margin-right: 0.5em;
     float: left;
-    color: #666;
+    clear:left;
+    font-weight: bold;
+    color: #121A28;
 }
 
 .form30newtabs li .warningtext,
@@ -1257,7 +1244,9 @@ textarea.updater-changelog {
     clear:left;
     padding-bottom:5px;
 }
-
+/*#tabs li{
+    clear:none;
+}*/
 .editorLink {
 	vertical-align: top;
 }
@@ -1323,13 +1312,12 @@ thead tr .headerSortDown {
 }
 
 thead tr .headerSortDown, thead tr .headerSortUp {
-    background-color: #888;
-    color:#fff;
+    background-color: #8195BA;
 }
 
 #tokensearch, #tokenrange, #browseresults{
     display:inline;
-    line-height:32px;
+    line-height:40px;
     vertical-align:middle;
     margin-left: 10px;
 }
@@ -1383,7 +1371,7 @@ div.right {
 }
 
 .statistics-tbl-separator td {
-    background-color:#EFFBDB;
+    background-color:#D2E0F2;
     height:2px;
     padding:0;
 }
@@ -1416,9 +1404,8 @@ div.right {
     width:33%;
 }
 
-/* Statistics filter */
 .filtertable  {
-    background:#EFFBDB;
+    background:#EEF6FF;
     text-align:center;
     margin:5px auto;
     border:1px #fff solid;
@@ -1462,18 +1449,10 @@ div.right {
     padding: 1px 1em;
     text-decoration:none !important;
     cursor:pointer;
+    font-size:0.9em;
     text-align: center;
     zoom: 1;
-    border: 1px solid #CDF078;
-    background: #EFFBDB url(images/ui-bg_glass_100_effbdb_1x400.png) 50% 50%
-    repeat-x;
 }
-
-.limebutton.ui-state-hover
-{
-    border: 1px solid #94D200;
-}
-
 
 #emailtemplates .ui-tabs-panel .limebutton {
     margin: 3px 20% 10px 30.5%;
@@ -1511,11 +1490,13 @@ table.limetable tbody tr.highlight {
 
 thead th
 {
+    background-color:#E1E7EF;
 }
 
 .usersurveypermissions {
     text-align:center;
 }
+
 
 .usersurveypermissions th{
     padding:0 2em;
@@ -1529,7 +1510,6 @@ thead th
     float:none;
 }
 
-
 .ui-notify {
     width:350px;
     position:fixed;
@@ -1538,6 +1518,7 @@ thead th
     margin-left: -175px;
     z-index:1000;
 }
+
 
 div.translate {
     margin: 2px 1px;
@@ -1574,7 +1555,7 @@ div.translate {
 
 
 ol.organizer {
-    padding: 0;
+    padding: 0 auto;
     list-style-type: none;
     font-weight: bold;
     width:800px;
@@ -1602,8 +1583,8 @@ ol.organizer {
 
 
 .organizer li div  {
-    background-color:#85BD00;
-    color:#fff;
+    border: 1px solid #D2E0F2;
+    background-color:#D2E0F2;
     padding: 3px;
     margin: 0;
     cursor: move;
@@ -1613,8 +1594,7 @@ ol.organizer {
 }
 
 .organizer li ol li div{
-    background-color:#EFFBDB;
-    color:#666;
+    background-color:#EEF6FF;
 }
 
 .textresponses {
@@ -1640,28 +1620,22 @@ ol.organizer {
     height:auto;
     font-size: 0.8em;
 }
-.labelsets-update label{display:block}
-.button-list{text-align:left}
-#gbox_displaysurveys{ margin:0 auto;}
-
-.ui-jqgrid tr.jqgrow {
-    background-color:#fff;
+.labelsets-update label{
+    display:block
 }
-
-.ui-jqgrid tr.ui-row-ltr td {
-    border:none !important;
+.button-list{
+    text-align:left
 }
-
-.separator{
-    height:32px;
+#gbox_displaysurveys{
+    margin:0 auto;
 }
 
 #separator4, #separator16{
-    padding-left:51px;
+    padding-left:55px;
 }
 
 #separator3, #separator12{
-    padding-right:12px;
+    padding-right:18px;
 }
 
 
@@ -1669,25 +1643,12 @@ ol.organizer {
     padding-left:5px;
 }
 
-.cke_skin_office2003 .cke_top, .cke_skin_office2003 .cke_bottom, .cke_shared .cke_skin_office2003 {
-    background-color: #EFFBDB !important;
-}
-
-.cke_skin_office2003 .cke_button a:hover, .cke_skin_office2003 .cke_button a:focus, .cke_skin_office2003 .cke_button a:active {
-    background-color: #EFFBDB !important;
-    border: 1px solid #94D200 !important;
-}
-
-.cke_skin_office2003 .cke_top, .cke_skin_office2003 .cke_bottom, .cke_shared .cke_skin_office2003 {
-    background-color: transparent !important;
-}
-
-.cke_skin_office2003 .cke_toolbar {
-    background-color: #FFF;
-}
-
 #browseresults{
     margin:0;
+}
+
+tr.editedrow{
+    background-color: #FCCFFF;
 }
 
 .ui-jqgrid td input[type="image"]
@@ -1697,13 +1658,8 @@ ol.organizer {
 
 #templateleft select
 {
-    width:140px;
+    width:150px;
 }
-
-legend{
-    margin:1em;
-}
-
 
 
 
@@ -1782,7 +1738,7 @@ tr.LEMsubq td {
 
 /* some classes to highlight certain elements */
 .error {
-    background-color: #FFBABA;
+    background-color: #000;
 }
 .ok {
     background-color: #00ff00
@@ -1809,23 +1765,10 @@ td.LEMerror  {
 	color: red;
 }
 
-.dd .ddTitle
-{
-    background-color:#fff !important;
-    color:#000 !important;
-}
-
-#cquestions optgroup{
-    font-weight:bold;
-}
-
-
-.browsetable thead td span
-
 #advancedquestionsettingswrapper {
 	display: block !important;
 }
- 
+
 #showadvancedattributes,
 #showadvancedattributes {
 	display: none !important;

@@ -1,25 +1,23 @@
 #addlang
 {
-  width: 400px;
+  width: 30%;
   margin-left: auto ;
   margin-right: auto ;
 }
-.commonsettings {
-    width: 400px;
-    margin-left: auto;
-    margin-right: auto;
+#comsettingdrop
+{
+  width: 15%;
+  margin-left: auto ;
+  margin-right: auto ;
 }
-.nudgeleft {
-    margin-left: -20px;
-}
-td.actions {
-    width: 40px;
-    text-align: right;
-}
-td.data {
-    text-align: center;
+#comsettingcheck
+{
+  width: 11%;
+  margin-left: auto ;
+  margin-right: auto ;
 }
 #dd{
+  width: 25%;
   margin-left: auto ;
   margin-right: auto ;
 }
@@ -27,18 +25,4 @@ td.data {
   width: 20%;
   margin-left: auto ;
   margin-right: auto ;
-}
-#editbox {
-    border: 1px solid black;
-}
-.languagesetting {
-    border: 1px solid gray;
-    cursor: pointer;
-}
-.edit {
-    cursor: pointer;
-    float: left;
-}
-input {
-    background-color: white;
 }

@@ -9,14 +9,13 @@ html, body{
    margin-top: 10px;
 }
 
-.cpdbatt {
-   margin-top: -5px;
+.tokenatt li{
+    border-color: #696565;
+    border-style:solid;
+    border-width:1px;
+    padding : 4px;
 }
-
-.cpdbatt li {
-  margin-top: 10px;
-  border-bottom: 0px;
-  min-height: 35px;
+.newcreate ul{
 }
 
 .newcreate, .csvatt, .cpdbatt {
@@ -24,15 +23,22 @@ html, body{
     padding-bottom: 50px;
 }
 
-#newcreated, #csvattribute, #centralattribute{
+.cpdbatt {
+   margin-top: -5px;
+}
+.cpdbatt li {
+  border-bottom: 0px;
+}
+
+#newcreated,#csvattribute,#centralattribute{
     float: left;
-    background-color: #EFFBDB;
+    background-color: #D2E0F2;
     height: 100%;
     margin-top:10px;
     margin-left: 30px;
     margin-right: 30px;
     margin-bottom: 20px;
-    border-color: #85BD00;
+    border-color: #D2E0F2;
     border-style: solid;
 	border-radius: 10px;
     border-width: 1px;
@@ -41,18 +47,21 @@ html, body{
     width:27%;
 }
 
- #newcreated ul, #csvattribute ul, #centralttribute ul{
+#newcreated ul, #csvattribute ul, #centralttribute ul{
     margin-left: -35px;
- }
+}
 
 #csvattribute, #centralattribute {
     height: 100%;
 }
+#centralattribute {
+    height: 100%;
+}
 
 .heading{
-    background: #8CCE00;
+    background: #EAF2FF;
     text-decoration: none;
-    color: #EFFBDB;
+    color:#5670A1;
     border-width: 1px;
     vertical-align: middle;
 	height: 23px;
@@ -73,7 +82,7 @@ li{
     color:#222222;
     width : 200px;
     margin-top: 2px;
-    margin-left:auto;
+    margin-left: auto;
     margin-right: auto;
     margin-bottom: 2px;
     list-style: none;

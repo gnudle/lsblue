@@ -7,12 +7,6 @@ ul,ol {
     text-align: right;
 }
 
-.maintitle {
-    padding: 0.2em 0.2em 0.2em 1em;
-    width: 96%;
-	text-align: right;
-	direction:rtl;
-}
 
 .menubar-main {
     float: right;
@@ -38,22 +32,17 @@ ul,ol {
     float: right;
 }
 
-.menubar-left img,
-.menubar-left a {
-    float: right;
-}
-
 .menubar-right {
     float: left;
 }
 
 #separator1 {
     padding-left: 0;
-    padding-right: 3px;
+    padding-right: 2px;
 }
 
 #separator2 {
-    padding-left: 10px;
+    padding-left: 2px;
 }
 
 #separator3, 
@@ -64,19 +53,14 @@ ul,ol {
 
 #separator4, 
 #separator16 {
-    padding-left: 1px;
-    padding-right: 50px;
+    padding-left: 0;
+    padding-right: 55px;
 }
 
 div.menubar input {
     margin-left: 2px;
 	margin-top: 5px;
-}
 
-.header, .formheader, .headertwo {
-    padding-left: 0;
-    padding-right: 1em;
-    text-align: right;
 }
 
 .form30 li, 
@@ -85,7 +69,7 @@ div.menubar input {
 }
 
 .form44 li label:first-child,
-.form30 li label:first-child ,
+.form30 li label:first-child,
 .form30newtabs li label:first-child {
     text-align: left;
     padding-left: 3px;
@@ -95,7 +79,7 @@ div.menubar input {
 }
 
 #emailtemplates .ui-tabs-panel .limebutton {
-    margin: 3px 30.5% 10px 20%;
+    margin: 3px 30.75% 10px 20%;
 }
 
 .form30 table {
@@ -134,7 +118,7 @@ div.menubar input {
 
 ul.sf-menu li li:hover ul,
 ul.sf-menu li li.sfHover ul {
-    right: 99%; 
+    right: 100%; 
 	left:auto;
 }
 
@@ -173,7 +157,6 @@ ul.sf-menu li li li.sfHover ul {
     margin: 0 0 -1px 0.2em;
 }
 
-
 /* Question type preview combobox */
 .dd {
     float: right;
@@ -201,6 +184,7 @@ ul.sf-menu li li li.sfHover ul {
     padding: 10px 0 0 1%;
     text-align: left;
 }
+
 
 /* Ckeditor */
 .cke_skin_office2003, .cke_skin_office2003 .cke_wrapper {
