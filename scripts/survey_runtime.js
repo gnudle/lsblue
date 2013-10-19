@@ -86,14 +86,34 @@ $(document).ready(function()
 		currentMap.panTo(markerLatLng);
 	});
 	
-	// #index
-    if ($("#index").size() && $("#index .row.current").size()){
-        var idx = $("#index");
-        var row = $("#index .row.current");
-        idx.scrollTop(row.position().top - idx.height() / 2 - row.height() / 2);
-    }
 });
-
+/**
+ * Manage the index
+ */
+function manageIndex(){
+    $("#index .jshide").hide();
+//    $("#index").on('click','li,.row',function(e){ 
+//        if(!$(e.target).is('button')){
+//            $(this).children("[name='move']").click();
+//        }
+//    });
+    $("#index li,#index .row").live('click',function(e){ 
+        if(!$(e.target).is('button')){
+            $(this).children("[name^='move']").click();
+        }
+    });
+    $("#index button").live('click',function(e){ 
+        $("input[name='move']").val($(this).val());
+        console.log($("input[name='move']").val());
+        $("#limesurvey").submit();
+    });
+//    $(function() {
+//        $(".outerframe").addClass("withindex");
+//        var idx = $("#index");
+//        var row = $("#index .row.current");
+//        idx.scrollTop(row.position().top - idx.height() / 2 - row.height() / 2);
+//    });
+}
 
 // Set jquery-ui to LS Button
 function navbuttonsJqueryUi(){
