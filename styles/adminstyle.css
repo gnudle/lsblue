@@ -50,3 +50,12 @@ div.htmleditor {
 .ui-tabs .ui-tabs-nav li{
 clear: none !important;
 }
+
+#advancedquestionsettingswrapper {
+	display: block !important;
+}
+
+#showadvancedattributes,
+#showadvancedattributes {
+	display: none !important;
+}
