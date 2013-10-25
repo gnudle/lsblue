@@ -3764,7 +3764,7 @@ function questionAttributes($returnByName=false)
     "caption"=>$clang->gT('Insert page break in printable view'));
 
     $qattributes["prefix"]=array(
-    "types"=>"KNQS",
+    "types"=>"KNQS*",
     'category'=>$clang->gT('Display'),
     'sortorder'=>10,
     'inputtype'=>'text',
@@ -3947,7 +3947,7 @@ function questionAttributes($returnByName=false)
     "caption"=>$clang->gT('Slider left/right text separator'));
 
     $qattributes["suffix"]=array(
-    "types"=>"KNQS",
+    "types"=>"KNQS*",
     'category'=>$clang->gT('Display'),
     'sortorder'=>11,
     'inputtype'=>'text',
