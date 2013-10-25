@@ -522,7 +522,12 @@ class tokens extends Survey_Common_Action
         return $this->getTokens_json($iSurveyId, $condition);
     }
 
-    function editToken($iSurveyId) // Used ? 2013-01-29
+    /**
+    * Called by jqGrid if a token is saved after editing
+    * 
+    * @param mixed $iSurveyId The Survey ID
+    */
+    function editToken($iSurveyId) 
     {
         $clang = $this->getController()->lang;
         if (!hasSurveyPermission($iSurveyId, 'tokens', 'update') && !hasSurveyPermission($iSurveyId, 'tokens', 'create'))
@@ -2322,6 +2327,7 @@ class tokens extends Survey_Common_Action
         if (Yii::app()->request->getQuery('createtable') == "Y")
         {
             createTokenTable($iSurveyId);
+            LimeExpressionManager::SetDirtyFlag();  // LimeExpressionManager needs to know about the new token table
             $this->_renderWrappedTemplate('token', array('message' =>array(
             'title' => $clang->gT("Token control"),
             'message' => $clang->gT("A token table has been created for this survey.") . " (\"" . Yii::app()->db->tablePrefix . "tokens_$iSurveyId\")<br /><br />\n"
