@@ -291,9 +291,13 @@ class SurveyRuntimeHelper {
                 }
                 else 
                 {
+                    $saveallvalue=(isset($_POST['saveall'])? $_POST['saveall']:false);
                     $token= (isset($clienttoken)) ? $clienttoken : "";
-                    header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['savescript']}s={$surveyid}&t={$clienttoken}");exit;
-                    // TODO : update lastpage to $_SESSION[$LEMsessid]['step'] in Survey_dynamic
+                    if($saveallvalue=="resume"){
+                        header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['savescript']}s={$surveyid}&t={$clienttoken}");exit;
+                    }else{
+                        $flashmessage = true;
+                    }
                 }
             }
 

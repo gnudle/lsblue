@@ -481,6 +481,16 @@ function templatereplace($line, $replacements = array(), &$redata = array(), $de
     {
         $_saveall = "";
     }
+    if(isset($thissurvey))
+    {
+        if($thissurvey['tokenanswerspersistence'] == 'Y' && tableExists('tokens_'.$surveyid) )
+        {
+        $disabled=(($thissurvey['active'] != "Y") ? " disabled='disabled' " : "");
+        $_saveall = "<button type='submit' name='saveall' class='' value='save' id='savebtn' {$disabled}>" . $clang->gT("Save") . "</button>";
+        $_saveall .= " ";
+        $_saveall .= "<button type='submit' name='saveall' class='btn-info' value='resume' id='resumebtn' {$disabled}>" . $clang->gT("Resume Later") . "</button>";
+        }
+    }
 
     if(!isset($help)) $help = "";
     if (flattenText($help, true,true) != '')
