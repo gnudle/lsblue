@@ -294,7 +294,8 @@ class SurveyRuntimeHelper {
                     $saveallvalue=(isset($_POST['saveall'])? $_POST['saveall']:false);
                     $token= (isset($clienttoken)) ? $clienttoken : "";
                     if($saveallvalue=="resume"){
-                        header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['savescript']}s={$surveyid}&t={$clienttoken}");exit;
+                        $sToken=(isset($_SESSION['survey_'.$surveyid]['token']))?$_SESSION['survey_'.$surveyid]['token']:"";
+                        header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['savescript']}s={$surveyid}&t={$sToken}");exit;
                     }else{
                         $flashmessage = true;
                     }
@@ -511,8 +512,8 @@ class SurveyRuntimeHelper {
                     }
                     else
                     {
-                        $clienttoken=(isset($_SESSION['survey_'.$surveyid]['thistoken']))?$_SESSION['survey_'.$surveyid]['thistoken']:"";
-                        header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['submitscript']}s={$surveyid}&t={$clienttoken}");
+                        $sToken=(isset($_SESSION['survey_'.$surveyid]['token']))?$_SESSION['survey_'.$surveyid]['token']:"";
+                        header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['submitscript']}s={$surveyid}&t={$sToken}");
                     }
                     doHeader();
                     echo $content;

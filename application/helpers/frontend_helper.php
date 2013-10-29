@@ -1486,7 +1486,7 @@
            }
             if (is_null($oTokenEntry) || ($areTokensUsed && $thissurvey['alloweditaftercompletion'] != 'Y') )
             {
-                            header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=ti");
+                header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=ti");
                 sendCacheHeaders();
                 doHeader();
                 //TOKEN DOESN'T EXIST OR HAS ALREADY BEEN USED. EXPLAIN PROBLEM AND EXIT
