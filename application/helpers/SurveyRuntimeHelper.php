@@ -1194,115 +1194,117 @@ class SurveyRuntimeHelper {
         //App()->getClientScript()->registerScript('manageIndex',"manageIndex()\n",CClientScript::POS_END);
 	}
 
+    // TODO
 	protected function createFullQuestionIndexByQuestion($LEMsessid)
 	{
-		echo CHtml::openTag('div', array('id' => 'index'));
-			echo CHtml::openTag('div', array('class' => 'container'));
-				echo CHtml::tag('h2', array(), $clang->$clang->gT("Question index"));
-				echo 'Question by question not yet supported, use incremental index.';
-			echo CHtml::closeTag('div');
-		echo CHtml::closeTag('div');
+#		echo CHtml::openTag('div', array('id' => 'index'));
+#			echo CHtml::openTag('div', array('class' => 'container'));
+#				echo CHtml::tag('h2', array(), $clang->$clang->gT("Question index"));
+#				echo 'Question by question not yet supported, use incremental index.';
+#			echo CHtml::closeTag('div');
+#		echo CHtml::closeTag('div');
 
-		echo "<script><!--\n"
-			."$(function() {\n"
-			." manageIndex();\n"
-			."});\n"
-			."--></script>\n";
+#		echo "<script><!--\n"
+#			."$(function() {\n"
+#			." manageIndex();\n"
+#			."});\n"
+#			."--></script>\n";
 	}
-	
+
+    // TODO
 	protected function createIncrementalQuestionIndex($LEMsessid, $surveyMode)
 	{
-		echo "\n\n<!-- PRESENT THE INDEX -->\n";
+#		echo "\n\n<!-- PRESENT THE INDEX -->\n";
 
-		echo '<div id="index"><div class="container"><h2>' . $clang->gT("Question index") . '</h2>';
+#		echo '<div id="index"><div class="container"><h2>' . $clang->gT("Question index") . '</h2>';
 
-		$stepIndex = LimeExpressionManager::GetStepIndexInfo();
-		$lastGseq=-1;
-		$gseq = -1;
-		$grel = true;
-		for($v = 0, $n = 0; $n != $_SESSION[$LEMsessid]['maxstep']; ++$n)
-		{
-			if (!isset($stepIndex[$n])) {
-				continue;   // this is an invalid group - skip it
-			}
-			$stepInfo = $stepIndex[$n];
+#		$stepIndex = LimeExpressionManager::GetStepIndexInfo();
+#		$lastGseq=-1;
+#		$gseq = -1;
+#		$grel = true;
+#		for($v = 0, $n = 0; $n != $_SESSION[$LEMsessid]['maxstep']; ++$n)
+#		{
+#			if (!isset($stepIndex[$n])) {
+#				continue;   // this is an invalid group - skip it
+#			}
+#			$stepInfo = $stepIndex[$n];
 
-			if ($surveyMode == 'question')
-			{
-				if ($lastGseq != $stepInfo['gseq']) {
-					// show the group label
-					++$gseq;
-					$g = $_SESSION[$LEMsessid]['grouplist'][$gseq];
-					$grel = !LimeExpressionManager::GroupIsIrrelevantOrHidden($gseq);
-					if ($grel)
-					{
-						$gtitle = LimeExpressionManager::ProcessString($g['group_name']);
-						echo '<h3>' . flattenText($gtitle) . "</h3>";
-					}
-					$lastGseq = $stepInfo['gseq'];
-				}
-				if (!$grel || !$stepInfo['show'])
-				{
-					continue;
-				}
-				$q = $_SESSION[$LEMsessid]['fieldarray'][$n];
-			}
-			else
-			{
-				++$gseq;
-				if (!$stepInfo['show'])
-				{
-					continue;
-				}
-				$g = $_SESSION[$LEMsessid]['grouplist'][$gseq];
-			}
+#			if ($surveyMode == 'question')
+#			{
+#				if ($lastGseq != $stepInfo['gseq']) {
+#					// show the group label
+#					++$gseq;
+#					$g = $_SESSION[$LEMsessid]['grouplist'][$gseq];
+#					$grel = !LimeExpressionManager::GroupIsIrrelevantOrHidden($gseq);
+#					if ($grel)
+#					{
+#						$gtitle = LimeExpressionManager::ProcessString($g['group_name']);
+#						echo '<h3>' . flattenText($gtitle) . "</h3>";
+#					}
+#					$lastGseq = $stepInfo['gseq'];
+#				}
+#				if (!$grel || !$stepInfo['show'])
+#				{
+#					continue;
+#				}
+#				$q = $_SESSION[$LEMsessid]['fieldarray'][$n];
+#			}
+#			else
+#			{
+#				++$gseq;
+#				if (!$stepInfo['show'])
+#				{
+#					continue;
+#				}
+#				$g = $_SESSION[$LEMsessid]['grouplist'][$gseq];
+#			}
 
-			if ($surveyMode == 'group')
-			{
-				$indexlabel = LimeExpressionManager::ProcessString($g['group_name']);
-				$sButtonText=$clang->gT('Go to this group');
-			}
-			else
-			{
-				$indexlabel = LimeExpressionManager::ProcessString($q[3]);
-				$sButtonText=$clang->gT('Go to this question');
-			}
+#			if ($surveyMode == 'group')
+#			{
+#				$indexlabel = LimeExpressionManager::ProcessString($g['group_name']);
+#				$sButtonText=$clang->gT('Go to this group');
+#			}
+#			else
+#			{
+#				$indexlabel = LimeExpressionManager::ProcessString($q[3]);
+#				$sButtonText=$clang->gT('Go to this question');
+#			}
 
-			$sText = (($surveyMode == 'group') ? flattenText($indexlabel) : flattenText($indexlabel));
-			$bGAnsw = !$stepInfo['anyUnanswered'];
+#			$sText = (($surveyMode == 'group') ? flattenText($indexlabel) : flattenText($indexlabel));
+#			$bGAnsw = !$stepInfo['anyUnanswered'];
 
-			++$v;
+#			++$v;
 
-			$class = ($n == $_SESSION[$LEMsessid]['step'] - 1 ? 'current' : ($bGAnsw ? 'answer' : 'missing'));
-			if ($v % 2)
-				$class .= " odd";
+#			$class = ($n == $_SESSION[$LEMsessid]['step'] - 1 ? 'current' : ($bGAnsw ? 'answer' : 'missing'));
+#			if ($v % 2)
+#				$class .= " odd";
 
-			$s = $n + 1;
-			if($_SESSION[$LEMsessid]['maxstep']< $s){
-				$class .= " upper";
-			}else{
-				$class .= " active";
-			}
-			echo "<div class=\"row $class\"\">";
-			echo "<span class=\"hdr\">$v</span>";
-			echo "<span title=\"$sText\">$sText</span>";
-			if($_SESSION[$LEMsessid]['maxstep']>=$s){
-            	echo CHtml::htmlButton($sButtonText,array('type'=>'submit','value'=>$s,'name'=>'moveindex'.$group['step'],'class'=>'jshide'));
-            }
-			echo "</div>";
-		}
+#			$s = $n + 1;
+#			if($_SESSION[$LEMsessid]['maxstep']< $s){
+#				$class .= " upper";
+#			}else{
+#				$class .= " active";
+#			}
+#			echo "<div class=\"row $class\"\">";
+#			echo "<span class=\"hdr\">$v</span>";
+#			echo "<span title=\"$sText\">$sText</span>";
+#			if($_SESSION[$LEMsessid]['maxstep']>=$s){
+#            	echo CHtml::htmlButton($sButtonText,array('type'=>'submit','value'=>$s,'name'=>'moveindex'.$group['step'],'class'=>'jshide'));
+#            }
+#			echo "</div>";
+#		}
 
-		if ($_SESSION[$LEMsessid]['maxstep'] == $_SESSION[$LEMsessid]['totalsteps'])
-		{
-            echo CHtml::htmlButton($clang->gT('Submit'),array('type'=>'submit','value'=>'movesubmit','name'=>'movesubmitindex','class'=>'submit button'));
-		}
+#		if ($_SESSION[$LEMsessid]['maxstep'] == $_SESSION[$LEMsessid]['totalsteps'])
+#		{
+#            echo CHtml::htmlButton($clang->gT('Submit'),array('type'=>'submit','value'=>'movesubmit','name'=>'movesubmitindex','class'=>'submit button'));
+#		}
 
-		echo '</div></div>';
-		echo "<script><!--\n"
-			."$(function() {\n"
-			." manageIndex();\n"
-			."});\n"
-			."--></script>\n";
+#		echo '</div></div>';
+#		echo "<script><!--\n"
+#			."$(function() {\n"
+#			." manageIndex();\n"
+#			."});\n"
+#			."--></script>\n";
 
 	}
 }
