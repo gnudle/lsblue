@@ -3155,7 +3155,7 @@ function do_multiplenumeric($ia)
         $maxlength= " maxlength='25' ";
     }
     $sThousandseperator=trim($aQuestionAttributes['thousand_seperator']);
-    $sThousandseperator=($sThousandseperator==$sSeperator)?"":$sThousandseperator;
+    $sThousandseperator=($sThousandseperator==$sSeperator or $sThousandseperator=="none")?"":$sThousandseperator;
     if($sThousandseperator)
         $answertypeclass .=" havethousand";
     if (trim($aQuestionAttributes['num_value_int_only'])==1)
@@ -3732,7 +3732,7 @@ function do_numerical($ia)
     }
     
     $sThousandseperator=trim($aQuestionAttributes['thousand_seperator']);
-    $sThousandseperator=($sThousandseperator==$sSeperator)?"":$sThousandseperator;
+    $sThousandseperator=($sThousandseperator==$sSeperator or $sThousandseperator=="none")?"":$sThousandseperator;
     if($sThousandseperator)
         $answertypeclass .=" havethousand";
     $fValue=$_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$ia[1]];
