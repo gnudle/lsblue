@@ -479,7 +479,6 @@ class index extends CAction {
 
                 sendCacheHeaders();
                 header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=ti");
-                die("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=ti");
                 //TOKEN DOESN'T EXIST OR HAS ALREADY BEEN USED. EXPLAIN PROBLEM AND EXIT
                 exit;
                 $redata = compact(array_keys(get_defined_vars()));
@@ -632,6 +631,7 @@ class index extends CAction {
                     if (!is_null($aRow['lastpage']))
                     {
                         $_SESSION['survey_'.$surveyid]['LEMtokenResume'] = true;
+                        $_SESSION['survey_'.$surveyid]['maxstep'] = $aRow['lastpage'];
                         $_SESSION['survey_'.$surveyid]['step'] = $aRow['lastpage'];
                     }
                 }
