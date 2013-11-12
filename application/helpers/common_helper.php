@@ -4445,6 +4445,27 @@ function questionAttributes($returnByName=false)
 	    'default'=>",",
 	    "help"=>$clang->gT('Thousand seperator automaticall used in answer'),
 	    "caption"=>$clang->gT('Thousand seperator'));
+		
+/* Display, cell coordinates for Grids */	
+	
+		$qattributes["grid_row"]=array(
+		    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+		    'category'=>$clang->gT('Display'),
+		    'sortorder'=>301,
+		    'inputtype'=>'text',
+		    'i18n'=>true,
+		    "help"=>$clang->gT('Row number, e.g., 1, 2, 3...'),
+		    "caption"=>$clang->gT('Grid row'));
+			
+		$qattributes["grid_column"]=array(
+		    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+		    'category'=>$clang->gT('Display'),
+		    'sortorder'=>302,
+		    'inputtype'=>'text',
+		    'i18n'=>true,
+		    "help"=>$clang->gT('Column name, e.g., A, B, C...'),
+		    "caption"=>$clang->gT('Grid column'));		
+			
     //This builds a more useful array (don't modify)
     if ($returnByName==false)
     {
