@@ -912,7 +912,12 @@ class SurveyRuntimeHelper {
                 // The following four variables offer the templating system the
                 // capacity to fully control the HTML output for questions making the
                 // above echo redundant if desired.
-                $question['essentials'] = 'id="question' . $qa[4] . '"' . $n_q_display;
+                $sEssentials ="id='question{$qa[4]}' ";
+                $sEssentials .="data-code='{$qa[5]}' ";
+                $aTempAttributeValues=getQuestionAttributeValues($qa[4]);
+                if($aTempAttributeValues['grid_cell']!="")
+                    $sEssentials .=" data-gridcell='{$aTempAttributeValues['grid_cell']}'";
+                $question['essentials'] = "$sEssentials $n_q_display";
                 $question['class'] = $q_class;
                 $question['man_class'] = $man_class;
                 $question['code'] = $qa[5];

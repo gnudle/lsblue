@@ -4451,24 +4451,34 @@ function questionAttributes($returnByName=false)
 	    "caption"=>$clang->gT('Thousand seperator'));
 		
 /* Display, cell coordinates for Grids */	
-	
-		$qattributes["grid_row"]=array(
-		    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
-		    'category'=>$clang->gT('Display'),
-		    'sortorder'=>302,
-		    'inputtype'=>'text',
-		    'i18n'=>true,
-		    "help"=>$clang->gT('Row number, e.g., 1, 2, 3...'),
-		    "caption"=>$clang->gT('Grid row'));
-			
-		$qattributes["grid_column"]=array(
+
+		$qattributes["grid_cell"]=array(
 		    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
 		    'category'=>$clang->gT('Display'),
 		    'sortorder'=>301,
 		    'inputtype'=>'text',
-		    'i18n'=>true,
-		    "help"=>$clang->gT('Column name, e.g., A, B, C...'),
-		    "caption"=>$clang->gT('Grid column'));		
+		    'i18n'=>false, // DSon't think we need different cell for each language ?
+		    "help"=>$clang->gT('Cell name (excel style), e.g., A1, B5, C1... Use BREAK to next table'),
+		    'default'=>"",
+		    "caption"=>$clang->gT('Grid cell'));
+
+#		$qattributes["grid_row"]=array(
+#		    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+#		    'category'=>$clang->gT('Display'),
+#		    'sortorder'=>302,
+#		    'inputtype'=>'text',
+#		    'i18n'=>true,
+#		    "help"=>$clang->gT('Row number, e.g., 1, 2, 3...'),
+#		    "caption"=>$clang->gT('Grid row'));
+#			
+#		$qattributes["grid_column"]=array(
+#		    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+#		    'category'=>$clang->gT('Display'),
+#		    'sortorder'=>301,
+#		    'inputtype'=>'text',
+#		    'i18n'=>true,
+#		    "help"=>$clang->gT('Column name, e.g., A, B, C...'),
+#		    "caption"=>$clang->gT('Grid column'));		
 			
     //This builds a more useful array (don't modify)
     if ($returnByName==false)
