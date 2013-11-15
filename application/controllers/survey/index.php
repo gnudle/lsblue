@@ -69,7 +69,7 @@ class index extends CAction {
             $this->_createNewUserSessionAndRedirect($surveyid, $redata, __LINE__, $asMessage);
         }
 
-        if ( $this->_isSurveyFinished($surveyid) )
+        if ( $this->_isSurveyFinished($surveyid) && ($thissurvey['alloweditaftercompletion'] != 'Y' || $thissurvey['tokenanswerspersistence'] != 'Y'))
         {
             header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=f");
             $asMessage = array(
