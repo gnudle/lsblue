@@ -1988,14 +1988,24 @@
     // Prefill questions/answers from command line params
     $reservedGetValues= array('token','sid','gid','qid','lang','newtest','action');
     $startingValues=array();
-    if (isset($_GET))
+    if (isset($_REQUEST))
     {
-        foreach ($_GET as $k=>$v)
+        foreach ($_REQUEST as $k=>$v)
         {
             if (!in_array($k,$reservedGetValues) && isset($_SESSION['survey_'.$surveyid]['fieldmap'][$k]))
             {
                 $startingValues[$k] = $v;
             }
+			elseif(!in_array($k,$reservedGetValues))
+			{   // Search question codes to use those for prefilling.
+				foreach($_SESSION['survey_'.$surveyid]['fieldmap'] as $sgqa => $details)
+				{
+					if ($details['title'] == $k)
+					{
+						$startingValues[$sgqa] = $v;
+					}
+				}
+			}
         }
     }
     $_SESSION['survey_'.$surveyid]['startingValues']=$startingValues;
