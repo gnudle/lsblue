@@ -959,7 +959,7 @@
                 if(!empty($participant_id))
                 {
                     $slquery = Survey_links::model()->find('participant_id = :pid AND survey_id = :sid AND token_id = :tid', array(':pid'=>$participant_id, ':sid'=>$surveyid, ':tid'=>$oTokenInformation->tid));
-                    if($slquery)
+                    if ($slquery)
                     {
                         if (isTokenCompletedDatestamped($thissurvey))
                         {
@@ -1183,8 +1183,8 @@
         $redata=compact(array_keys(get_defined_vars()));
         if (count($aEmailNotificationTo)>0)
         {
-            $sMessage=templatereplace($thissurvey['email_admin_notification'],$aReplacementVars,$redata,'frontend_helper[1398]',($thissurvey['anonymized'] == "Y"));
-            $sSubject=templatereplace($thissurvey['email_admin_notification_subj'],$aReplacementVars,$redata,'frontend_helper[1399]',($thissurvey['anonymized'] == "Y"));
+            $sMessage=templatereplace($thissurvey['email_admin_notification'],$aReplacementVars,$redata,'frontend_helper[1398]',($thissurvey['anonymized'] == "Y"),NULL, array(), true);
+            $sSubject=templatereplace($thissurvey['email_admin_notification_subj'],$aReplacementVars,$redata,'frontend_helper[1399]',($thissurvey['anonymized'] == "Y"),NULL, array(), true);
             foreach ($aEmailNotificationTo as $sRecipient)
             {
                 if (!SendEmailMessage($sMessage, $sSubject, $sRecipient, $sFrom, $sitename, true, getBounceEmail($surveyid)))
@@ -2013,8 +2013,8 @@
     if (isset($_SESSION['survey_'.$surveyid]['fieldarray'])) $_SESSION['survey_'.$surveyid]['fieldarray']=array_values($_SESSION['survey_'.$surveyid]['fieldarray']);
 
     //Check if a passthru label and value have been included in the query url
-    $oResult=Survey_url_parameters::model()->getParametersForSurvey($surveyid);
-    foreach($oResult->readAll() as $aRow)
+    $oResult=Survey_url_parameters::model()->getParametersForSurvey($surveyid)->readAll();
+    foreach($oResult as $aRow)
     {
         if(isset($_GET[$aRow['parameter']]) && !$preview)
         {
