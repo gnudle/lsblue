@@ -3361,7 +3361,7 @@ function do_multiplenumeric($ia)
     $hidetip=$aQuestionAttributes['hide_tip'];
     if ($slider_layout === true) // auto hide tip when using sliders
     {
-        $hidetip=1;
+        //$hidetip=1;
     }
 
     if ($aQuestionAttributes['random_order']==1)
@@ -3535,11 +3535,11 @@ function do_multiplenumeric($ia)
             $question_tip .= '<p class="tip">';
             if ($slider_layout)
             {
-                $question_tip .= $clang->gT('Only numbers may be entered in these fields');    
+                $question_tip .= $clang->gT('Please click and drag the slider handles to enter your answer.');// Must be shown only in javascript
             }
             else
             {
-                $question_tip .= $clang->gT('Please click and drag the slider handles to enter your answer.');    
+                $question_tip .= $clang->gT('Only numbers may be entered in these fields');
             }
             $question_tip .= "</p>\n";    
             
@@ -3830,7 +3830,11 @@ function do_shortfreetext($ia)
     global $thissurvey;
 
     $clang = Yii::app()->lang;
-    $googleMapsAPIKey = Yii::app()->getConfig("googleMapsAPIKey");
+    $sGoogleMapsAPIKey = trim(Yii::app()->getConfig("googleMapsAPIKey"));
+    if ($sGoogleMapsAPIKey!='')
+    {
+        $sGoogleMapsAPIKey='&key='.$sGoogleMapsAPIKey;
+    }
     $extraclass ="";
     $aQuestionAttributes = getQuestionAttributeValues($ia[0], $ia[4]);
 
@@ -3981,9 +3985,9 @@ function do_shortfreetext($ia)
         <div id=\"gmap_canvas_$ia[1]_c\" style=\"width: {$aQuestionAttributes['location_mapwidth']}px; height: {$aQuestionAttributes['location_mapheight']}px\"></div>
         </div>";
         if ($aQuestionAttributes['location_mapservice']==1 && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != "off")
-            header_includes("https://maps.googleapis.com/maps/api/js?sensor=false");
+            header_includes("https://maps.googleapis.com/maps/api/js?sensor=false$sGoogleMapsAPIKey");
         else if ($aQuestionAttributes['location_mapservice']==1)
-            header_includes("http://maps.googleapis.com/maps/api/js?sensor=false");
+            header_includes("http://maps.googleapis.com/maps/api/js?sensor=false$sGoogleMapsAPIKey");
         elseif ($aQuestionAttributes['location_mapservice']==2)
             header_includes("http://www.openlayers.org/api/OpenLayers.js");
 
