@@ -155,7 +155,7 @@ function addUpdateResponse()
         // Find the response id
         var responseId=aUrl[aUrl.indexOf("id")+1];
         // OR var responseId= aUrl.pop();
-        $('.menubar').eq(1).find('.menubar-main').append("<div class='updateanswer' data-responseid='"+responseId+"'>Update This Answer</div>");
+        $('.menubar').eq(1).find('.menubar-main').find(".menubar-left:last").append("<a class='updateanswer' data-responseid='"+responseId+"'>Update This Answer</a>");
         $('.updateanswer').click(function(){
             // Need function for url LS.createUrl = function (route, params)
             //jsonUrl="http://practicelab.sondages.pro/q/recompute?sid="+surveyid+"&srid="+responseId;
@@ -185,7 +185,7 @@ function addUpdateResponse()
         });
     }
     if(controllers=='responses'){
-        $('.menubar').eq(0).find('.menubar-main').append("<div class='updateanswers'>Update all submitted answers</div>");
+        $('.menubar').eq(0).find('.menubar-main').find(".menubar-left:last").append("<a class='updateanswers'>Update all submitted answers</a>");
             $(".updateanswers").live("click",function(){
                 var jsonurl=$(this).attr('rel');
                   $("#updatedsrid").remove();

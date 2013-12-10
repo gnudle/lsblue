@@ -16,6 +16,7 @@ class RecomputeController extends LSYii_Controller {
 
     private $language="";
     private $json=false;
+    private $bIsAdmin=false;
     function init()
     {
         parent::init();
@@ -44,11 +45,11 @@ class RecomputeController extends LSYii_Controller {
 
         if(!$aSurveyInfo || $aSurveyInfo['active']!="Y")
         {
-            $this->sendError("Invalid survey ID");
+            $this->bIsAdmin=true;// Admin view response and can update one by one. Else : only update if token or srid
         }
         Yii::app()->setConfig('surveyID',$iSurveyId);
         $bIsTokenSurvey=tableExists("tokens_{$iSurveyId}");
-        if(!hasSurveyPermission($iSurveyId,'responses','update'))
+        if(hasSurveyPermission($iSurveyId,'responses','update'))
         {
             $this->sendError("Invalid user (permissions)");
         }
@@ -59,11 +60,13 @@ class RecomputeController extends LSYii_Controller {
             if($oResponse)
                 $iResponseId=$oResponse->id;
         }
-        if(!$sToken && !$iResponseId && $bDoNext)
+        if(!$sToken && !$iResponseId && $bDoNext && $this->bIsAdmin)
         {
             $oResponse=Survey_dynamic::model($iSurveyId)->find("submitdate IS NOT NULL",array("order"=>"id"));
             if($oResponse)
                 $iResponseId=$oResponse->id;
+            else
+                $this->json=json_encode(array("status"=>"success","message"=>"No completed survey found","next"=>false,"updatedValueCount"=>0,"updatedArray"=>array()));
         }
         if($iResponseId){
             $oResponse=Survey_dynamic::model($iSurveyId)->findByPk($iResponseId);
@@ -154,11 +157,13 @@ class RecomputeController extends LSYii_Controller {
                         $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$aFieldMap[$column]['relevance']."}");
                         if(!$bRelevance)
                         {
+                            
                             if(!is_null($oResponse->$column))
                             {
+                                if($oResponse->$column)
+                                    $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>NULL";
                                 $updatedValues['old'][$sColumnName]=$oResponse->$column;
                                 $updatedValues['new'][$sColumnName]=null;
-                                $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>".$updatedValues['new'][$sColumnName];
                             }
                             $oResponse->$column= null;
                         }
@@ -168,7 +173,7 @@ class RecomputeController extends LSYii_Controller {
                     {
                         $oldVal=$oResponse->$column;
                         $newVal=$oResponse->$column=LimeExpressionManager::ProcessString($aFieldMap[$column]['question']);
-                        if($oldVal!=$newVal)
+                        if($oldVal!=$newVal && ($oldVal && $newVal))
                         {
                             $updatedValues['old'][$sColumnName]=$oldVal;
                             $updatedValues['new'][$sColumnName]=$newVal;
@@ -180,11 +185,13 @@ class RecomputeController extends LSYii_Controller {
             $oResponse->save();
             // Construct a message
             if(count($updatedValues)>1)
-                $message= sprintf('Responses %s updated: %s answers modified.',$iResponseId,count($updatedValues));
+                $message= sprintf('Responses %s updated: %s answers modified.',$iResponseId,count($updatedInfoArray));
             elseif(count($updatedValues)>0)
                 $message= sprintf('Responses %s updated: one answer modified.',$iResponseId);
             else
                 $message= sprintf('Responses %s updated: no answer modified.',$iResponseId);
+            if(!$this->bIsAdmin)
+                $message= 'Responses %s updated.';
             // If needed find the next
             if($bDoNext)
             {
@@ -197,8 +204,10 @@ class RecomputeController extends LSYii_Controller {
                 if($oNextResponse)
                     $iNextSrid=$oNextResponse->id;
             }
-            $this->json=json_encode(array("status"=>"success","message"=>$message,"next"=>$iNextSrid,"updatedValueCount"=>count($updatedInfoArray),"updatedArray"=>$updatedInfoArray));
-            //$this->json=json_encode($aFieldMap);
+            if($this->bIsAdmin)
+                $this->json=json_encode(array("status"=>"success","message"=>$message,"next"=>$iNextSrid,"updatedValueCount"=>count($updatedInfoArray),"updatedArray"=>$updatedInfoArray));
+            else
+                $this->json=json_encode(array("status"=>"success","message"=>$message);
         }
         $this->displayJson();
     }
