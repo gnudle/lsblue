@@ -45,13 +45,13 @@ class RecomputeController extends LSYii_Controller {
 
         if(!$aSurveyInfo || $aSurveyInfo['active']!="Y")
         {
-            $this->bIsAdmin=true;// Admin view response and can update one by one. Else : only update if token or srid
+                $this->sendError("Invalid Survey ID");
         }
         Yii::app()->setConfig('surveyID',$iSurveyId);
         $bIsTokenSurvey=tableExists("tokens_{$iSurveyId}");
         if(hasSurveyPermission($iSurveyId,'responses','update'))
         {
-            $this->sendError("Invalid user (permissions)");
+            $this->bIsAdmin=true;// Admin view response and can update one by one. Else : only update if token or srid
         }
         $iNextSrid=0;
         if($bIsTokenSurvey && $sToken && !$iResponseId)
@@ -207,7 +207,7 @@ class RecomputeController extends LSYii_Controller {
             if($this->bIsAdmin)
                 $this->json=json_encode(array("status"=>"success","message"=>$message,"next"=>$iNextSrid,"updatedValueCount"=>count($updatedInfoArray),"updatedArray"=>$updatedInfoArray));
             else
-                $this->json=json_encode(array("status"=>"success","message"=>$message);
+                $this->json=json_encode(array("status"=>"success","message"=>$message));
         }
         $this->displayJson();
     }
