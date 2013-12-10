@@ -441,7 +441,14 @@ class SurveyRuntimeHelper {
                 }
                 else 
                 {
-                    // TODO : update lastpage to $_SESSION[$LEMsessid]['step'] in SurveyDynamic
+                    $saveallvalue=(isset($_POST['saveall'])? $_POST['saveall']:false);
+                    $token= (isset($clienttoken)) ? $clienttoken : "";
+                    if($saveallvalue=="resume"){
+                        $sToken=(isset($_SESSION['survey_'.$surveyid]['token']))?$_SESSION['survey_'.$surveyid]['token']:"";
+                        header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['savescript']}s={$surveyid}&t={$sToken}");exit;
+                    }else{
+                        $flashmessage = true;
+                    }
                 }
             }
 
@@ -653,7 +660,11 @@ class SurveyRuntimeHelper {
                         //Automatically redirect the page to the "url" setting for the survey
                         header("Location: {$thissurvey['surveyls_url']}");
                     }
-
+                    else
+                    {
+                        $sToken=(isset($_SESSION['survey_'.$surveyid]['token']))?$_SESSION['survey_'.$surveyid]['token']:"";
+                        header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['submitscript']}s={$surveyid}&t={$sToken}");
+                    }
                     doHeader();
                     echo $content;
                 }
@@ -1077,7 +1088,12 @@ class SurveyRuntimeHelper {
                 // The following four variables offer the templating system the
                 // capacity to fully control the HTML output for questions making the
                 // above echo redundant if desired.
-                $question['essentials'] = 'id="question' . $qa[4] . '"' . $n_q_display;
+                $sEssentials ="id='question{$qa[4]}' ";
+                $sEssentials .="data-code='{$qa[5]}' ";
+                $aTempAttributeValues=getQuestionAttributeValues($qa[4]);
+                if($aTempAttributeValues['grid_cell']!="")
+                    $sEssentials .=" data-gridcell='{$aTempAttributeValues['grid_cell']}'";
+                $question['essentials'] = "$sEssentials $n_q_display";
                 $question['class'] = $q_class;
                 $question['man_class'] = $man_class;
                 $question['code'] = $qa[5];
@@ -1141,6 +1157,7 @@ class SurveyRuntimeHelper {
             }
 
 
+
             if ($surveyMode != 'survey' && $thissurvey['questionindex'] == 1)
             {
 				$this->createIncrementalQuestionIndex($LEMsessid, $surveyMode);
@@ -1149,6 +1166,15 @@ class SurveyRuntimeHelper {
 			{
 				$this->createFullQuestionIndex($LEMsessid, $surveyMode);
 			}
+
+#            if ($surveyMode != 'survey' && $thissurvey['allowjumps'] == "L") // Old index : L like little ? Deprecated after update to 2.05
+#            {
+#				$this->createIncrementalQuestionIndex($LEMsessid, $surveyMode);
+#            }
+#			elseif ($surveyMode != 'survey' && $thissurvey['allowjumps'] == "Y")// Default Y is complete
+#			{
+#				$this->createFullQuestionIndex($LEMsessid, $surveyMode);
+#			}
 
             echo "<input type='hidden' name='thisstep' value='{$_SESSION[$LEMsessid]['step']}' id='thisstep' />\n";
             echo "<input type='hidden' name='sid' value='$surveyid' id='sid' />\n";
@@ -1179,4 +1205,160 @@ class SurveyRuntimeHelper {
         doFooter();
 
     }
+    
+	protected function createFullQuestionIndex($LEMsessid, $surveyMode)
+	{
+		if ($surveyMode == 'group')
+		{
+			$this->createFullQuestionIndexByGroup($LEMsessid);
+		}
+		else
+		{
+			$this->createFullQuestionIndexByQuestion($LEMsessid);
+		}
+		
+	}
+
+	protected function createFullQuestionIndexByGroup($LEMsessid)
+	{
+		$clang = Yii::app()->lang;
+		echo "\n\n<!-- PRESENT THE INDEX -->\n";
+		echo CHtml::openTag('div', array('id' => 'index'));
+			echo CHtml::openTag('div', array('class' => 'container'));
+				echo CHtml::tag('h2', array(), $clang->gT("Question index"));
+					foreach ($_SESSION[$LEMsessid]['grouplist'] as $key => $group)
+					{
+//						echo '<script>';
+//						echo 'var session = '. json_encode(LimeExpressionManager::singleton()->_ValidateGroup($key)) . ';';
+//						echo 'console.log(session);';
+//						echo '</script>';
+// Better to use tracevar / 
+						$groupinfo=Groups::model()->find("gid=:gid",array(':gid'=>$group['gid']));//language not needed : same for all language
+						$grelevance=str_replace(" ","",trim($groupinfo->grelevance));
+						$relevant = LimeExpressionManager::ProcessString("{".$grelevance."}");
+						if (LimeExpressionManager::GroupIsRelevant($group['gid']) && $relevant)
+						{
+							$group['step'] = $key + 1;
+							$stepInfo = LimeExpressionManager::singleton()->_ValidateGroup($key);
+							$classes = implode(' ', array(
+								'row',
+								$stepInfo['anyUnanswered'] ? 'missing' : '',
+								$_SESSION[$LEMsessid]['step'] == $group['step'] ? 'current' : ''
+
+							));
+							if($_SESSION[$LEMsessid]['maxstep']< $group['step']){
+								$classes .= " upper";
+								$sButtonSubmit="";
+							}else{
+								$classes .= " lesser";
+								$sButtonSubmit=CHtml::htmlButton($clang->gT('Go to this group'),array('type'=>'submit','value'=>$group['step'],'name'=>'moveindex'.$group['step'],'class'=>'jshide'));
+							}
+							
+							echo CHtml::tag('div', array(
+								'data-gid' => $group['gid'],
+								'title' => flattenText($group['description']),
+								'class' => $classes,
+							), $group['group_name'].$sButtonSubmit);
+						}
+						else
+						{
+							$groupinfo=Groups::model()->find("gid=:gid",array(':gid'=>$group['gid']));//langauge not needed : same for all language
+							if($grelevance=="0==1")
+							{
+								$gtitle = LimeExpressionManager::ProcessString($group['group_name']);
+								echo '<h3>' . FlattenText($gtitle) . "</h3>";
+							}
+						}
+					}
+			echo CHtml::closeTag('div');
+		echo CHtml::closeTag('div');
+		echo "<script><!--\n"
+			."$(function() {\n"
+			." manageIndex();\n"
+			."});\n"
+			."--></script>\n";
+        //App()->getClientScript()->registerScript('manageIndex',"manageIndex()\n",CClientScript::POS_END);
+	}
+
+    // TODO
+	protected function createFullQuestionIndexByQuestion($LEMsessid)
+	{
+		$this->createIncrementalQuestionIndex($LEMsessid);
+	}
+
+	protected function createIncrementalQuestionIndex($LEMsessid)
+	{
+		$clang = Yii::app()->lang;
+		$sSurveyLang=$_SESSION[$LEMsessid]['s_lang'];
+		echo "\n\n<!-- PRESENT THE INDEX -->\n";
+		echo CHtml::openTag('div', array('id' => 'index'));
+			echo CHtml::openTag('div', array('class' => 'container'));
+				echo CHtml::tag('h2', array(), $clang->gT("Question index"));
+					$iMaxStep=$_SESSION[$LEMsessid]['maxstep'];
+					$stepIndex = LimeExpressionManager::GetStepIndexInfo();
+					$lastGseq=-1;
+					$grel = true;
+					$odd = "";
+					for($iStep = 0; $iStep <= $_SESSION[$LEMsessid]['maxstep']; ++$iStep)
+					{
+						if (!isset($stepIndex[$iStep])) {
+							continue;
+						}
+						$stepInfo = $stepIndex[$iStep];
+						if ($lastGseq != $stepInfo['gseq']) {
+						
+							$g = $_SESSION[$LEMsessid]['grouplist'][$stepInfo['gseq']];
+							$grel = !LimeExpressionManager::GroupIsIrrelevantOrHidden($stepInfo['gseq']);
+							if ($grel)
+							{
+								$gtitle = LimeExpressionManager::ProcessString($g['group_name']);
+								echo '<h3>' . flattenText($gtitle) . "</h3>";
+							}
+							$lastGseq = $stepInfo['gseq'];
+						}
+						if (!$grel || !$stepInfo['show'])
+						{
+							continue;
+						}
+						$indexlabel = flattenText(LimeExpressionManager::ProcessString($stepInfo['qtext']));
+						$sButtonText=$clang->gT('Go to this question');
+						$bGAnsw = !$stepInfo['anyUnanswered'];
+						$iMove=$iStep+1;
+						$class="row ";
+						if($iMove<=$iMaxStep){
+							$class .= ($iStep == $_SESSION[$LEMsessid]['step'] - 1 ? 'current' : ($bGAnsw ? 'answer' : 'missing'));
+						}else{
+							$class.=" upper";
+						}
+						if($odd){
+							$class.=$odd;
+							$odd="";
+						}else{
+							$odd=" odd";
+						}
+						if($iMove<$iMaxStep){
+						    $class.=" lesser";
+						}elseif($iMove==$iMaxStep){
+						    $class.=" last";
+						}
+						if($iMove<=$iMaxStep){
+							$class.=" active";
+							$sButtonSubmit=CHtml::htmlButton($clang->gT('Go to this question'),array('type'=>'submit','value'=>$iMove,'name'=>'moveindex'.$iMove,'class'=>'jshide'));
+						}else{
+							$sButtonSubmit="";
+						}
+
+						echo CHtml::tag('div', array(
+							'data-qid' => $stepInfo['qid'],
+							'class' => $class,
+						), $indexlabel.$sButtonSubmit);
+					}
+			echo CHtml::closeTag('div');
+		echo CHtml::closeTag('div');
+		echo "<script><!--\n"
+			."$(function() {\n"
+			." manageIndex();\n"
+			."});\n"
+			."--></script>\n";
+	}
 }

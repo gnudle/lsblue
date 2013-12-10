@@ -2043,6 +2043,7 @@ class ExpressionManager {
                                 case 'sin':
                                 case 'sqrt':
                                 case 'tan':
+                                case 'number_format':
                                     if (is_numeric($params[0]))
                                     {
                                         $result = $funcName(floatval($params[0]));

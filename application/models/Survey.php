@@ -168,6 +168,13 @@ class Survey extends LSActiveRecord
       //  array('datecreated','date', 'format'=>array('yyyy-MM-dd', 'yyyy-MM-dd HH:mm', 'yyyy-MM-dd HH:mm:ss',), 'allowEmpty'=>true),
       // Date rules currently don't work properly with MSSQL, deactivating for now
         array('template', 'tmplfilter'),
+        array('supersurvey', 'numerical', 'integerOnly'=>true,'allowEmpty'=>true),
+        array('supersurvey_order', 'numerical', 'integerOnly'=>true,'allowEmpty'=>true),
+        array('threshold', 'numerical', 'integerOnly'=>true,'allowEmpty'=>true),
+        array('published', 'in','range'=>array('Y','N'), 'allowEmpty'=>true),
+        array('period_unit', 'in','range'=>array('Y','Q','M','W','D','N'), 'allowEmpty'=>true),
+        array('admission', 'in','range'=>array('O','C'), 'allowEmpty'=>true),
+        array('mobile', 'in','range'=>array('Y','N'), 'allowEmpty'=>true),
         );
     }
 

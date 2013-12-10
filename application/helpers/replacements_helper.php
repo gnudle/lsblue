@@ -177,6 +177,7 @@ function templatereplace($line, $replacements = array(), &$redata = array(), $de
         App()->getClientScript()->registerScriptFile(Yii::app()->getConfig('generalscripts')."survey_runtime.js");
         App()->getClientScript()->registerScriptFile($templateurl . 'template.js',CClientScript::POS_BEGIN);
         useFirebug();
+
     }
 
     // surveyformat
@@ -424,6 +425,16 @@ function templatereplace($line, $replacements = array(), &$redata = array(), $de
     else
     {
         $_saveall = "";
+    }
+    if(isset($thissurvey))
+    {
+        if($thissurvey['tokenanswerspersistence'] == 'Y' && tableExists('tokens_'.$surveyid) )
+        {
+        $disabled=(($thissurvey['active'] != "Y") ? " disabled='disabled' " : "");
+        $_saveall = "<button type='submit' name='saveall' class='' value='save' id='savebtn' {$disabled}>" . $clang->gT("Save") . "</button>";
+        $_saveall .= " ";
+        $_saveall .= "<button type='submit' name='saveall' class='btn-info' value='resume' id='resumebtn' {$disabled}>" . $clang->gT("Resume Later") . "</button>";
+        }
     }
 
     if(!isset($help)) $help = "";

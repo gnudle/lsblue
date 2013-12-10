@@ -609,5 +609,11 @@ $config['bFixNumAuto']             = 1;
 $config['bNumRealValue']             = 0;
 
 
+/* PracticeLab redirection */
+$config['headerlocationurl']  = $config['publicurl']."../";
+$config['errorcript'] = ""; 
+$config['savecript'] = "route?src=save"; 
+$config['submitscript'] = "route?src=submit";
+
 return $config;
 //settings deleted

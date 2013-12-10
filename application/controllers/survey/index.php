@@ -45,7 +45,8 @@ class index extends CAction {
         }
 
         $this->_loadRequiredHelpersAndLibraries();
-
+        Yii::import('application.helpers.practicelabHelper');
+        $aPracticelabVar=practicelabHelper::getPracticelabVar();
         $param = $this->_getParameters(func_get_args(), $_POST);
 
         $surveyid = $param['sid'];
@@ -77,6 +78,7 @@ class index extends CAction {
 
         if ( $this->_isClientTokenDifferentFromSessionToken($clienttoken,$surveyid) )
         {
+            header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=s");
             $sReloadUrl=$this->getController()->createUrl("/survey/index/sid/{$surveyid}",array('token'=>$clienttoken,'lang'=>$clang->langcode,'newtest'=>'Y'));
             $asMessage = array(
             $clang->gT('Token mismatch'),
@@ -88,6 +90,7 @@ class index extends CAction {
 
         if ( $this->_isSurveyFinished($surveyid) && ($thissurvey['alloweditaftercompletion'] != 'Y' || $thissurvey['tokenanswerspersistence'] != 'Y')) // No test for response update
         {
+            header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=f");
             $aReloadUrlParam=array('lang'=>$clang->langcode,'newtest'=>'Y');
             if($clienttoken){$aReloadUrlParam['token']=$clienttoken;}
             $sReloadUrl=$this->getController()->createUrl("/survey/index/sid/{$surveyid}",$aReloadUrlParam);
@@ -104,6 +107,7 @@ class index extends CAction {
         {
             if(!$this->_canUserPreviewSurvey($surveyid))
             {
+                header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=p");
                 $asMessage = array(
                     $clang->gT('Error'),
                     $clang->gT("We are sorry but you don't have permissions to do this.")
@@ -123,6 +127,7 @@ class index extends CAction {
 
             if ($bPreviewRight === false)
             {
+                header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=p");
                 $asMessage = array(
                 $clang->gT("Error"),
                 $clang->gT("We are sorry but you don't have permissions to do this."),
@@ -186,6 +191,8 @@ class index extends CAction {
         }
         else
         {
+            // PracticeLab
+            header('Location: '.$aPracticelabVar['headerlocationurl']);
             $clang = $this->_loadLimesurveyLang($sDisplayLanguage);
             Yii::app()->session['s_lang']=$clang->langcode;
             $languagechanger = makeLanguageChanger($clang->langcode);
@@ -367,6 +374,7 @@ class index extends CAction {
         //MAKE SURE SURVEY HASN'T EXPIRED
         if ($thissurvey['expiry']!='' and dateShift(date("Y-m-d H:i:s"), "Y-m-d H:i:s", $timeadjust)>$thissurvey['expiry'] && $thissurvey['active']!='N' && !$previewmode)
         {
+            header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=se");
             $redata = compact(array_keys(get_defined_vars()));
             $asMessage = array(
             $clang->gT("Error"),
@@ -380,6 +388,7 @@ class index extends CAction {
         //MAKE SURE SURVEY IS ALREADY VALID
         if ($thissurvey['startdate']!='' and  dateShift(date("Y-m-d H:i:s"), "Y-m-d H:i:s", $timeadjust)<$thissurvey['startdate'] && $thissurvey['active']!='N' && !$previewmode)
         {
+            header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=ss");
             $redata = compact(array_keys(get_defined_vars()));
             $asMessage = array(
             $clang->gT("Error"),
@@ -395,6 +404,7 @@ class index extends CAction {
         $sCookieName="LS_".$surveyid."_STATUS";
         if (isset($_COOKIE[$sCookieName]) && $_COOKIE[$sCookieName] == "COMPLETE" && $thissurvey['usecookie'] == "Y" && $tokensexist != 1 && (!isset($param['newtest']) || $param['newtest'] != "Y"))
         {
+            header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=sc");
             $redata = compact(array_keys(get_defined_vars()));
             $asMessage = array(
             $clang->gT("Error"),
@@ -413,6 +423,7 @@ class index extends CAction {
         //LOAD SAVED SURVEY
         if (isset($_POST['loadall']) && $_POST['loadall'] == "reload")
         {
+            // PRACTICELAB : TOFIX
             $errormsg="";
             if ( !isset($param['loadname']) || $param['loadname'] == null )
             {
@@ -487,10 +498,11 @@ class index extends CAction {
 
 			if (!isset($tokenInstance) && !$previewmode)
             {
-                sendCacheHeaders();
-                doHeader();
-                //TOKEN DOESN'T EXIST OR HAS ALREADY BEEN USED. EXPLAIN PROBLEM AND EXIT
 
+                sendCacheHeaders();
+                header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=ti");
+                //TOKEN DOESN'T EXIST OR HAS ALREADY BEEN USED. EXPLAIN PROBLEM AND EXIT
+                exit;
                 $redata = compact(array_keys(get_defined_vars()));
                 $this->_printTemplateContent($thistpl.'/startpage.pstpl', $redata, __LINE__);
                 $this->_printTemplateContent($thistpl.'/survey.pstpl', $redata, __LINE__);
@@ -513,6 +525,7 @@ class index extends CAction {
             }
             if (!isset($tokenInstance))
             {
+                header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=tt");
                 sendCacheHeaders();
                 doHeader();
                 //TOKEN DOESN'T EXIST OR HAS ALREADY BEEN USED. EXPLAIN PROBLEM AND EXIT
@@ -586,6 +599,7 @@ class index extends CAction {
                 dbExecuteAssoc('DELETE FROM {{saved_control}} WHERE srid='.$_SESSION['survey_'.$surveyid]['srid'].' AND sid='.$surveyid);
             }
             killSurveySession($surveyid);
+            header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['errorscript']}er=ca");// errorscipt or submitscript ?
             sendCacheHeaders();
             doHeader();
 
@@ -636,6 +650,11 @@ class index extends CAction {
                     {
                         $_SESSION['survey_'.$surveyid]['LEMtokenResume'] = true;
                         $_SESSION['survey_'.$surveyid]['step'] = $oSurveyTokenInstance->lastpage;
+                        $_SESSION['survey_'.$surveyid]['maxstep'] = $oSurveyTokenInstance->lastpage;
+                    }
+                    if(!empty($oSurveyTokenInstance->submitdate)) // alloweditaftercompletion
+                    {
+                        $_SESSION['survey_'.$surveyid]['maxstep'] = $_SESSION['survey_'.$surveyid]['totalsteps'];
                     }
                 }
                 buildsurveysession($surveyid);
@@ -759,7 +778,7 @@ class index extends CAction {
 
     function _niceExit(&$redata, $iDebugLine, $sTemplateDir = null, $asMessage = array())
     {
-
+        exit;
         if(isset($redata['surveyid']) && $redata['surveyid'] && !isset($thisurvey))
         {
             $thissurvey=getSurveyInfo($redata['surveyid']);
@@ -772,9 +791,9 @@ class index extends CAction {
         sendCacheHeaders();
 
         doHeader();
-        $this->_printTemplateContent($sTemplateDir.'/startpage.pstpl', $redata, $iDebugLine);
-        $this->_printMessage($asMessage);
-        $this->_printTemplateContent($sTemplateDir.'/endpage.pstpl', $redata, $iDebugLine);
+        //$this->_printTemplateContent($sTemplateDir.'/startpage.pstpl', $redata, $iDebugLine);
+        //$this->_printMessage($asMessage);
+        //$this->_printTemplateContent($sTemplateDir.'/endpage.pstpl', $redata, $iDebugLine);
 
         doFooter();
 		exit;

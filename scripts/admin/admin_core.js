@@ -214,8 +214,10 @@ function updatequestionattributes()
                     target: 'bottomRight'}
             },
             show: {effect: {length:50}}
-        });}
-    );
+        });
+        // Add control on GridCell
+        $("#grid_cell").attr("pattern","([A-Z]+[0-9]+|BREAK)");
+    });
 }
 
 function validatefilename (form, strmessage )

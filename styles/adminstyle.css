@@ -220,3 +220,14 @@ legend { line-height: normal; }
 .exporttip li { overflow: visible;}
 li input+label { display: inline;}
 #resultexport ol, #resultexport ul { margin: 0 0 10px 10px;}
+
+/* Practice lab */
+#advancedquestionsettingswrapper {
+	display: block !important;
+}
+
+#showadvancedattributes,
+#showadvancedattributes {
+	display: none !important;
+}
+

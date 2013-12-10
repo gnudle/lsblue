@@ -113,10 +113,98 @@ $(document).ready(function(){
             alert(noFilesSelectedForDnld)
     });
 
-
+    addUpdateResponse();
 });
 
+/*
+* Used to update response one by one
+* To move in asset when plugged
+*/
 
+function addUpdateResponse()
+{
+    var docUrl=document.URL;
+    var jsonUrl="/q/recompute";// Need to use LS.url from plugin
+    var aUrl=docUrl.split('/');
+    var surveyid=aUrl[aUrl.indexOf("surveyid")+1];
+    var controllers=aUrl[aUrl.indexOf("admin")+1];
+    if($('table.detailbrowsetable').length>0)// Browse one response
+    {
+        // Find the response id
+        var responseId=aUrl[aUrl.indexOf("id")+1];
+        // OR var responseId= aUrl.pop();
+        $('.menubar').eq(1).find('.menubar-main').find(".menubar-left:last").append("<a class='updateanswer' data-responseid='"+responseId+"'>Update This Answer</a>");
+        $('.updateanswer').click(function(){
+            // Need function for url LS.createUrl = function (route, params)
+            //jsonUrl="http://practicelab.sondages.pro/q/recompute?sid="+surveyid+"&srid="+responseId;
+            $("#updatedsrid").remove();
+                $.ajax({
+                url: jsonUrl,
+                dataType : 'json',
+                data : {sid: surveyid, srid: responseId},
+                success: function(data){
+                    if(data.updatedValueCount>0){console.debug(data.updatedValues);}
+                    var $dialog = $('<div id="updatedsrid"></div>')
+                        .html("<p>"+data.message+"</p>")
+                        .dialog({
+                            title: data.status,
+                            dialogClass: 'updatedsrid',
+                            buttons: { 
+                                "Ok": function() { $(this).dialog("close"); },
+                                "Reload": function() { window.location.reload(); } 
+                                },
+                            modal: true,
+                            close: function () {
+                                $(this).remove();
+                            }
+                        });
+                }
+            });
+        });
+    }
+    if(controllers=='responses'){
+        $('.menubar').eq(0).find('.menubar-main').find(".menubar-left:last").append("<a class='updateanswers'>Update all submitted answers</a>");
+            $(".updateanswers").live("click",function(){
+                var jsonurl=$(this).attr('rel');
+                  $("#updatedsrid").remove();
+                  var $dialog = $('<div id="updatedsrid" style="overflow-y:scroll"></div>')
+                    .html("")
+                    .dialog({
+                      height: 200,
+                      title: "Status",
+                      dialogClass: 'updatedsrid',
+                      buttons: { Cancel: function() { $(this).dialog("close"); } },
+                      modal: true,
+                      close: function () {
+                          $(this).remove();
+                      }
+                  });
+                loopUpdateResponse(jsonUrl,surveyid,0);
+            });
+    }
+}
+
+function loopUpdateResponse(jsonurl,surveyid,responseid) {
+  if($("#updatedsrid").length>0)
+  {
+    $.ajax({
+        url: jsonurl,
+        dataType : 'json',
+        data : {sid: surveyid, srid: responseid,next : 1},
+        success: function (data) {
+          $("#updatedsrid").prepend("<p style='margin:0;display:none'>"+data.message+"</p>");
+          $("#updatedsrid p:first-child").slideDown(500);
+          //$("#updatedsrid p:nth-child(6)").fadeOut(500,function() {$(this).remove();});
+            if (data.next) {
+                loopUpdateResponse(jsonurl,surveyid,data.next);
+            } else {
+              $("#updatedsrid").closest(".ui-dialog").find(" .ui-dialog-buttonset .ui-button-text").html("Done");
+              $("#updatedsrid").prepend("<p style='margin:0;font-weight:700'>Done</p>");
+            }
+        }
+    });
+  }
+}
 
 /*    $("#responseTable")
 .jqGrid({

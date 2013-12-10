@@ -101,8 +101,8 @@ function limesurveySubmitHandler(){
             $("#limesurvey [type='submit']").not("#defaultbtn").first().before($("#defaultbtn"));
         });
     }
+	
 }
-
 
 // Ask confirmation on click on .needconfirm
 function needConfirmHandler(){
@@ -266,10 +266,10 @@ function manageIndex(){
     });
     $(function() {
         $(".outerframe").addClass("withindex");
-        var idx = $("#index");
-        var row = $("#index .row.current");
-        if(row.length)
-            idx.scrollTop(row.position().top - idx.height() / 2 - row.height() / 2);
+//        var idx = $("#index");
+//        var row = $("#index .row.current");
+//        if(row.length)
+//            idx.scrollTop(row.position().top - idx.height() / 2 - row.height() / 2);
     });
 }
 /**

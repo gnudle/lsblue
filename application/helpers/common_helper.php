@@ -3646,7 +3646,7 @@ function questionAttributes($returnByName=false)
         //    "caption"=>$clang->gT('Value equals SGQA'));
 
         $qattributes["num_value_int_only"]=array(
-        "types"=>"N",
+        "types"=>"KN",
         'category'=>$clang->gT('Input'),
         'sortorder'=>100,
         'inputtype'=>'singleselect',
@@ -4294,6 +4294,175 @@ function questionAttributes($returnByName=false)
         "help"=>$clang->gT("Is no answer (missing) allowed when either 'Equals sum value' or 'Minimum sum value' are set?"),
         "caption"=>$clang->gT("Value range allows missing"));
     }
+=================
+
+    // Start construction extra attribute 
+
+// report
+	 $qattributes['dont_report']=array(
+	    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+	    'category'=>$clang->gT('Report'),
+	    'sortorder'=>1,
+	    'inputtype'=>'singleselect',
+	    'options'=>array(
+			0=>$clang->gT('No'),
+	    	1=>$clang->gT('Yes')),
+	    'default'=>0,
+	    'help'=>$clang->gT('Hide this question on reports.'),
+	    'caption'=>$clang->gT('Hidden on Report'));
+	 $qattributes['exported']=array(
+	    'types'=>'15ABCDEFGHIKLMNOPQRSTUY!:;|*',
+	    'category'=>$clang->gT('Report'),
+	    'sortorder'=>100,
+	    'inputtype'=>'singleselect',
+	    'options'=>array(
+			0=>$clang->gT('No'),
+	    	1=>$clang->gT('Yes')),
+	    'default'=>1,
+	    'help'=>$clang->gT('Export with LimeSurvey tools: default is YES.'),
+	    'caption'=>$clang->gT('Exported with LimeSurvey'));
+	 $qattributes['exported_X']=array(
+	    'types'=>'X',
+	    'category'=>$clang->gT('Report'),
+	    'sortorder'=>100,
+	    'inputtype'=>'singleselect',
+	    'options'=>array(
+			0=>$clang->gT('No'),
+	    	1=>$clang->gT('Yes')),
+	    'default'=>0,
+	    'help'=>$clang->gT('Export with LimeSurvey tools: default is NO.'),
+	    'caption'=>$clang->gT('Exported with LimeSurvey'));
+	$qattributes['dont_convert']=array(
+    	'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+	    'category'=>$clang->gT('Report'),
+	    'sortorder'=>1,
+	    'inputtype'=>'singleselect',
+	    'options'=>array(
+			0=>$clang->gT('No'),
+	    	1=>$clang->gT('Yes')),
+	    'default'=>0,
+	    'help'=>$clang->gT('Ignore this question during data conversion.'),
+	    'caption'=>$clang->gT('Do not convert'));
+	$qattributes["display_decimals"]=array(
+	    "types"=>"*KN",
+	    'category'=>$clang->gT('Report'),
+	    'sortorder'=>5,
+	    'inputtype'=>'singleselect',
+	    'options'=>array(
+			0=>$clang->gT('0'),
+	    	1=>$clang->gT('0.0'), 
+			2=>$clang->gT('0.00')),
+	    'default'=>0,
+	    "help"=>$clang->gT('Decimal places to display in reports'),
+	    "caption"=>$clang->gT('Decimal places'));
+	$qattributes['num_commas']=array(
+	    'types'=>'*KN',
+	    'category'=>$clang->gT('Report'),
+	    'sortorder'=>10,
+	    'inputtype'=>'singleselect',
+	    'options'=>array(
+			0=>$clang->gT('No'),
+	    	1=>$clang->gT('Yes')),
+	    'default'=>1,
+	    'help'=>$clang->gT('Show comma separator on 1,000s.'),
+	    'caption'=>$clang->gT('Comma separator'));
+
+	$qattributes["tags"]=array(
+	    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+	    'category'=>$clang->gT('Meta'),
+	    'sortorder'=>10,
+	    'inputtype'=>'text',
+	    'i18n'=>true,
+	    "help"=>$clang->gT('Separate tags with commas'),
+	    "caption"=>$clang->gT('Question tags'));
+	$qattributes['push']=array(
+	    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+	    'category'=>$clang->gT('Report'),
+	    'sortorder'=>1,
+	    'inputtype'=>'singleselect',
+	    'options'=>array(0=>$clang->gT('No'),
+	     1=>$clang->gT('Yes')),
+	    'default'=>0,
+	    'help'=>$clang->gT('Important question, check and show in standard reports.'),
+	    'caption'=>$clang->gT('Push'));
+
+	$qattributes["equation_definition"]=array(
+	    "types"=>"*",
+	    'category'=>$clang->gT('Report'),
+	    'sortorder'=>200,
+	    'inputtype'=>'textarea',
+	    "help"=>$clang->gT('Definition to display in reports'),
+	    "caption"=>$clang->gT('Definition'));
+//meta
+	$qattributes['superquestion']=array(
+	    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+	    'category'=>$clang->gT('Meta'),
+	    'sortorder'=>2,
+	    'inputtype'=>'text',
+	    'i18n'=>true,
+	    "help"=>$clang->gT('Question is aggregated with this SuperQuestion'),
+	    "caption"=>$clang->gT('SuperQuestion'));
+
+	$qattributes['ratio']=array(
+	    "types"=>"*KN",
+	    'category'=>$clang->gT('Meta'),
+	    'sortorder'=>5,
+	    'inputtype'=>'singleselect',
+	    'options'=>array(
+	     'N'=>$clang->gT('None'), 
+	     'E'=>$clang->gT('Per Employee'), 
+	     'D'=>$clang->gT('YOY % Change'), 
+	     'F'=>$clang->gT('Cash Flow'),
+	   	 'T'=>$clang->gT('% of Total')),
+	    'default'=>'N',
+	    "help"=>$clang->gT('Yardstick for derived question e.g., profit Per Employee, or profit as % Of Revenue'),
+	    "caption"=>$clang->gT('Ratio'));
+
+	$qattributes["period_offset"]=array(
+	    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+	    'category'=>$clang->gT('Meta'),
+	    'sortorder'=>20,
+	    'inputtype'=>'text',
+	    'i18n'=>true,
+	    "help"=>$clang->gT('Period adjustment for question relative to survey period. eg, -1, +1'),
+	    "caption"=>$clang->gT('Period offset'));
+
+	$qattributes["pcf_element"]=array(
+	    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+	    'category'=>$clang->gT('Meta'),
+	    'sortorder'=>30,
+	    'inputtype'=>'text',
+	    'i18n'=>true,
+	    "help"=>$clang->gT('Process classification framework element i.d.'),
+	    "caption"=>$clang->gT('PCF Element'));
+
+/* Adding thousand seperator */
+	$qattributes["thousand_seperator"]=array(
+	    "types"=>"KN",
+	    'category'=>$clang->gT('Display'),
+	    'sortorder'=>5,
+	    'inputtype'=>'singleselect',
+	    'options'=>array(
+			"none"=>$clang->gT('none'),
+	    	","=>$clang->gT(','), 
+			" "=>$clang->gT(' '),
+			"."=>$clang->gT('.')),
+	    'default'=>",",
+	    "help"=>$clang->gT('Thousand seperator automaticall used in answer'),
+	    "caption"=>$clang->gT('Thousand seperator'));
+		
+/* Display, cell coordinates for Grids */	
+
+		$qattributes["grid_cell"]=array(
+		    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+		    'category'=>$clang->gT('Display'),
+		    'sortorder'=>301,
+		    'inputtype'=>'text',
+		    'i18n'=>false, // DSon't think we need different cell for each language ?
+		    "help"=>$clang->gT('Cell name (excel style), e.g., A1, B5, C1... Use BREAK to next table'),
+		    'default'=>"",
+		    "caption"=>$clang->gT('Grid cell'));
+
     //This builds a more useful array (don't modify)
     if ($returnByName==false)
     {
@@ -7859,5 +8028,6 @@ function array_diff_assoc_recursive($array1, $array2) {
     }
     return $difference;
 }
+
 // Closing PHP tag intentionally omitted - yes, it is okay
 

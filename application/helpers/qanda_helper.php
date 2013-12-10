@@ -3096,7 +3096,7 @@ function do_multiplenumeric($ia)
     global $thissurvey;
 
     $clang = Yii::app()->lang;
-    $extraclass ="";
+    $extraclass ="";$answertypeclass ="";
     $checkconditionFunction = "fixnum_checkconditions";
     $aQuestionAttributes = getQuestionAttributeValues($ia[0], $ia[4]);
     $answer='';
@@ -3115,6 +3115,21 @@ function do_multiplenumeric($ia)
     {
         $maxlength= " maxlength='25' ";
     }
+    $sThousandseperator=trim($aQuestionAttributes['thousand_seperator']);
+    $sThousandseperator=($sThousandseperator==$sSeperator or $sThousandseperator=="none")?"":$sThousandseperator;
+    if($sThousandseperator)
+        $answertypeclass .=" havethousand";
+    if (trim($aQuestionAttributes['num_value_int_only'])==1)
+    {
+        $extraclass .=" integeronly";
+        $answertypeclass .= " integeronly";
+        $integeronly=1;
+    }
+    else
+    {
+        $integeronly=0;
+    }
+
 
     if (trim($aQuestionAttributes['prefix'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']])!='') {
         $prefix=$aQuestionAttributes['prefix'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']];
@@ -3137,7 +3152,7 @@ function do_multiplenumeric($ia)
     if ($thissurvey['nokeyboard']=='Y')
     {
         includeKeypad();
-        $kpclass = "num-keypad";
+        $$answertypeclass .= " num-keypad";
         $extraclass .=" keypad";
     }
     else
@@ -3268,14 +3283,86 @@ function do_multiplenumeric($ia)
                 $sSeparator = getRadixPointData($thissurvey['surveyls_numberformat']);
                 $sSeparator = $sSeparator['separator'];
 
-                $answer_main .= "{$sliderleft}<span class=\"input\">\n\t".$prefix."\n\t<input class=\"text $kpclass\" type=\"text\" size=\"".$tiwidth."\" name=\"".$myfname."\" id=\"answer".$myfname."\" title=\"".$clang->gT('Only numbers may be entered in this field.')."\" value=\"";                
+                $answer_main .= "{$sliderleft}<span class=\"input\">\n\t".$prefix."\n\t<input class=\"text $kpclass\" type=\"text\" size=\"".$tiwidth."\" name=\"".$myfname."\" id=\"answer".$myfname."\" title=\"".$clang->gT('Only numbers may be entered in this field.')."\" ";
+                if($sThousandseperator)
+                    $answer_main .= " data-thousand='{$sThousandseperator}' ";
+                $answer_main .= ' value="';
                 if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]))
                 {
-                    $dispVal = str_replace('.',$sSeparator,$_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]);
+                    $dispVal = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname];
+                    if($integeronly && $dispVal!="")
+                        $dispVal = intval($dispVal);
+                    else
+                        $dispVal = str_replace('.',$sSeperator,$dispVal);
                     $answer_main .= $dispVal;
                 }
 
-                $answer_main .= '" onkeyup="'.$checkconditionFunction.'(this.value, this.name, this.type);" '." {$maxlength} />\n\t".$suffix."\n</span>{$sliderright}\n\t</li>\n";
+                $answer_main .= '" onkeyup="'.$checkconditionFunction.'(this.value, this.name, this.type,\'onchange\','.$integeronly.',\''.$sThousandseperator.'\');" '." {$maxlength} />\n\t".$suffix."\n</span>{$sliderright}\n\t</li>\n";
+            }
+            else
+            {
+                if ($aQuestionAttributes['slider_showminmax']==1)
+                {
+                    //$slider_showmin=$slider_min;
+                    $slider_showmin= "\t<div id=\"slider-left-$myfname\" class=\"slider_showmin\">$slider_mintext</div>\n";
+                    $slider_showmax= "\t<div id=\"slider-right-$myfname\" class=\"slider_showmax\">$slider_maxtext</div>\n";
+                }
+                else
+                {
+                    $slider_showmin='';
+                    $slider_showmax='';
+                }
+                if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]) && $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname] != '')
+                {
+                    $slider_startvalue = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname] * $slider_divisor;
+                    $displaycallout_atstart=1;
+                }
+                elseif ($slider_default != "")
+                {
+                    $slider_startvalue = $slider_default * $slider_divisor;
+                    $displaycallout_atstart=1;
+                }
+                elseif ($slider_middlestart != '')
+                {
+                    $slider_startvalue = $slider_middlestart;
+                    $displaycallout_atstart=0;
+                }
+                else
+                {
+                    $slider_startvalue = 'NULL';
+                    $displaycallout_atstart=0;
+                }
+                $answer_main .= "$sliderleft<div id='container-$myfname' class='multinum-slider'>\n"
+                . "\t<input type=\"text\" id=\"slider-modifiedstate-$myfname\" value=\"$displaycallout_atstart\" style=\"display: none;\" />\n"
+                . "\t<input type=\"text\" id=\"slider-param-min-$myfname\" value=\"$slider_min\" style=\"display: none;\" />\n"
+                . "\t<input type=\"text\" id=\"slider-param-max-$myfname\" value=\"$slider_max\" style=\"display: none;\" />\n"
+                . "\t<input type=\"text\" id=\"slider-param-stepping-$myfname\" value=\"$slider_stepping\" style=\"display: none;\" />\n"
+                . "\t<input type=\"text\" id=\"slider-param-divisor-$myfname\" value=\"$slider_divisor\" style=\"display: none;\" />\n"
+                . "\t<input type=\"text\" id=\"slider-param-startvalue-$myfname\" value='$slider_startvalue' style=\"display: none;\" />\n"
+                . "\t<input type=\"text\" id=\"slider-onchange-js-$myfname\" value=\"$numbersonly_slider\" style=\"display: none;\" />\n"
+                . "\t<input type=\"text\" id=\"slider-prefix-$myfname\" value=\"$prefix\" style=\"display: none;\" />\n"
+                . "\t<input type=\"text\" id=\"slider-suffix-$myfname\" value=\"$suffix\" style=\"display: none;\" />\n"
+                . "<div id=\"slider-$myfname\" class=\"ui-slider-1\">\n"
+                .  $slider_showmin
+                . "<div class=\"slider_callout\" id=\"slider-callout-$myfname\"></div>\n"
+                . "<div class=\"ui-slider-handle\" id=\"slider-handle-$myfname\"></div>\n"
+                . $slider_showmax
+                . "\t</div>"
+                . "</div>$sliderright\n"
+                . "<input class=\"text\" type=\"text\" name=\"$myfname\" id=\"answer$myfname\" value=\"";
+                if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]) && $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname] != '')
+                {
+                    $answer_main .= $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname];
+                }
+                elseif ($slider_default != "")
+                {
+                    $answer_main .= $slider_default;
+                }
+                $answer_main .= "\"/>\n"
+                . "\t</li>\n";
+            }
+
+            //			$answer .= "\t</tr>\n";
 
             $fn++;
             $inputnames[]=$myfname;
@@ -3369,6 +3456,8 @@ function do_numerical($ia)
     $extraclass ="";
     $answertypeclass = "numeric";
     $checkconditionFunction = "fixnum_checkconditions";
+    $sSeperator = getRadixPointData($thissurvey['surveyls_numberformat']);
+    $sSeperator = $sSeperator['seperator'];
     $aQuestionAttributes = getQuestionAttributeValues($ia[0], $ia[4]);
     if (trim($aQuestionAttributes['prefix'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']])!='') {
         $prefix=$aQuestionAttributes['prefix'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']];
@@ -3406,6 +3495,11 @@ function do_numerical($ia)
     {
         $tiwidth=10;
     }
+    
+    $sThousandseperator=trim($aQuestionAttributes['thousand_seperator']);
+    $sThousandseperator=($sThousandseperator==$sSeperator or $sThousandseperator=="none")?"":$sThousandseperator;
+    if($sThousandseperator)
+        $answertypeclass .=" havethousand";
 
     if (trim($aQuestionAttributes['num_value_int_only'])==1)
     {
@@ -3421,6 +3515,7 @@ function do_numerical($ia)
         $integeronly=0;
     }
 
+
     $fValue=$_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$ia[1]];
     $sSeparator = getRadixPointData($thissurvey['surveyls_numberformat']);
     $sSeparator = $sSeparator['separator'];
@@ -3430,6 +3525,7 @@ function do_numerical($ia)
         $fValue=rtrim(rtrim($fValue,"0"),".");
     }
     $fValue = str_replace('.',$sSeparator,$fValue);
+
 
     if ($thissurvey['nokeyboard']=='Y')
     {
@@ -3444,8 +3540,10 @@ function do_numerical($ia)
     // --> START NEW FEATURE - SAVE
     $answer = "<p class='question answer-item text-item numeric-item {$extraclass}'>"
     . " <label for='answer{$ia[1]}' class='hide label'>{$clang->gT('Answer')}</label>\n$prefix\t"
-    . "<input class='text {$answertypeclass}' type=\"text\" size=\"$tiwidth\" name=\"$ia[1]\"  title=\"".$clang->gT('Only numbers may be entered in this field.')."\" "
-    . "id=\"answer{$ia[1]}\" value=\"{$fValue}\" onkeyup=\"{$checkconditionFunction}(this.value, this.name, this.type,'onchange',{$integeronly})\" "
+    . "<input class='text {$answertypeclass}' type=\"text\" size=\"$tiwidth\" name=\"$ia[1]\"  title=\"".$clang->gT('Only numbers may be entered in this field.')."\" ";
+    if($sThousandseperator)
+        $answer .= " data-thousand='{$sThousandseperator}' ";
+    $answer .= "id=\"answer{$ia[1]}\" value=\"{$fValue}\" onkeyup=\"{$checkconditionFunction}(this.value, this.name, this.type,'onchange',{$integeronly},'{$sThousandseperator}')\" "
     . " {$maxlength} />\t{$suffix}\n</p>\n";
     // --> END NEW FEATURE - SAVE
 

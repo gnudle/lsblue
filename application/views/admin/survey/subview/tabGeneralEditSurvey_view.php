@@ -44,6 +44,12 @@
                         </select></td>
                 </tr></table></li>
 
+        <li><label for='supersurvey'><?php $clang->eT("Super Survey:") ?></label>
+            <?php echo CHtml::textField('supersurvey', $esrow['supersurvey'], array('size'=>'12','maxlength'=>'12','pattern'=>'\d*')); ?>
+        </li>
+        <li><label for='supersurvey_order'><?php $clang->eT("Super Survey Order:") ?></label>
+            <?php echo CHtml::textField('supersurvey_order', $esrow['supersurvey_order'], array('size'=>'12','maxlength'=>'12','pattern'=>'\d*')); ?>
+        </li>
 
         <li><label for='admin'><?php $clang->eT("Administrator:"); ?></label>
             <input type='text' size='50' id='admin' name='admin' value="<?php echo $esrow['admin']; ?>" /></li>

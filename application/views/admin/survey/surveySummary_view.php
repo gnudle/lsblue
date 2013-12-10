@@ -156,6 +156,26 @@
     	</td>
     </tr>
     <?php } ?>
+	<?php if ((int)$surveyinfo['supersurvey']) { ?>
+    <tr>
+    	<td>
+    		<strong><?php $clang->eT("Super Survey");?>:</strong>
+    	</td>
+    	<td>
+    		<?php echo $surveyinfo['supersurvey'];?>
+    	</td>
+    </tr>
+    <?php } ?>
+	<?php if ((int)$surveyinfo['supersurvey_order']) { ?>
+    <tr>
+    	<td>
+    		<strong><?php $clang->eT("Super Survey Order");?>:</strong>
+    	</td>
+    	<td>
+    		<?php echo $surveyinfo['supersurvey_order'];?>
+    	</td>
+    </tr>
+    <?php } ?>
     <tr>
     	<td>
     		<strong><?php $clang->eT("Hints");?>:</strong>
