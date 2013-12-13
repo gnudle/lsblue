@@ -276,7 +276,7 @@ class Participants extends CActiveRecord
         $selectValue = array();
         $joinValue = array();
 
-        $selectValue[] = "p.*";
+        $selectValue = array("p.participant_id","p.firstname","p.lastname","p.email","p.language","p.blacklisted","p.owner_uid");// Get only the LimeSurvey attributes from particpant DB
         $selectValue[] = "luser.full_name as ownername";
         $selectValue[] = "luser.users_name as username";
 
