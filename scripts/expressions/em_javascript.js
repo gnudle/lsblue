@@ -406,6 +406,7 @@ function LEMval(alias)
     /* If passed a number, return that number */
     if (str == '') return '';
     newval = str;
+    //console.log(varName);
     if (LEMradix === ',') {
         newval = str.split(',').join('.');
     }
@@ -574,6 +575,11 @@ function LEMval(alias)
         case 'valueNAOK':
         {
             value = htmlspecialchars_decode(document.getElementById(whichJsName).value);
+            var thousandseperator=$("#"+whichJsName).data("thousand");
+            if(thousandseperator){
+                    var thousandRegex= new RegExp(thousandseperator, 'g');
+                    value=value.replace(thousandRegex, '');
+                }
             if (value === '') {
                 return '';
             }

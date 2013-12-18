@@ -53,6 +53,11 @@ function fixnum_checkconditions(value, name, type, evt_type, intonly,thousandsep
 {
     newval = new String(value);
     if(typeof thousandseperator=="undefined"){thousandseperator="";}
+    if(thousandseperator!="")
+    {
+        var thousandRegex= new RegExp(thousandseperator, 'g');
+        newval=newval.replace(thousandRegex, '');
+    }
     if (typeof intonly !=='undefined' && intonly) {
         newval = newval.replace(intRegex,'');
     }
