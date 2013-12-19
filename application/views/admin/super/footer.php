@@ -5,9 +5,9 @@
     <a href='http://manual.limesurvey.org'><img alt='LimeSurvey - <?php $clang->eT("Online Manual");?>' title='LimeSurvey - <?php $clang->eT("Online manual");?>' src='<?php echo Yii::app()->getConfig('adminimageurl');?>docs.png' /></a>
     </div>
     <div style='float:right;'>
-    <a href='http://donate.limesurvey.org'><img alt='<?php $clang->eT("Support this project - Donate to "); ?>LimeSurvey' title='<?php $clang->eT("Support this project - Donate to "); ?>LimeSurvey!' src='<?php echo Yii::app()->getConfig('adminimageurl');;?>donate.png'/></a>
+    <a  class='subtitle'  href='http://www.limesurvey.org'>Based on LimeSurvey</a>
     </div>
-    <div class='subtitle'><a class='subtitle' title='<?php $clang->eT("Visit our website!"); ?>' href='http://www.limesurvey.org' target='_blank'>LimeSurvey</a><br /><?php echo $versiontitle." ".$versionnumber." ".$buildtext;?></div>
+    <div class='subtitle'><a class='subtitle' title='<?php $clang->eT("Visit our website!"); ?>' href='http://www.practicelab.com/' target='_blank'>Practice Lab</a><br /><?php echo $versiontitle." ".$versionnumber." ".$buildtext;?></div>
 </div>
 <?php
     if(!empty($js_admin_includes))
