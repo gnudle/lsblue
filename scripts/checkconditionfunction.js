@@ -70,6 +70,12 @@ function fixnum_checkconditions(value, name, type, evt_type, intonly,thousandsep
     if (newval != '-' && newval != '.' && newval != '-.' && newval != parseFloat(newval)) {
         newval = '';
     }
+    if (newval.substring(0,1) == '.') {
+        newval = newval.replace(/^\./, '0\.')
+    }
+    if (newval.substring(0,2) == '-.') {
+        newval = newval.replace(/^-\./, '-0\.')
+    }
     if (newval != '0' && newval.substring(0,2) != '0.') {
         newval = newval.replace(/^0/, '')
     }
