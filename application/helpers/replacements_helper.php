@@ -481,7 +481,7 @@ function templatereplace($line, $replacements = array(), &$redata = array(), $de
     {
         $_saveall = "";
     }
-    if(isset($thissurvey))
+    if(isset($surveyid) && isset($thissurvey))
     {
         if($thissurvey['tokenanswerspersistence'] == 'Y' && tableExists('tokens_'.$surveyid) )
         {
