@@ -104,7 +104,6 @@ function manageIndex(){
     });
     $("#index button").live('click',function(e){ 
         $("input[name='move']").val($(this).val());
-        console.log($("input[name='move']").val());
         $("#limesurvey").submit();
     });
 //    $(function() {
