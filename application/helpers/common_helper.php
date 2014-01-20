@@ -3549,7 +3549,7 @@ function questionAttributes($returnByName=false)
     "caption"=>$clang->gT('Maximum sum value'));
 
     $qattributes["max_num_value_n"]=array(
-    "types"=>"NK",
+    "types"=>"NK*",
     'category'=>$clang->gT('Input'),
     'sortorder'=>110,
     'inputtype'=>'integer',
@@ -3589,7 +3589,7 @@ function questionAttributes($returnByName=false)
     "caption"=>$clang->gT('Minimum sum value'));
 
     $qattributes["min_num_value_n"]=array(
-    "types"=>"NK",
+    "types"=>"NK*",
     'category'=>$clang->gT('Input'),
     'sortorder'=>100,
     'inputtype'=>'integer',
