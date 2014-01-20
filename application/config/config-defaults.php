@@ -256,8 +256,7 @@ $config['demoMode'] = false;
 *
 * $column_style defines how columns are rendered for survey answers.
 * There are four possible options:
-*     'css'   using one of the various CSS only methods for creating
-columns (see template style sheet for details).
+*     'css'   using one of the various CSS only methods for creating columns (see template style sheet for details).
 *     'ul'    using multiple floated unordered lists. (DEFAULT)
 *     'table' using conventional tables based layout.
 *     NULL    blocks the use of columns

@@ -4390,7 +4390,7 @@ function questionAttributes($returnByName=false)
 	    'category'=>$clang->gT('Report'),
 	    'sortorder'=>200,
 	    'inputtype'=>'textarea',
-	    "help"=>$clang->gT('Definition to display in reports'),
+	    "help"=>$clang->gT('Question label for equations'),
 	    "caption"=>$clang->gT('Definition'));
 //meta
 	$qattributes['superquestion']=array(
