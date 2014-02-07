@@ -12,11 +12,24 @@
  *
  */
 
+/* 
+ * A class to recompute expression in ajax or by url 
+ * @return json
+ * @url_param int $sid survey id (mandatory)
+ * @url_param string $token the token of the answer (option)
+ * @url_param int srid the id of the answers (option)
+ * @url_param bool next Need to send next srid (only for admin)
+ * @url_param bool update Allow other url parameters toupdateb the response line. Only if token or for admin
+ * @url_param any Question code to be updated
+ * 
+ */
 class RecomputeController extends LSYii_Controller {
 
     private $language="";
     private $json=false;
     private $bIsAdmin=false;
+    private $bToUpdate=false;
+    private $bCompleteMessage=false;
     function init()
     {
         parent::init();
@@ -38,6 +51,7 @@ class RecomputeController extends LSYii_Controller {
         $sToken=(string)Yii::app()->request->getQuery('token', "");
         $iResponseId=(int)Yii::app()->request->getQuery('srid', 0);
         $bDoNext=(bool)Yii::app()->request->getQuery('next', false);
+        $bUpdate=(bool)Yii::app()->request->getQuery('update', false);
         $bError=false;
         $sMessage="";
         Yii::app()->loadHelper("common");
@@ -51,7 +65,9 @@ class RecomputeController extends LSYii_Controller {
         $bIsTokenSurvey=tableExists("tokens_{$iSurveyId}");
         if(hasSurveyPermission($iSurveyId,'responses','update'))
         {
-            $this->bIsAdmin=true;// Admin view response and can update one by one. Else : only update if token or srid
+            $this->bCompleteMessage=$this->bIsAdmin=true;// Admin view response and can update one by one. Else : only update if token or srid
+            if($bUpdate)
+                $this->bToUpdate=true;
         }
         $iNextSrid=0;
         if($bIsTokenSurvey && $sToken && !$iResponseId)
@@ -59,6 +75,9 @@ class RecomputeController extends LSYii_Controller {
             $oResponse=Survey_dynamic::model($iSurveyId)->find("token=:token",array('token'=>$sToken));
             if($oResponse)
                 $iResponseId=$oResponse->id;
+            $this->bCompleteMessage=true;
+            if($bUpdate)
+                $this->bToUpdate=true;
         }
         if(!$sToken && !$iResponseId && $bDoNext && $this->bIsAdmin)
         {
@@ -70,6 +89,7 @@ class RecomputeController extends LSYii_Controller {
         }
         if($iResponseId){
             $oResponse=Survey_dynamic::model($iSurveyId)->findByPk($iResponseId);
+
             if(!$oResponse)
             {
                 $this->sendError("Invalid Response ID");
@@ -133,7 +153,34 @@ class RecomputeController extends LSYii_Controller {
             );
             LimeExpressionManager::SetDirtyFlag();
             buildsurveysession($iSurveyId);
-            foreach($aOldAnswers as $column=>$value){
+            $updatedValues=array();
+            $updatedInfoArray=array();
+            $aInsertArray=$_SESSION['survey_'.$surveyid]['insertarray'];
+            $aFieldMap=$_SESSION['survey_'.$surveyid]['fieldmap'];
+            Yii::import('application.helpers.viewHelper');
+
+            $aTempAnswers=$aOldAnswers;
+            $aReservedVar=array('token','srid','sid','next','update');
+            if($this->bToUpdate){
+                foreach($aOldAnswers as $column=>$value)
+                {
+                    if (in_array($column,$aInsertArray) && isset($aFieldMap[$column]))
+                    {
+                        $sColumnName=viewHelper::getFieldCode($aFieldMap[$column],array('LEMcompat'=>true));
+                        if (!in_array($sColumnName,$aReservedVar) && $newValue=Yii::app()->request->getQuery($sColumnName))
+                        {
+                            $aTempAnswers[$column] = $newValue;
+                            $updatedValues['old'][$sColumnName]=$oResponse->$column;
+                            $updatedValues['new'][$sColumnName]=$newValue;
+                            if($oResponse->$column)
+                                $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>".$newValue;
+                            $oResponse->$column=$newValue;
+                        }
+                    }
+                }
+                $oResponse->save();
+            }
+            foreach($aTempAnswers as $column=>$value){
                 if (in_array($column, $_SESSION['survey_'.$surveyid]['insertarray']) && isset($_SESSION['survey_'.$surveyid]['fieldmap'][$column]))
                 {
                     $_SESSION['survey_'.$surveyid][$column]=$value;
@@ -141,16 +188,11 @@ class RecomputeController extends LSYii_Controller {
             }
             LimeExpressionManager::StartSurvey($iSurveyId,$surveyMode,$aEmSurveyOptions);
             $oResponse=Survey_dynamic::model($iSurveyId)->findByPk($iResponseId);
-            $aInsertArray=$_SESSION['survey_'.$surveyid]['insertarray'];
-            $aFieldMap=$_SESSION['survey_'.$surveyid]['fieldmap'];
-            $updatedValues=array();
-            $updatedInfoArray=array();
             foreach($aOldAnswers as $column=>$value)
             {
                 if (in_array($column,$aInsertArray) && isset($aFieldMap[$column]))
                 {
-                    Yii::import('application.helpers.viewHelper');
-                    $sColumnName=viewHelper::getFieldCode($aFieldMap[$column]);
+                    $sColumnName=viewHelper::getFieldCode($aFieldMap[$column],array('LEMcompat'=>true));
                     $bRelevance=true;
                     if(Yii::app()->getConfig('deletenonvalues') && isset($aFieldMap[$column]['relevance']) && trim($aFieldMap[$column]['relevance']!=""))
                     {
@@ -160,10 +202,11 @@ class RecomputeController extends LSYii_Controller {
                             
                             if(!is_null($oResponse->$column))
                             {
-                                if($oResponse->$column)
-                                    $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>NULL";
                                 $updatedValues['old'][$sColumnName]=$oResponse->$column;
                                 $updatedValues['new'][$sColumnName]=null;
+                                if($oResponse->$column){
+                                    $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>NULL";
+                                }
                             }
                             $oResponse->$column= null;
                         }
@@ -190,8 +233,8 @@ class RecomputeController extends LSYii_Controller {
                 $message= sprintf('Responses %s updated: one answer modified.',$iResponseId);
             else
                 $message= sprintf('Responses %s updated: no answer modified.',$iResponseId);
-            if(!$this->bIsAdmin)
-                $message= 'Responses %s updated.';
+            if(!$this->bCompleteMessage)
+                $message=  sprintf('Responses %s updated.',$iResponseId);
             // If needed find the next
             if($bDoNext)
             {
@@ -204,7 +247,7 @@ class RecomputeController extends LSYii_Controller {
                 if($oNextResponse)
                     $iNextSrid=$oNextResponse->id;
             }
-            if($this->bIsAdmin)
+            if($this->bCompleteMessage)
                 $this->json=json_encode(array("status"=>"success","message"=>$message,"next"=>$iNextSrid,"updatedValueCount"=>count($updatedInfoArray),"updatedArray"=>$updatedInfoArray));
             else
                 $this->json=json_encode(array("status"=>"success","message"=>$message));
