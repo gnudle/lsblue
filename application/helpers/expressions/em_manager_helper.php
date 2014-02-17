@@ -6242,7 +6242,7 @@
                         $relParts[] = "  if ( " . $sq['relevancejs'] . " ) {\n";
                         if ($afHide)
                         {
-                            $relParts[] = "    $('#javatbd" . $sq['rowdivid'] . "').show();\n";
+                            $relParts[] = "    $('#javatbd" . $sq['rowdivid'] . "').lsshow();\n";
                         }
                         else
                         {
@@ -6272,7 +6272,7 @@
                                 $relParts[] = "      $('#javatbd" . $sq['rowdivid'] . "$inputSelector').removeAttr('disabled');\n";
                                 if ($afHide)
                                 {
-                                    $relParts[] = "     $('#javatbd" . $sq['rowdivid'] . "').hide();\n";
+                                    $relParts[] = "     $('#javatbd" . $sq['rowdivid'] . "').lshide();\n";
                                 }
                                 else
                                 {
@@ -6289,7 +6289,7 @@
                         {
                             if ($afHide)
                             {
-                                $relParts[] = "    $('#javatbd" . $sq['rowdivid'] . "').hide();\n";
+                                $relParts[] = "    $('#javatbd" . $sq['rowdivid'] . "').lshide();\n";
                             }
                             else
                             {
@@ -6471,13 +6471,13 @@
 
                     if ($arg['hidden']) {
                         $relParts[] = "  // This question should always be hidden\n";
-                        $relParts[] = "  $('#question" . $arg['qid'] . "').hide();\n";
+                        $relParts[] = "  $('#question" . $arg['qid'] . "').lshide();\n";
                     }
                     else {
                         if (!($relevance == '' || $relevance == '1' || ($arg['result'] == true && $arg['numJsVars']==0)))
                         {
                             // In such cases, PHP will make the question visible by default.  By not forcing a re-show(), template.js can hide questions with impunity
-                            $relParts[] = "  $('#question" . $arg['qid'] . "').show();\n";
+                            $relParts[] = "  $('#question" . $arg['qid'] . "').lsshow();\n";
                             if ($arg['type'] == 'S')
                             {
                                 $relParts[] = "  if($('#question" . $arg['qid'] . " div[id^=\"gmap_canvas\"]').length > 0)\n";
@@ -6511,7 +6511,7 @@
                         if( !($arg['hidden'] && $arg['type']=="*"))// Equation question type don't update visibility of group if hidden ( child of bug #08315).
                             $dynamicQinG[$arg['gseq']][$arg['qid']]=true;
                         $relParts[] = "else {\n";
-                        $relParts[] = "  $('#question" . $arg['qid'] . "').hide();\n";
+                        $relParts[] = "  $('#question" . $arg['qid'] . "').lshide();\n";
                         $relParts[] = "  if ($('#relevance" . $arg['qid'] . "').val()=='1') { relChange" . $arg['qid'] . "=true; }\n";  // only propagate changes if changing from relevant to irrelevant
                         $relParts[] = "  $('#relevance" . $arg['qid'] . "').val('0');\n";
                         $relParts[] = "}\n";
@@ -6597,7 +6597,7 @@
                     //                $jsParts[] = "\n// Process Relevance for Group " . $gr['gid'];
                     //                $jsParts[] = ": { " . $gr['eqn'] . " }";
                     $jsParts[] = "\nif (" . $gr['relevancejs'] . ") {\n";
-                    $jsParts[] = "  $('#group-" . $gr['gseq'] . "').show();\n";
+                    $jsParts[] = "  $('#group-" . $gr['gseq'] . "').lsshow();\n";
                     $jsParts[] = "  relChangeG" . $gr['gseq'] . "=true;\n";
                     $jsParts[] = "  $('#relevanceG" . $gr['gseq'] . "').val(1);\n";
 
@@ -6634,7 +6634,7 @@
                     }
 
                     $jsParts[] = "}\nelse {\n";
-                    $jsParts[] = "  $('#group-" . $gr['gseq'] . "').hide();\n";
+                    $jsParts[] = "  $('#group-" . $gr['gseq'] . "').lshide();\n";
                     $jsParts[] = "  if ($('#relevanceG" . $gr['gseq'] . "').val()=='1') { relChangeG" . $gr['gseq'] . "=true; }\n";
                     $jsParts[] = "  $('#relevanceG" . $gr['gseq'] . "').val(0);\n";
                     $jsParts[] = "}\n";
@@ -6684,11 +6684,11 @@
                     $relStatusTest = "($('#relevance" . implode("').val()=='1' || $('#relevance", array_keys($dynamicQidsInG)) . "').val()=='1')";
 
                     $jsParts[] = "\nif (" . $relStatusTest . ") {\n";
-                    $jsParts[] = "  $('#group-" . $gr['gseq'] . "').show();\n";
+                    $jsParts[] = "  $('#group-" . $gr['gseq'] . "').lsshow();\n";
                     $jsParts[] = "  if ($('#relevanceG" . $gr['gseq'] . "').val()=='0') { relChangeG" . $gr['gseq'] . "=true; }\n";
                     $jsParts[] = "  $('#relevanceG" . $gr['gseq'] . "').val(1);\n";
                     $jsParts[] = "}\nelse {\n";
-                    $jsParts[] = "  $('#group-" . $gr['gseq'] . "').hide();\n";
+                    $jsParts[] = "  $('#group-" . $gr['gseq'] . "').lshide();\n";
                     $jsParts[] = "  if ($('#relevanceG" . $gr['gseq'] . "').val()=='1') { relChangeG" . $gr['gseq'] . "=true; }\n";
                     $jsParts[] = "  $('#relevanceG" . $gr['gseq'] . "').val(0);\n";
                     $jsParts[] = "}\n";

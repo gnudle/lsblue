@@ -1,3 +1,16 @@
+jQuery(function($) {
+    $.fn.lsshow = function(options) {
+        return $(this).each(function() {
+            $(this).show(0,function(){$(this).trigger('shown');});
+        });
+    }
+    var _oldHide = $.fn.hide;
+    $.fn.lshide = function(options) {
+        return $(this).each(function() {
+            $(this).hide(0,function(){$(this).trigger('hidden');});
+        });
+    }
+});
 var DOM1;
 $(document).ready(function()
 {
