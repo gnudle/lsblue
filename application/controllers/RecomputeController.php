@@ -27,9 +27,13 @@ class RecomputeController extends LSYii_Controller {
 
     private $language="";
     private $json=false;
-    private $bIsAdmin=false;
-    private $bToUpdate=false;
-    private $bCompleteMessage=false;
+
+    private $bIsAdmin=false; // To test if user is admin
+    private $bAllowByResponseId=true; // Allow update by response Id
+
+    private $bToUpdate=false; // Allow anybody to update an answer (if false : only update by token or if admin user allowed to update responses)
+    private $bCompleteMessage=true; // Return complete json information (if false : only for admin)
+
     function init()
     {
         parent::init();
@@ -49,9 +53,13 @@ class RecomputeController extends LSYii_Controller {
 
         $iSurveyId=(int)Yii::app()->request->getQuery('sid', 0);
         $sToken=(string)Yii::app()->request->getQuery('token', "");
-        $iResponseId=(int)Yii::app()->request->getQuery('srid', 0);
+        if($this->bAllowByResponseId || $this->bIsAdmin)
+            $iResponseId=(int)Yii::app()->request->getQuery('srid', 0);
+        else
+            $iResponseId=0;
         $bDoNext=(bool)Yii::app()->request->getQuery('next', false);
         $bUpdate=(bool)Yii::app()->request->getQuery('update', false);
+
         $bError=false;
         $sMessage="";
         Yii::app()->loadHelper("common");
@@ -172,9 +180,12 @@ class RecomputeController extends LSYii_Controller {
                             $aTempAnswers[$column] = $newValue;
                             $updatedValues['old'][$sColumnName]=$oResponse->$column;
                             $updatedValues['new'][$sColumnName]=$newValue;
-                            if($oResponse->$column)
+                            if(!is_null($oResponse->$column))
                                 $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>".$newValue;
+                            else
+                                $updatedInfoArray[$sColumnName]='NULL'."=>".$newValue;
                             $oResponse->$column=$newValue;
+                            
                         }
                     }
                 }
@@ -194,12 +205,26 @@ class RecomputeController extends LSYii_Controller {
                 {
                     $sColumnName=viewHelper::getFieldCode($aFieldMap[$column],array('LEMcompat'=>true));
                     $bRelevance=true;
-                    if(Yii::app()->getConfig('deletenonvalues') && isset($aFieldMap[$column]['relevance']) && trim($aFieldMap[$column]['relevance']!=""))
+                    // We need to fix column for multiple question : todo : attribute filter
+                    $sRelevance=isset($aFieldMap[$column]['relevance'])?trim($aFieldMap[$column]['relevance']):1;
+                    if(isset($_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]) && $_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]!=$column)
                     {
-                        $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$aFieldMap[$column]['relevance']."}");
+                        $sParentSGQ=$_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column];
+                        $aParentSGQ=explode('X',$sParentSGQ);
+                        if(isset($aParentSGQ[2]))
+                        {
+                            $oParentQuestion=Questions::model()->find('qid=:qid and language=:language',array(':qid'=>$aParentSGQ[2],':language'=>$thissurvey['language']));
+                            if($oParentQuestion)
+                            {
+                                $sRelevance=trim($oParentQuestion->relevance);
+                            }
+                        }
+                    }
+                    if(Yii::app()->getConfig('deletenonvalues') && $sRelevance!="" && $sRelevance!="1" )
+                    {
+                        $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$sRelevance."}");
                         if(!$bRelevance)
                         {
-                            
                             if(!is_null($oResponse->$column))
                             {
                                 $updatedValues['old'][$sColumnName]=$oResponse->$column;
@@ -209,21 +234,36 @@ class RecomputeController extends LSYii_Controller {
                                 }
                             }
                             $oResponse->$column= null;
+                            // Set relevanceStatus to false
+                            $_SESSION['survey_'.$surveyid][$column]=NULL;
+                            $_SESSION['survey_'.$surveyid]['relevanceStatus'][$aFieldMap[$column]['qid']]=false;
                         }
-                        
+                        else
+                        {
+                            $_SESSION['survey_'.$surveyid]['relevanceStatus'][$aFieldMap[$column]['qid']]=true;
+                        }
                     }
                     if ($aFieldMap[$column]['type'] == '*' && $bRelevance)
                     {
                         $oldVal=$oResponse->$column;
                         $newVal=$oResponse->$column=LimeExpressionManager::ProcessString($aFieldMap[$column]['question']);
-                        if($oldVal!=$newVal && ($oldVal && $newVal))
+                        if($oldVal!==$newVal)
                         {
-                            $updatedValues['old'][$sColumnName]=$oldVal;
+                            if(!is_null($oldVal))
+                                $updatedValues['old'][$sColumnName]=$oldVal;
+                            else
+                                $updatedValues['old'][$sColumnName]="NULL";
                             $updatedValues['new'][$sColumnName]=$newVal;
                             $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>".$updatedValues['new'][$sColumnName];
+                            $_SESSION['survey_'.$surveyid][$column]=$newVal;
                         }
                     }
                 }
+            }
+            $oResponse->save();
+            foreach($aSavedAnswers as $column => $value)
+            {
+                $oResponse->$column=$value;
             }
             $oResponse->save();
             // Construct a message
