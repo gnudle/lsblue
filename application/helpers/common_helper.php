@@ -4435,6 +4435,27 @@ function questionAttributes($returnByName=false)
 	    "help"=>$clang->gT('Process classification framework element i.d.'),
 	    "caption"=>$clang->gT('PCF Element'));
 
+	$qattributes['prefill_survey']=array(
+	    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+	    'category'=>$clang->gT('Meta'),
+	    'sortorder'=>40,
+	    'inputtype'=>'text',
+	    'i18n'=>true,
+	    "help"=>$clang->gT('Survey i.d. containing prefill value for this question'),
+	    "caption"=>$clang->gT('Prefill survey'));
+
+	$qattributes['prefill_required']=array(
+	    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+	    'category'=>$clang->gT('Meta'),
+	    'sortorder'=>41,
+	    'inputtype'=>'singleselect',
+	    'options'=>array('N'=>$clang->gT('No'),
+	     'Y'=>$clang->gT('Yes')),
+	    'default'=>'N',
+	    'help'=>$clang->gT('Prefill is required before starting survey.'),
+	    'caption'=>$clang->gT('Prefill is required'));
+
+
 /* Adding thousand seperator */
 	$qattributes["thousand_seperator"]=array(
 	    "types"=>"KN",
