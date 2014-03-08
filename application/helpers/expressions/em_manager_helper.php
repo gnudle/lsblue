@@ -6140,8 +6140,6 @@
                     if (!$LEM->allOnOnePage && $LEM->currentGroupSeq != $arg['gseq']) {
                         continue;
                     }
-                    if ($arg['hidden'] && $arg['type']!="*")// No dynamic for hidden attribute (except for equation, child of bug #08315).
-                        continue;
                     $gseqList[$arg['gseq']] = $arg['gseq'];    // so keep them in order
                     // First check if there is any tailoring  and construct the tailoring JavaScript if needed
                     $tailorParts = array();
