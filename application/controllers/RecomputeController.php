@@ -58,7 +58,10 @@ class RecomputeController extends LSYii_Controller {
         else
             $iResponseId=0;
         $bDoNext=(bool)Yii::app()->request->getQuery('next', false);
+        $bDoRelevance=(bool)Yii::app()->request->getQuery('relevance',Yii::app()->getConfig('deletenonvalues'));
+        $bDoRecompute=(bool)Yii::app()->request->getQuery('recompute',true);// ONLY used if update is false
         $bUpdate=(bool)Yii::app()->request->getQuery('update', false);
+        $bForceRecompute=(bool)Yii::app()->request->getQuery('forcerecompute', false);// ONLY used with update to true
 
         $bError=false;
         $sMessage="";
@@ -97,13 +100,13 @@ class RecomputeController extends LSYii_Controller {
         }
         if($iResponseId){
             $oResponse=Survey_dynamic::model($iSurveyId)->findByPk($iResponseId);
-
             if(!$oResponse)
             {
                 $this->sendError("Invalid Response ID");
             }
+            unset($_SESSION['survey_'.$iSurveyId]);
+            $aOldAnswers=$oResponse->attributes;// Take the order of the survey ....
             $_SESSION['survey_'.$iSurveyId]['srid']=$iResponseId;
-            $aOldAnswers=$oResponse->attributes;
             if(isset($oResponse->startlanguage ) && $oResponse->startlanguage )
             {
                 $_SESSION['survey_'.$iSurveyId]['s_lang']=$oResponse->startlanguage;
@@ -123,10 +126,15 @@ class RecomputeController extends LSYii_Controller {
             if(isset($oResponse->lastpage) && $oResponse->lastpage)
             {
                 $_SESSION['survey_'.$iSurveyId]['prevstep']=-1;
-                $_SESSION['survey_'.$iSurveyId]['maxstep'] = $oResponse->lastpage;
-                $_SESSION['survey_'.$iSurveyId]['step'] = $oResponse->lastpage;
-                $step=$_SESSION['survey_'.$iSurveyId]['step']; // Need movenext after
+                if($oResponse->lastpage>0){
+                    $_SESSION['survey_'.$iSurveyId]['maxstep'] = $oResponse->lastpage;
+                    $_SESSION['survey_'.$iSurveyId]['step'] = $oResponse->lastpage;
+                }else{
+                    $_SESSION['survey_'.$iSurveyId]['maxstep'] = 0;
+                    $_SESSION['survey_'.$iSurveyId]['step'] = 0;
+                }
             }
+            $_SESSION['survey_'.$iSurveyId]['LEMtokenResume']=true;
             if($aSurveyInfo['format']=="A"){
                 $surveyMode='survey';
             }elseif($aSurveyInfo['format']=="G"){
@@ -137,7 +145,11 @@ class RecomputeController extends LSYii_Controller {
             $aSavedAnswers=array();
             if(isset($aOldAnswers['datestamp'])){$aSavedAnswers['datestamp']=$aOldAnswers['datestamp'];}
             if(isset($aOldAnswers['submitdate'])){$aSavedAnswers['submitdate']=$aOldAnswers['submitdate'];}
-            if(isset($aOldAnswers['lastpage'])){$aSavedAnswers['lastpage']=$aOldAnswers['lastpage'];}
+            if(isset($aOldAnswers['lastpage']) && $aOldAnswers['lastpage']>0){
+                $aSavedAnswers['lastpage']=$aOldAnswers['lastpage'];
+            }else{
+                $aSavedAnswers['lastpage']=0;
+            }
             $radix=getRadixPointData($aSurveyInfo['surveyls_numberformat']);
             $radix = $radix['seperator'];
             $aEmSurveyOptions = array(
@@ -160,7 +172,8 @@ class RecomputeController extends LSYii_Controller {
             'token' => (isset($clienttoken) ? $clienttoken : NULL),
             );
             LimeExpressionManager::SetDirtyFlag();
-            buildsurveysession($iSurveyId);
+            buildsurveysession($iSurveyId);// Keep the order ....
+            $this->loadAnswers($iSurveyId,$iResponseId);
             $updatedValues=array();
             $updatedInfoArray=array();
             $aInsertArray=$_SESSION['survey_'.$surveyid]['insertarray'];
@@ -190,39 +203,53 @@ class RecomputeController extends LSYii_Controller {
                     }
                 }
                 $oResponse->save();
+                LimeExpressionManager::SetDirtyFlag();
+                buildsurveysession($iSurveyId);
+                $this->loadAnswers($iSurveyId,$iResponseId);
             }
-            foreach($aTempAnswers as $column=>$value){
-                if (in_array($column, $_SESSION['survey_'.$surveyid]['insertarray']) && isset($_SESSION['survey_'.$surveyid]['fieldmap'][$column]))
-                {
-                    $_SESSION['survey_'.$surveyid][$column]=$value;
-                }
-            }
-            LimeExpressionManager::StartSurvey($iSurveyId,$surveyMode,$aEmSurveyOptions);
             $oResponse=Survey_dynamic::model($iSurveyId)->findByPk($iResponseId);
+            $_SESSION['survey_'.$surveyid]['srid'] = $oResponse->id;
+            $_SESSION['survey_'.$surveyid]['LEMtokenResume'] = true;
+            $_SESSION['survey_'.$surveyid]['maxstep'] = $_SESSION['survey_'.$surveyid]['totalsteps']+1;
+            $_SESSION['survey_'.$surveyid]['step'] = $_SESSION['survey_'.$surveyid]['totalsteps']+1;
+            LimeExpressionManager::StartSurvey($iSurveyId,$surveyMode,$aEmSurveyOptions);
+            LimeExpressionManager::JumpTo($_SESSION['survey_'.$surveyid]['totalsteps']+1,false,false,true) ;// To set all relevanceStatus
+            // Fix parameters according to $bUpdate
+            if($bUpdate && !$bForceRecompute){
+                $bDoRelevance=$bDoRecompute=false;
+            }
+#           $updatedInfoArray['debugfirst'] = LimeExpressionManager::ProcessString("DEBUG{ixCioExistsNcY}");
+#           $updatedInfoArray['debugsecond'] = LimeExpressionManager::ProcessString("DEBUG{if(ixCioExistsNcY=='Y','OK','BAD')}");
+#            echo "<pre>".var_export($_SESSION['survey_'.$surveyid],true)."</pre>";
+#            $debugCnt=0;
             foreach($aOldAnswers as $column=>$value)
             {
+
+                $sColumnName=viewHelper::getFieldCode($aFieldMap[$column],array('LEMcompat'=>true));
                 if (in_array($column,$aInsertArray) && isset($aFieldMap[$column]))
                 {
-                    $sColumnName=viewHelper::getFieldCode($aFieldMap[$column],array('LEMcompat'=>true));
                     $bRelevance=true;
-                    // We need to fix column for multiple question : todo : attribute filter
+#                    $updatedInfoArray['debug'.$debugCnt]=LimeExpressionManager::ProcessString("{ixCioExistsNcY}");
+#                    $debugCnt++;
                     $sRelevance=isset($aFieldMap[$column]['relevance'])?trim($aFieldMap[$column]['relevance']):1;
-                    if(isset($_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]) && $_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]!=$column)
+                    $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$sRelevance."}");
+                    if($bDoRelevance && $sRelevance!="" && $sRelevance!="1" )
                     {
-                        $sParentSGQ=$_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column];
-                        $aParentSGQ=explode('X',$sParentSGQ);
-                        if(isset($aParentSGQ[2]))
+                        // We need to fix column for multiple question : todo : attribute filter
+                        if(isset($_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]) && $_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]!=$column)
                         {
-                            $oParentQuestion=Questions::model()->find('qid=:qid and language=:language',array(':qid'=>$aParentSGQ[2],':language'=>$thissurvey['language']));
-                            if($oParentQuestion)
+                            $sParentSGQ=$_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column];
+                            $aParentSGQ=explode('X',$sParentSGQ);
+                            if(isset($aParentSGQ[2]))
                             {
-                                $sRelevance=trim($oParentQuestion->relevance);
+                                $oParentQuestion=Questions::model()->find('qid=:qid and language=:language',array(':qid'=>$aParentSGQ[2],':language'=>$thissurvey['language']));
+                                if($oParentQuestion)
+                                {
+                                    $sRelevance=trim($oParentQuestion->relevance);
+                                    $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$sRelevance."}");
+                                }
                             }
                         }
-                    }
-                    if(Yii::app()->getConfig('deletenonvalues') && $sRelevance!="" && $sRelevance!="1" )
-                    {
-                        $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$sRelevance."}");
                         if(!$bRelevance)
                         {
                             if(!is_null($oResponse->$column))
@@ -243,10 +270,10 @@ class RecomputeController extends LSYii_Controller {
                             $_SESSION['survey_'.$surveyid]['relevanceStatus'][$aFieldMap[$column]['qid']]=true;
                         }
                     }
-                    if ($aFieldMap[$column]['type'] == '*' && $bRelevance)
+                    if ($bDoRecompute && $aFieldMap[$column]['type'] == '*' && $bRelevance)
                     {
                         $oldVal=$oResponse->$column;
-                        $newVal=$oResponse->$column=LimeExpressionManager::ProcessString($aFieldMap[$column]['question']);
+                        $newVal=$oResponse->$column=LimeExpressionManager::ProcessString($aFieldMap[$column]['question'],$aFieldMap[$column]['qid'],array(),false,3,1,false,true,true);
                         if($oldVal!==$newVal)
                         {
                             if(!is_null($oldVal))
@@ -313,5 +340,32 @@ class RecomputeController extends LSYii_Controller {
             die("An error was occured");
         }
     }
-
+    private function loadAnswers($surveyid,$iResponseId)
+    {
+        if(isset($_SESSION['survey_'.$surveyid]['s_lang']))
+        {
+            $thissurvey=getSurveyInfo($surveyid,$_SESSION['survey_'.$surveyid]['s_lang']);
+        }
+        else
+        {
+            $thissurvey=getSurveyInfo($surveyid);
+        }
+        $oResponse=Survey_dynamic::model($surveyid)->findByPk($iResponseId);
+        foreach ($oResponse->attributes as $column => $value)
+        {
+            if (in_array($column, $_SESSION['survey_'.$surveyid]['insertarray']) && isset($_SESSION['survey_'.$surveyid]['fieldmap'][$column]))
+            {
+                if (($_SESSION['survey_'.$surveyid]['fieldmap'][$column]['type'] == 'N' ||
+                $_SESSION['survey_'.$surveyid]['fieldmap'][$column]['type'] == 'K' ||
+                $_SESSION['survey_'.$surveyid]['fieldmap'][$column]['type'] == 'D') && $value == null)
+                {
+                    $_SESSION['survey_'.$surveyid][$column]='';
+                }
+                else
+                {
+                    $_SESSION['survey_'.$surveyid][$column]=$value;
+                }
+            }
+        }
+    }
 }
