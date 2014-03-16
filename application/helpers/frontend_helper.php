@@ -1389,7 +1389,7 @@
             <?php
             echo "<input type='hidden' name='sid' value='".$surveyid."' id='sid' />
             <input type='hidden' name='lang' value='".$sLangCode."' id='lang' />";
-            if (isset($_GET['newtest']) && $_GET['newtest'] == "Y")
+            if (Yii::app()->request->getParam('newtest') == "Y")
             {
                 echo "  <input type='hidden' name='newtest' value='Y' id='newtest' />";
 
