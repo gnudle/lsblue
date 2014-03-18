@@ -119,6 +119,10 @@ class SurveyRuntimeHelper {
             }
             elseif($surveyid != LimeExpressionManager::getLEMsurveyId())
             {
+                if (isset($thissurvey['showwelcome']) && $thissurvey['showwelcome'] == 'N' && $_SESSION[$LEMsessid]['step']<1)
+                {
+                    $_SESSION[$LEMsessid]['step']=1;
+                }
                 LimeExpressionManager::StartSurvey($surveyid, $surveyMode, $surveyOptions, false, $LEMdebugLevel);
                 LimeExpressionManager::JumpTo($_SESSION[$LEMsessid]['step'], false, false);
             }
