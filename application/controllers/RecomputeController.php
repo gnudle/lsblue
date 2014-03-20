@@ -59,9 +59,9 @@ class RecomputeController extends LSYii_Controller {
             $iResponseId=0;
         $bDoNext=(bool)Yii::app()->request->getQuery('next', false);
         $bDoRelevance=(bool)Yii::app()->request->getQuery('relevance',Yii::app()->getConfig('deletenonvalues'));
-        $bDoRecompute=(bool)Yii::app()->request->getQuery('recompute',true);// ONLY used if update is false
+        $bDoRecompute=(bool)Yii::app()->request->getQuery('recompute',true);
         $bUpdate=(bool)Yii::app()->request->getQuery('update', false);
-        $bForceRecompute=(bool)Yii::app()->request->getQuery('forcerecompute', false);// ONLY used with update to true
+        //$bForceRecompute=(bool)Yii::app()->request->getQuery('forcerecompute', false);// ONLY used with update to true
 
         $bError=false;
         $sMessage="";
@@ -215,13 +215,13 @@ class RecomputeController extends LSYii_Controller {
             LimeExpressionManager::StartSurvey($iSurveyId,$surveyMode,$aEmSurveyOptions);
             LimeExpressionManager::JumpTo($_SESSION['survey_'.$surveyid]['totalsteps']+1,false,false,true) ;// To set all relevanceStatus
             // Fix parameters according to $bUpdate
-            if($bUpdate && !$bForceRecompute){
-                $bDoRelevance=$bDoRecompute=false;
+            if($bUpdate && (!$oResponse->submitdate || $oResponse->submitdate=='N')){
+                // Only apply with this condition : survey is NOT submitted and update is true : relevance and recompute are NOT needed, because user have to come back to survey
+                if(!Yii::app()->request->getQuery('relevance'))
+                    $bDoRelevance=false;
+                if(!Yii::app()->request->getQuery('recompute'))
+                    $bDoRecompute=false;
             }
-#           $updatedInfoArray['debugfirst'] = LimeExpressionManager::ProcessString("DEBUG{ixCioExistsNcY}");
-#           $updatedInfoArray['debugsecond'] = LimeExpressionManager::ProcessString("DEBUG{if(ixCioExistsNcY=='Y','OK','BAD')}");
-#            echo "<pre>".var_export($_SESSION['survey_'.$surveyid],true)."</pre>";
-#            $debugCnt=0;
             foreach($aOldAnswers as $column=>$value)
             {
 
@@ -229,11 +229,9 @@ class RecomputeController extends LSYii_Controller {
                 if (in_array($column,$aInsertArray) && isset($aFieldMap[$column]))
                 {
                     $bRelevance=true;
-#                    $updatedInfoArray['debug'.$debugCnt]=LimeExpressionManager::ProcessString("{ixCioExistsNcY}");
-#                    $debugCnt++;
                     $sRelevance=isset($aFieldMap[$column]['relevance'])?trim($aFieldMap[$column]['relevance']):1;
                     $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$sRelevance."}");
-                    if($bDoRelevance && $sRelevance!="" && $sRelevance!="1" )
+                    if(($bDoRelevance || ($aFieldMap[$column]['type'] == '*' && $bDoRecompute)) && $sRelevance!="" && $sRelevance!="1" )
                     {
                         // We need to fix column for multiple question : todo : attribute filter
                         if(isset($_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]) && $_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]!=$column)
@@ -274,7 +272,7 @@ class RecomputeController extends LSYii_Controller {
                     {
                         $oldVal=$oResponse->$column;
                         $newVal=$oResponse->$column=LimeExpressionManager::ProcessString($aFieldMap[$column]['question'],$aFieldMap[$column]['qid'],array(),false,3,1,false,true,true);
-                        if($oldVal!==$newVal)
+                        if($oldVal!=$newVal)
                         {
                             if(!is_null($oldVal))
                                 $updatedValues['old'][$sColumnName]=$oldVal;
