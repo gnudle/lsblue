@@ -26,6 +26,14 @@ class FieldmapController extends LSYii_Controller {
         Yii::import('application.helpers.common_helper', true);
         Yii::import('application.libraries.Limesurvey_lang', true);
         $iSurveyId=Yii::app()->request->getQuery('sid', 0);
+
+		/* check api token */
+		$apiToken=Yii::app()->request->getQuery('t', 0);
+		if ($apiToken=="" or $apiToken != getenv('CRON_API_TOKEN')) {
+			echo "Access denied";
+			exit ();
+				}
+
         $oSurvey=Survey::model()->find('sid=:sid',array(':sid'=>$iSurveyId));
         if($oSurvey){
             LimeExpressionManager::SetSurveyId($iSurveyId);
