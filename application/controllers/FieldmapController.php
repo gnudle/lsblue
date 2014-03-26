@@ -19,18 +19,18 @@ class FieldmapController extends LSYii_Controller {
     function init()
     {
         parent::init();
-        $app = Yii::app();
-        $this->language=Yii::app()->getConfig('defaultlang');
     }
 
     public function actionIndex()
     {
         Yii::import('application.helpers.common_helper', true);
         Yii::import('application.libraries.Limesurvey_lang', true);
-
+Yii::app()->lang;
         $iSurveyId=Yii::app()->request->getQuery('sid', 0);
         $oSurvey=Survey::model()->find('sid=:sid',array(':sid'=>$iSurveyId));
         if($oSurvey){
+            LimeExpressionManager::SetSurveyId($iSurveyId);
+            SetSurveyLanguage( $iSurveyId, $oSurvey->language);
             $aFieldsMap=createFieldMap($iSurveyId,'short',false,false,$oSurvey->language);
         }
         else
