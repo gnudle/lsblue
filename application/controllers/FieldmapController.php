@@ -25,7 +25,6 @@ class FieldmapController extends LSYii_Controller {
     {
         Yii::import('application.helpers.common_helper', true);
         Yii::import('application.libraries.Limesurvey_lang', true);
-Yii::app()->lang;
         $iSurveyId=Yii::app()->request->getQuery('sid', 0);
         $oSurvey=Survey::model()->find('sid=:sid',array(':sid'=>$iSurveyId));
         if($oSurvey){
