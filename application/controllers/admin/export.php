@@ -184,8 +184,25 @@ class export extends Survey_Common_Action {
             $data['selectshow'] = $selectshow;
             $data['selectinc'] = $selectinc;
             $data['afieldcount'] = $iFieldCount;
-            $data['excesscols'] = $aFieldMap;
-
+            // Fix $aFieldMap
+            $aFieldCorrected=array();
+            foreach($aFieldMap as $key => $aField)
+            {
+                if($aField['qid'] && isset($aField['type']))
+                {
+                    if($aField['type']!="X"){
+                        $oQuestionAttribute=Question_attributes::model()->find('qid=:qid AND attribute=:attribute',array(':qid'=>$aField['qid'],'attribute'=>'exported'));
+                        $exported=($oQuestionAttribute)?(bool) $oQuestionAttribute->value:true;
+                    }else{
+                        $oQuestionAttribute=Question_attributes::model()->find('qid=:qid AND attribute=:attribute',array(':qid'=>$aField['qid'],'attribute'=>'exported_X'));
+                        $exported=($oQuestionAttribute)?(bool) $oQuestionAttribute->value:false;
+                    }
+                    if($exported)
+                        $aFieldCorrected[$key]=$aField;
+                }
+            }
+            //$data['excesscols'] = $aFieldMap;
+            $data['excesscols'] = $aFieldCorrected;
             //get max number of datasets
             $iMaximum = Yii::app()->db->createCommand("SELECT count(id) FROM {{survey_".intval($iSurveyID)."}}")->queryScalar();
 
