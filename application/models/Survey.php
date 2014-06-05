@@ -151,6 +151,12 @@ class Survey extends CActiveRecord
         array('period_unit', 'in','range'=>array('Y','Q','M','W','D','N'), 'allowEmpty'=>true),
         array('admission', 'in','range'=>array('O','C'), 'allowEmpty'=>true),
         array('mobile', 'in','range'=>array('Y','N'), 'allowEmpty'=>true),
+        //array('submitby', 'date'),
+        array('payments', 'in','range'=>array('F','S','P'), 'allowEmpty'=>true),
+        array('aggregate', 'in','range'=>array('Y','N'), 'allowEmpty'=>true),
+        array('required', 'in','range'=>array('Y','N'), 'allowEmpty'=>true),
+        array('canassign', 'in','range'=>array('Y','N'), 'allowEmpty'=>true),
+        array('canshare', 'in','range'=>array('Y','N'), 'allowEmpty'=>true),
         );
     }
 

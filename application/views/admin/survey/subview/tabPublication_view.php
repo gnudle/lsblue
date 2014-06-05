@@ -52,6 +52,57 @@
             <?php echo CHtml::dropDownList('mobile', $esrow['mobile'], $aRowArray); ?>
         </li>
 
+        <?php $aRowArray=array("Y"=>$clang->gT("Yes"),"N"=>$clang->gT("No")); 
+            if(!array_key_exists($esrow['mobile'],$aRowArray))
+                $esrow['mobile']="N";// default value
+        ?>
+        <li><label for='mobile'><?php $clang->eT("Mobile survey?") ?></label>
+            <?php echo CHtml::dropDownList('mobile', $esrow['mobile'], $aRowArray); ?>
+        </li>
+
+         <li><label for='submitby'><?php $clang->eT("Submit by date:"); ?></label>
+            <input type='text' class='popupdatetime' id='submitby' size='20' name='submitby' value="<?php echo $submitby; ?>" /></li>
+
+        <?php $aRowArray=array("F"=>$clang->gT("Free"),"S"=>$clang->gT("Sponsored"),"P"=>$clang->gT("Paid")); 
+            if(!array_key_exists($esrow['payments'],$aRowArray))
+                $esrow['payments']="F";// default value
+        ?>
+        <li><label for='payments'><?php $clang->eT("Payment Model") ?></label>
+            <?php echo CHtml::dropDownList('payments', $esrow['payments'], $aRowArray); ?>
+        </li>
+
+        <?php $aRowArray=array("Y"=>$clang->gT("Yes"),"N"=>$clang->gT("No")); 
+            if(!array_key_exists($esrow['aggregate'],$aRowArray))
+                $esrow['aggregate']="Y";// default value
+        ?>
+        <li><label for='aggregate'><?php $clang->eT("Aggregate survey responses?") ?></label>
+            <?php echo CHtml::dropDownList('aggregate', $esrow['aggregate'], $aRowArray); ?>
+        </li>
+
+        <?php $aRowArray=array("Y"=>$clang->gT("Yes"),"N"=>$clang->gT("No")); 
+            if(!array_key_exists($esrow['required'],$aRowArray))
+                $esrow['required']="Y";// default value
+        ?>
+        <li><label for='required'><?php $clang->eT("Subsurvey is required?") ?></label>
+            <?php echo CHtml::dropDownList('required', $esrow['required'], $aRowArray); ?>
+        </li>
+
+        <?php $aRowArray=array("Y"=>$clang->gT("Yes"),"N"=>$clang->gT("No")); 
+            if(!array_key_exists($esrow['canassign'],$aRowArray))
+                $esrow['canassign']="Y";// default value
+        ?>
+        <li><label for='canassign'><?php $clang->eT("Participant can re-assign?") ?></label>
+            <?php echo CHtml::dropDownList('canassign', $esrow['canassign'], $aRowArray); ?>
+        </li>
+
+        <?php $aRowArray=array("Y"=>$clang->gT("Yes"),"N"=>$clang->gT("No")); 
+            if(!array_key_exists($esrow['canshare'],$aRowArray))
+                $esrow['canshare']="Y";// default value
+        ?>
+        <li><label for='canshare'><?php $clang->eT("Participant can share report?") ?></label>
+            <?php echo CHtml::dropDownList('canshare', $esrow['canassign'], $aRowArray); ?>
+        </li>
+
              <li><label for='startdate'><?php $clang->eT("Start date/time:"); ?></label>
             <input type='text' class='popupdatetime' id='startdate' size='20' name='startdate' value="<?php echo $startdate; ?>" /></li>
 

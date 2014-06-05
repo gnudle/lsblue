@@ -976,6 +976,18 @@ class database extends Survey_Common_Action
                 $startdate=$datetimeobj->convert("Y-m-d H:i:s");
             }
 
+            $submitby = Yii::app()->request->getPost('submitby','');
+            if (trim($submitby)=="")
+            {
+                $submitby=null;
+            }
+            else
+            {
+                Yii::app()->loadLibrary('Date_Time_Converter');
+                $datetimeobj = new date_time_converter($submitby,$formatdata['phpdate'].' H:i'); 
+                $submitby=$datetimeobj->convert("Y-m-d H:i:s");
+            }
+
             //make sure only numbers are passed within the $_POST variable
             $tokenlength = (int) $_POST['tokenlength'];
 
@@ -1063,8 +1075,13 @@ class database extends Survey_Common_Action
             'period_unit'=>trim(Yii::app()->request->getPost('period_unit')),
             'admission'=>trim(Yii::app()->request->getPost('admission')),
             'mobile'=>trim(Yii::app()->request->getPost('mobile')),
+            'submitby'=>$submitby,
+            'payments'=>Yii::app()->request->getPost('payments'),
+            'aggregate'=>Yii::app()->request->getPost('aggregate'),
+            'required'=>Yii::app()->request->getPost('required'),
+            'canassign'=>Yii::app()->request->getPost('canassign'),
+            'canshare'=>Yii::app()->request->getPost('canshare'),
             );
-        
 
             $warning = '';
             // make sure we only update admin email if it is valid

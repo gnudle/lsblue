@@ -1139,6 +1139,12 @@ class SurveyAdmin extends Survey_Common_Action
             $esrow['admission']     = 'C';
             $esrow['period_unit']     = 'Y';
             $esrow['mobile']     = 'N';
+            $esrow['submitby']     = '';
+            $esrow['payments']     = 'F';
+            $esrow['aggregate']     = 'Y';
+            $esrow['required']     = 'Y';
+            $esrow['canassign']     = 'Y';
+            $esrow['canshare']     = 'Y';
         }
         elseif ($action == 'editsurvey')
         {
@@ -1152,7 +1158,6 @@ class SurveyAdmin extends Survey_Common_Action
                     $esresult['template']=Yii::app()->getConfig('defaulttemplate');
                 }
                 $esresult['template']=validateTemplateDir($esresult['template']);
-
                 $esrow = $esresult;
             }
         }
@@ -1266,7 +1271,7 @@ class SurveyAdmin extends Survey_Common_Action
         {
             Yii::app()->loadLibrary('Date_Time_Converter');
             $datetimeobj = new date_time_converter($esrow["startdate"],"Y-m-d H:i:s"); //new Date_Time_Converter($esrow['startdate'] , "Y-m-d H:i:s");
-            $startdate = $datetimeobj->convert("d.m.Y H:i"); //$datetimeobj->convert($dateformatdetails['phpdate'].' H:i');
+            $startdate = $datetimeobj->convert("{$dateformatdetails['phpdate']} H:i"); //$datetimeobj->convert($dateformatdetails['phpdate'].' H:i');
         }
 
         $expires = '';
@@ -1274,12 +1279,22 @@ class SurveyAdmin extends Survey_Common_Action
         {
             Yii::app()->loadLibrary('Date_Time_Converter');
             $datetimeobj = new date_time_converter($esrow['expires'], "Y-m-d H:i:s"); //new Date_Time_Converter($esrow['expires'] , "Y-m-d H:i:s");
-            $expires = $datetimeobj->convert("d.m.Y H:i");
+            $expires = $datetimeobj->convert("{$dateformatdetails['phpdate']} H:i");
         }
+
+        $submitby = '';
+        if ($esrow['submitby'])
+        {
+            Yii::app()->loadLibrary('Date_Time_Converter');
+            $datetimeobj = new date_time_converter($esrow['submitby'], "Y-m-d H:i:s"); //new Date_Time_Converter($esrow['expires'] , "Y-m-d H:i:s");
+            $submitby = $datetimeobj->convert("{$dateformatdetails['phpdate']} H:i");
+        }
+
         $aData['clang'] = $clang;
         $aData['esrow'] = $esrow;
         $aData['startdate'] = $startdate;
         $aData['expires'] = $expires;
+        $aData['submitby'] = $submitby;
         return $aData;
     }
 
@@ -1546,6 +1561,14 @@ class SurveyAdmin extends Survey_Common_Action
                 $sExpiryDate = $converter->convert("Y-m-d H:i:s");
             }
 
+            // If expiry date supplied convert it to the right format
+            $sSubmitBy =  Yii::app()->request->getPost('submitby','');
+            if (trim($sExpiryDate) != '')
+            {
+                Yii::import('application.libraries.Date_Time_Converter');
+                $converter = new Date_Time_Converter($sSubmitBy, $aDateFormatData['phpdate'] . ' H:i:s');
+                $sSubmitBy = $converter->convert("Y-m-d H:i:s");
+            }
             // Insert base settings into surveys table
             $aInsertData = array(
             'expires' => $sExpiryDate,
@@ -1588,7 +1611,20 @@ class SurveyAdmin extends Survey_Common_Action
             'publicgraphs' => $_POST['publicgraphs'],
             'assessments' => $_POST['assessments'],
             'emailresponseto' => $_POST['emailresponseto'],
-            'tokenlength' => $_POST['tokenlength']
+            'tokenlength' => $_POST['tokenlength'],
+            'supersurvey' => Yii::app()->request->getPost('supersurvey',''),
+            'supersurvey_order' => Yii::app()->request->getPost('supersurvey_order',0),
+            'threshold' => Yii::app()->request->getPost('threshold',50),
+            'published' => Yii::app()->request->getPost('published','N'),
+            'admission' => Yii::app()->request->getPost('admission','C'),
+            'period_unit' => Yii::app()->request->getPost('period_unit','Y'),
+            'mobile' => Yii::app()->request->getPost('mobile','N'),
+            'submitby' => $sSubmitBy,
+            'payments' => Yii::app()->request->getPost('payments','F'),
+            'aggregate' => Yii::app()->request->getPost('aggregate','Y'),
+            'required' => Yii::app()->request->getPost('required','Y'),
+            'canassign' => Yii::app()->request->getPost('canassign','Y'),
+            'canshare' => Yii::app()->request->getPost('canshare','Y'),
             );
 
             $warning = '';
