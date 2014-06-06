@@ -52,14 +52,6 @@
             <?php echo CHtml::dropDownList('mobile', $esrow['mobile'], $aRowArray); ?>
         </li>
 
-        <?php $aRowArray=array("Y"=>$clang->gT("Yes"),"N"=>$clang->gT("No")); 
-            if(!array_key_exists($esrow['mobile'],$aRowArray))
-                $esrow['mobile']="N";// default value
-        ?>
-        <li><label for='mobile'><?php $clang->eT("Mobile survey?") ?></label>
-            <?php echo CHtml::dropDownList('mobile', $esrow['mobile'], $aRowArray); ?>
-        </li>
-
          <li><label for='submitby'><?php $clang->eT("Submit by date:"); ?></label>
             <input type='text' class='popupdatetime' id='submitby' size='20' name='submitby' value="<?php echo $submitby; ?>" /></li>
 
