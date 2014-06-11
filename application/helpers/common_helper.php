@@ -4384,6 +4384,16 @@ function questionAttributes($returnByName=false)
 	    'default'=>0,
 	    'help'=>$clang->gT('Important question, check and show in standard reports.'),
 	    'caption'=>$clang->gT('Push'));
+	$qattributes['review']=array(
+	    'types'=>'15ABCDEFGHIKLMNOPQRSTUXY!:;|*',
+	    'category'=>$clang->gT('Report'),
+	    'sortorder'=>1,
+	    'inputtype'=>'singleselect',
+	    'options'=>array(0=>$clang->gT('No'),
+	     1=>$clang->gT('Yes')),
+	    'default'=>0,
+	    'help'=>$clang->gT('Show in participant review report.'),
+	    'caption'=>$clang->gT('Review'));
 
 	$qattributes["equation_definition"]=array(
 	    "types"=>"*",
