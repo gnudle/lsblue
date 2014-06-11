@@ -1562,12 +1562,16 @@ class SurveyAdmin extends Survey_Common_Action
             }
 
             // If expiry date supplied convert it to the right format
-            $sSubmitBy =  Yii::app()->request->getPost('submitby','');
-            if (trim($sExpiryDate) != '')
+            $sSubmitBy =  Yii::app()->request->getPost('submitby');
+            if (trim($sSubmitBy) != '')
             {
                 Yii::import('application.libraries.Date_Time_Converter');
                 $converter = new Date_Time_Converter($sSubmitBy, $aDateFormatData['phpdate'] . ' H:i:s');
                 $sSubmitBy = $converter->convert("Y-m-d H:i:s");
+            }
+            else
+            {
+                $sSubmitBy = null;
             }
             // Insert base settings into surveys table
             $aInsertData = array(

@@ -200,6 +200,10 @@ class export extends Survey_Common_Action {
                     if($exported)
                         $aFieldCorrected[$key]=$aField;
                 }
+                else
+                {
+                    $aFieldCorrected[$key]=$aField;
+                }
             }
             //$data['excesscols'] = $aFieldMap;
             $data['excesscols'] = $aFieldCorrected;
