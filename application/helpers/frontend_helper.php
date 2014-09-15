@@ -75,15 +75,16 @@
                 }
                 elseif ($column =='lastpage' && isset($_GET['token']))
                 {
+                    if ($value<1) $value=1;
                     if(is_null($submitdate) || $submitdate=="N")
                     {
-                        if ($value<1) $value=1;
                         $_SESSION['survey_'.$surveyid]['step']=$value;
                         $thisstep=$value-1;
                     }
                     else
                     {
-                        $_SESSION['survey_'.$surveyid]['maxstep']=$value;
+                        $_SESSION['survey_'.$surveyid]['step']=$value;
+                        $_SESSION['survey_'.$surveyid]['maxstep']=$_SESSION['survey_'.$surveyid]['totalsteps'];
                     }
                 }
                 /*
