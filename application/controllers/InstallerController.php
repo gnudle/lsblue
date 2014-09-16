@@ -626,6 +626,9 @@ class InstallerController extends CController {
                 //checking DB Connection
                 if ($this->connection->getActive() == true) {
                     $password_hash=hash('sha256', $defaultpass);
+                    if (User::model()->count()>0){
+                        die();
+                    }
                     try {
                         $this->connection->createCommand()->insert('{{users}}', array('users_name' => $defaultuser, 'password' => $password_hash, 'full_name' => $siteadminname, 'parent_id' => 0, 'lang' => $defaultlang, 'email' => $siteadminemail, 'create_survey' => 1, 'create_user' => 1, 'participant_panel' => 1, 'delete_user' => 1, 'superadmin' => 1, 'configurator' => 1, 'manage_template' => 1, 'manage_label' => 1));
                         $this->connection->createCommand()->insert("{{settings_global}}", array('stg_name' => 'SessionName', 'stg_value' => self::_getRandomString()));
