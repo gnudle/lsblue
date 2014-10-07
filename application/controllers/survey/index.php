@@ -323,7 +323,6 @@ class index extends CAction {
 
         //GET BASIC INFORMATION ABOUT THIS SURVEY
         $thissurvey=getSurveyInfo($surveyid, $_SESSION['survey_'.$surveyid]['s_lang']);
-
         //SEE IF SURVEY USES TOKENS
         if ($surveyExists == 1 && tableExists('{{tokens_'.$thissurvey['sid'].'}}'))
         {
@@ -636,6 +635,7 @@ class index extends CAction {
                     }
                 }
                 buildsurveysession($surveyid);
+                $this->fixMaxStep();
                 if($aRow['submitdate']!='') // alloweditaftercompletion
                 {
                     $_SESSION['survey_'.$surveyid]['maxstep'] = $_SESSION['survey_'.$surveyid]['totalsteps'];
@@ -828,6 +828,74 @@ class index extends CAction {
         echo templatereplace(file_get_contents($sTemplateFile),array(),$redata,'survey['.$iDebugLine.']');
     }
 
+    /**
+    * fixMaxStep before 2.05 LS core version
+    * @link http://extensions.sondages.pro/rubrique6
+    */
+    function fixMaxStep()
+    {
+        global $surveyid;
+        global $token;
+        $iSurveyId=$surveyid;
+        // Validate if we need to fix maxstep
+        $oSurvey=Survey::model()->findByPk($iSurveyId);
+
+        $sSessionToken=(isset($_SESSION["survey_{$iSurveyId}"]['token'])) ? $_SESSION["survey_{$iSurveyId}"]['token'] : null;
+        $sToken=Yii::app()->getRequest()->getParam('token',$sSessionToken);
+        if($oSurvey && $sToken && $oSurvey->allowjumps=="Y" && $oSurvey->active=="Y" && $oSurvey->tokenanswerspersistence=="Y" && $oSurvey->anonymized=="N")
+        {
+            $iPostedStep=Yii::app()->getRequest()->getPost('thisstep');
+            $iMaxSessionStep=(isset($_SESSION["survey_{$iSurveyId}"]['maxstep'])) ? $_SESSION["survey_{$iSurveyId}"]['maxstep'] : null;
+            $iRespondeId=(isset($_SESSION["survey_{$iSurveyId}"]['srid'])) ? $_SESSION["survey_{$iSurveyId}"]['srid'] : null;
+            $bTokenExists = tableExists('{{tokens_' . $iSurveyId . '}}');
+            if(!$bTokenExists)
+                return;
+            if(!$iRespondeId)
+            {
+                // Only if $sToken useleft <=1
+                if ($oToken=Tokens_dynamic::model($iSurveyId)->find("token =:token",array(':token' => $sToken)))
+                {
+                    if($oToken->usesleft<=1)
+                    {
+                        $oResponse=Survey_dynamic::model($iSurveyId)->find("token =:token",array(':token' => $sToken));
+                        $iResponseStep=($oResponse) ? $oResponse->lastpage : null;
+                        $iRespondeId=($oResponse) ? $oResponse->id : null;
+                        $oSavedControl=Saved_control::model()->find("sid =:sid AND srid=:srid",array(':sid'=>$iSurveyId,':srid'=>$iRespondeId));
+                        $iSavedStep=($oSavedControl) ? $oSavedControl->saved_thisstep : null;
+                        $iMaxStep=max($iSavedStep,$iResponseStep,$iPostedStep,$iMaxSessionStep);
+                    }
+                    // What happen if use left > 1
+                }
+            }
+            else
+            {
+                $oResponse=Survey_dynamic::model($iSurveyId)->find("id =:srid",array(':srid' => $iRespondeId));
+                $iResponseStep=($oResponse) ? $oResponse->lastpage : null;
+                $oSavedControl=Saved_control::model()->find("sid =:sid AND srid=:srid",array(':sid'=>$iSurveyId,':srid'=>$iRespondeId));
+                $iSavedStep=($oSavedControl) ? $oSavedControl->saved_thisstep : null;
+                $iMaxStep=max($iSavedStep,$iResponseStep,$iPostedStep,$iMaxSessionStep);
+            }
+
+            if(!empty($iMaxStep))
+            {
+                $_SESSION["survey_{$iSurveyId}"]['maxstep']=$iMaxStep;
+                if($iSavedStep < $iMaxStep)
+                {
+                    if(!$oSavedControl)
+                    {
+                        $oSavedControl=new Saved_control;
+                        $oSavedControl->sid=$iSurveyId;
+                        $oSavedControl->srid=$iRespondeId;
+                    }
+                    $oSavedControl->saved_thisstep=$iMaxStep;
+                    if(!$oSavedControl->save())
+                        tracevar($oSavedControl->getErrors());
+                }
+            }
+        }
+
+    }
+    
 
 }
 
