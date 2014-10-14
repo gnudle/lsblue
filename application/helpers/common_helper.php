@@ -4391,7 +4391,7 @@ function questionAttributes($returnByName=false)
 	    'inputtype'=>'singleselect',
 	    'options'=>array(0=>$clang->gT('No'),
 	     1=>$clang->gT('Yes')),
-	    'default'=>0,
+	    'default'=>1,
 	    'help'=>$clang->gT('Show in participant review report.'),
 	    'caption'=>$clang->gT('Review'));
 
