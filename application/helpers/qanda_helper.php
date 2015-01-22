@@ -1738,14 +1738,32 @@ function do_list_radio($ia)
     $ansresult = dbExecuteAssoc($ansquery)->readAll();  //Checked
     $anscount = count($ansresult);
 
+    /* <PRACTICELAB> */
+    $bDisplayAsArray=false;
     if (trim($aQuestionAttributes['display_columns'])!='') {
-        $dcols = $aQuestionAttributes['display_columns'];
+        if(substr($aQuestionAttributes['display_columns'], 0, 5 ) === "ARRAY")
+        {
+            $dcols= 0;// Just needed for testing
+            $bDisplayAsArray=true;
+            $aTemp=explode("_",$aQuestionAttributes['display_columns']);
+            $iAnswerWidth=isset($aTemp[1]) ? (float)$aTemp[1]:20; // Default width of header like array , can be set with ARRAY_50 for example (in %)
+            $iAnswerWidth=($iAnswerWidth<100) ? $iAnswerWidth : 100; // Max 100%
+        }
+        else
+        {
+            $dcols = $aQuestionAttributes['display_columns']; // ANother string set diplay column, but to 1 column ;)
+        }
+    /* </PRACTICELAB> */
     }
     else
     {
         $dcols= 1;
     }
-
+    //$bDisplayAsArray=false;
+    if($dcols==1 && trim($aQuestionAttributes['equation_definition'])){
+        $bDisplayAsArray=true;
+        $iAnswerWidth=20; // Default width of header like array , can be set with ARRAY_50 for example (in %)
+    }
     if (trim($aQuestionAttributes['other_replace_text'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']])!='')
     {
         $othertext=$aQuestionAttributes['other_replace_text'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']];
@@ -1758,9 +1776,24 @@ function do_list_radio($ia)
     if (isset($other) && $other=='Y') {$anscount++;} //Count up for the Other answer
     if ($ia[6] != 'Y' && SHOW_NO_ANSWER == 1) {$anscount++;} //Count up if "No answer" is showing
 
+    /* <PRACTICELAB> */
+    if($bDisplayAsArray)
+    {
+
+        $answer_head ="\n<td>&nbsp;</td>";
+        $answer_cols='<col width="'.$iAnswerWidth.'%" class="col-answers">';
+        $answer_body = '<th class="answertext">';
+        $answer_body.=  $aQuestionAttributes['equation_definition']; // And if not set ?
+        $answer_body.= "</th>";
+        /* Evaluate with of each columns */
+        $iCellWidth=(100-$iAnswerWidth)/$anscount;
+        $iCellWidth=($iCellWidth>0) ? $iCellWidth : 0; // Min width to 0.
+        
+    }else{
+    /* </PRACTICELAB> */
     $wrapper = setupColumns($dcols , $anscount,"answers-list radio-list","answer-item radio-item");
     $answer = $wrapper['whole-start'];
-
+    }
     //Time Limit Code
     if (trim($aQuestionAttributes['time_limit'])!='')
     {
@@ -1774,6 +1807,96 @@ function do_list_radio($ia)
     $colcounter = 1;
     $trbc='';
 
+    /* <PRACTICELAB> */
+    if($bDisplayAsArray)
+    {
+        $odd_even = '';
+        foreach ($ansresult as $key=>$ansrow)
+        {
+            $myfname = $ia[1].$ansrow['code'];
+            $check_ans = '';
+            if ($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$ia[1]] == $ansrow['code'])
+            {
+                $check_ans = CHECKED;
+            }
+            $answer_head .="<th>{$ansrow['answer']}</th>";
+
+            $odd_even = alternation($odd_even);
+            $answer_cols .= "<col class=\"$odd_even\" width=\"$iCellWidth%\" />\n";
+            $answer_body .="<td class='answer_cell_00{$ansrow['code']} answer-item radio-item'>  <label for='answer{$ia[1]}{$ansrow['code']}'>";
+            $answer_body .='<input class="radio" type="radio" value="'.$ansrow['code'].'" name="'.$ia[1].'" id="answer'.$ia[1].$ansrow['code'].'"'.$check_ans.' onclick="if (document.getElementById(\'answer'.$ia[1].'othertext\') != null) document.getElementById(\'answer'.$ia[1].'othertext\').value=\'\';'.$checkconditionFunction.'(this.value, this.name, this.type)" />';
+            $answer_body .=" </label> </td>";
+        }
+        if (isset($other) && $other=='Y')
+        {
+
+            $sSeperator = getRadixPointData($thissurvey['surveyls_numberformat']);
+            $sSeperator = $sSeperator['seperator'];
+
+            if ($aQuestionAttributes['other_numbers_only']==1)
+            {
+                $oth_checkconditionFunction = 'fixnum_checkconditions';
+            }
+            else
+            {
+                $oth_checkconditionFunction = 'checkconditions';
+            }
+            if ($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$ia[1]] == '-oth-')
+            {
+                $check_ans = CHECKED;
+            }
+            else
+            {
+                $check_ans = '';
+            }
+            $thisfieldname=$ia[1].'other';
+            if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$thisfieldname]))
+            {
+                $dispVal = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$thisfieldname];
+                if ($aQuestionAttributes['other_numbers_only']==1)
+                {
+                    $dispVal = str_replace('.',$sSeperator,$dispVal);
+                }
+                $answer_other = ' value="'.htmlspecialchars($dispVal,ENT_QUOTES).'"';
+            }
+            else
+            {
+                $answer_other = ' value=""';
+            }
+            $answer_head .="<th>{$othertext}</th>";
+            $odd_even = alternation($odd_even);
+            $answer_cols .= "<col class=\"$odd_even\" width=\"$iCellWidth%\" />\n";
+            $answer_body .="<td class='answer_cell_other answer-item radio-item other-item'>";
+            $answer_body .= '<label for "'.$ia[1].'"><input class="radio" type="radio" value="-oth-" name="'.$ia[1].'" id="SOTH'.$ia[1].'"'.$check_ans.' onclick="'.$checkconditionFunction.'(this.value, this.name, this.type)" /></label>';
+            $answer_body .= '<label for="answer'.$ia[1].'othertext">
+            <input type="text" class="text '.$kpclass.'" id="answer'.$ia[1].'othertext" name="'.$ia[1].'other" title="'.$clang->gT('Other').'"'.$answer_other.' onkeyup="if($.trim($(this).val())!=\'\'){ $(\'#SOTH'.$ia[1].'\').click(); }; '.$oth_checkconditionFunction.'(this.value, this.name, this.type);" />
+            </label>';
+            $answer_body .="</td>";
+        }
+        if ($ia[6] != 'Y' && SHOW_NO_ANSWER == 1)
+        {
+            if ((!$_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$ia[1]] || $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$ia[1]] == '') || ($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$ia[1]] == ' ' ))
+            {
+                $check_ans = CHECKED; //Check the "no answer" radio button if there is no answer in session.
+            }
+            else
+            {
+                $check_ans = '';
+            }
+            $answer_head .="<th>".$clang->gT('No answer')."</th>";
+            $odd_even = alternation($odd_even);
+            $answer_cols .= "<col class=\"$odd_even col-no-answer\" width=\"$iCellWidth%\" />\n";
+            $answer_body .= '<td class="answer-item radio-item noanswer-item"><label for="answer'.$ia[1].'"><input class="radio" type="radio" name="'.$ia[1].'" id="answer'.$ia[1].'" value=""'.$check_ans.' onclick="if (document.getElementById(\'answer'.$ia[1].'othertext\') != null) document.getElementById(\'answer'.$ia[1].'othertext\').value=\'\';'.$checkconditionFunction.'(this.value, this.name, this.type)" /></td>';
+        }
+        // Reconstruct the total $answers
+        $answer = "\n<table class=\"question subquestions-list questions-list array_list_radio\" summary=\"An array type question\" >\n"
+                . '<colgroup class="col-responses">'.$answer_cols.'</colgroup>'
+                . '<thead><tr>'.$answer_head.'</tr></thead>'
+                . '<body><tbody><tr class="array2 answers-list radio-list">'.$answer_body.'</tr></body>'
+                . "</table>";
+        $answer.= '<input type="hidden" name="java'.$ia[1].'" id="java'.$ia[1]."\" value=\"".$_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$ia[1]]."\" />\n";
+    }else{
+    /* </PRACTICELAB> */
     foreach ($ansresult as $key=>$ansrow)
     {
         $myfname = $ia[1].$ansrow['code'];
@@ -1923,7 +2046,10 @@ function do_list_radio($ia)
     //END OF ITEMS
     $answer .= $wrapper['whole-end'].'
     <input type="hidden" name="java'.$ia[1].'" id="java'.$ia[1]."\" value=\"".$_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$ia[1]]."\" />\n";
-
+    /* <PRACTICELAB> */
+    /* End of LS behaviour */
+    }
+    /* </PRACTICELAB> */
     $inputnames[]=$ia[1];
     return array($answer, $inputnames);
 }
