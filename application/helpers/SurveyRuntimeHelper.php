@@ -930,6 +930,13 @@ class SurveyRuntimeHelper {
                 $question['sqid'] = !empty($qinfo['info']['sqid']) ? $qinfo['info']['sqid'] : 0;
                 $question['type']=$qinfo['info']['type'];
                 //===================================================================
+                /* <PRACTICELAB> */
+                if($question['type']=="L" && (trim($aTempAttributeValues['equation_definition']) || substr($aTempAttributeValues['display_columns'], 0, 5 ) === "ARRAY"))
+                {
+                    $question['class'].=" array-flexible-row";
+                    $question['text']="";
+                }
+                /* </PRACTICELAB> */
                 $answer = $qa[1];
                 $help = $qinfo['info']['help'];   // $qa[2];
 
