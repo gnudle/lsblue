@@ -4396,7 +4396,7 @@ function questionAttributes($returnByName=false)
 	    'caption'=>$clang->gT('Review'));
 
 	$qattributes["equation_definition"]=array(
-	    "types"=>"*YL!",
+	    "types"=>"*YL!M",
 	    'category'=>$clang->gT('Report'),
 	    'sortorder'=>200,
 	    'inputtype'=>'textarea',
