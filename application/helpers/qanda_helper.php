@@ -2405,6 +2405,21 @@ function do_multiplechoice($ia)
         $dcols = 1;
     }
 
+    if( ( $dcols==1 && trim($aQuestionAttributes['equation_definition']) ) || substr($aQuestionAttributes['display_columns'], 0, 5 ) === "ARRAY" )
+    {
+        $bDisplayAsArray=true;
+        if(substr($aQuestionAttributes['display_columns'], 0, 6 ) === "ARRAY_")
+        {
+            $aTemp=explode("_",$aQuestionAttributes['display_columns']);
+            $iAnswerWidth=isset($aTemp[1]) ? (float)$aTemp[1]:20; // Default width of header like array , can be set with ARRAY_50 for example (in %)
+            $iAnswerWidth=($iAnswerWidth<100) ? $iAnswerWidth : 100; // Max 100%
+        }
+        else
+        {
+            $iAnswerWidth=20;
+        }
+    }
+
     if ($aQuestionAttributes['other_numbers_only']==1)
     {
         $sSeperator = getRadixPointData($thissurvey['surveyls_numberformat']);
@@ -2453,6 +2468,95 @@ function do_multiplechoice($ia)
         $anscount++; //COUNT OTHER AS AN ANSWER FOR MANDATORY CHECKING!
     }
 
+    /* <PRACTICELAB> */
+    if($bDisplayAsArray)
+    {
+        $answer = '<input type="hidden" name="MULTI'.$ia[1].'" value="'.$anscount."\" />\n\n";
+
+        $answer_head ="\n<td>&nbsp;</td>";
+        $answer_cols='<col width="'.$iAnswerWidth.'%" class="col-answers">';
+        $answer_body = '<th class="answertext">';
+        $answer_body.= $aQuestionAttributes['equation_definition']; // And if not set ?
+        $answer_body.= "</th>";
+        /* Evaluate with of each columns */
+        $iCellWidth=(100-$iAnswerWidth)/$anscount;
+        $iCellWidth=($iCellWidth>0) ? $iCellWidth : 0; // Min width to 0.
+
+        $odd_even = '';
+        foreach ($ansresult as $key=>$ansrow)
+        {
+            $myfname = $ia[1].$ansrow['title'];
+
+            $answer_head .= "<th><label for=\"answer$ia[1]{$ansrow['title']}\" class=\"answertext\">".$ansrow['question']."</label></th>";
+
+            $answer_cols.='<col width="'.$iCellWidth.'%" class="col-answers">';
+
+            $answer_body .= "<td>\n";
+            $answer_body .= '   <input class="checkbox" type="checkbox" name="'.$myfname.'" id="answer'.$myfname.'" value="Y"';
+            if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]))
+            {
+                if ($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname] == 'Y')
+                {
+                    $answer_body .= CHECKED;
+                }
+            }
+            $answer_body .= " onclick='cancelBubbleThis(event);{$checkconditionFunction}(this.value, this.name, this.type)'";
+            $answer_body .= " />\n";
+            $answer_body .= '   <input type="hidden" name="java'.$myfname.'" id="java'.$myfname.'" value="';
+            if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]))
+            {
+                $answer_body .= $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname];
+            }
+            $answer_body .= "\" />\n";
+            $answer_body .= "\n</td>\n";
+
+            $inputnames[]=$myfname;
+
+        }
+        if ($other == 'Y')
+        {
+            $myfname = $ia[1].'other';
+            
+            $answer_head .= "<th><label for=\"answer{$myfname}\" class=\"answertext\">{$othertext}</label></th>";
+            $answer_body .= "<td>\n";
+            $answer_body .= "<label for=\"answer$myfname\" class=\"answertext\">".$othertext."</label>";
+            $answer_body .= "<input class=\"text ".$kpclass."\" type=\"text\" name=\"$myfname\" id=\"answer$myfname\" value=\"";
+            if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]))
+            {
+                $dispVal = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname];
+                if ($aQuestionAttributes['other_numbers_only']==1)
+                {
+                    $dispVal = str_replace('.',$sSeperator,$dispVal);
+                }
+                $answer_body .=  htmlspecialchars($dispVal,ENT_QUOTES);
+            }
+            $answer_body .= "\" />";
+            $answer_body .="<script type='text/javascript'>\n";
+            $answer_body .="$('#answer{$myfname}').bind('keyup focusout',function(event){\n";
+            $answer_body .= " $(\"#java{$myfname}\").val($(this).val());LEMflagMandOther(\"$myfname\",$(this).val()!=''); $oth_checkconditionFunction(this.value, this.name, this.type); \n";
+            $answer_body .="});\n";
+            $answer_body .="</script>\n";
+            $answer_body .= '<input type="hidden" name="java'.$myfname.'" id="java'.$myfname.'" value="';
+            if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]))
+            {
+                $dispVal = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname];
+                if ($aQuestionAttributes['other_numbers_only']==1)
+                {
+                    $dispVal = str_replace('.',$sSeperator,$dispVal);
+                }
+                $answer_body .= htmlspecialchars($dispVal,ENT_QUOTES);
+            }
+
+            $answer_body .= "\" />\n";
+            $inputnames[]=$myfname;
+        }
+        $answer .= "\n<table class=\"question subquestions-list questions-list array_multiple-opt\" summary=\"An array type question\" >\n"
+        . '<colgroup class="col-responses">'.$answer_cols.'</colgroup>'
+        . '<thead><tr>'.$answer_head.'</tr></thead>'
+        . '<body><tbody><tr class="array2 answers-list radio-list">'.$answer_body.'</tr></body>'
+        . "</table>";
+    }else{
+    /* </PRACTICELAB> */
     $wrapper = setupColumns($dcols, $anscount,"subquestions-list questions-list checkbox-list","question-item answer-item checkbox-item");
 
     $answer = '<input type="hidden" name="MULTI'.$ia[1].'" value="'.$anscount."\" />\n\n".$wrapper['whole-start'];
@@ -2702,8 +2806,9 @@ function do_multiplechoice($ia)
 #    }
 
 #    $answer = $checkotherscript . $answer;
-
+    
     $answer .= $postrow;
+    }/* </PRACTICELAB> */
     return array($answer, $inputnames);
 }
 

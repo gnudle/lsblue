@@ -936,6 +936,11 @@ class SurveyRuntimeHelper {
                     $question['class'].=" array-flexible-row";
                     $question['text']="";
                 }
+                if($question['type']=="M" && (trim($aTempAttributeValues['equation_definition']) || substr($aTempAttributeValues['display_columns'], 0, 5 ) === "ARRAY"))
+                {
+                    $question['class'].=" array-multi-flexi";
+                    $question['text']="";
+                }
                 /* </PRACTICELAB> */
                 $answer = $qa[1];
                 $help = $qinfo['info']['help'];   // $qa[2];
