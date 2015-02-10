@@ -2519,7 +2519,6 @@ function do_multiplechoice($ia)
             
             $answer_head .= "<th><label for=\"answer{$myfname}\" class=\"answertext\">{$othertext}</label></th>";
             $answer_body .= "<td>\n";
-            $answer_body .= "<label for=\"answer$myfname\" class=\"answertext\">".$othertext."</label>";
             $answer_body .= "<input class=\"text ".$kpclass."\" type=\"text\" name=\"$myfname\" id=\"answer$myfname\" value=\"";
             if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]))
             {
