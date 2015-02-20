@@ -1795,6 +1795,7 @@ function do_list_radio($ia)
             $answer_cols='';
         if($iAnswerWidth){
             $answer_body = '<th class="answertext">';
+            $answer_body.= (($ia[6]=="Y") ? "<span class='asterisk'>*</span> " : "");
             $answer_body.=  $aQuestionAttributes['equation_definition']; // And if not set ?
             $answer_body.= "</th>";
         }else{
@@ -2506,6 +2507,7 @@ function do_multiplechoice($ia)
 
         if($iAnswerWidth){
             $answer_body = '<th class="answertext">';
+            $answer_body.= (($ia[6]=="Y") ? "<span class='asterisk'>*</span> " : "");
             $answer_body.= $aQuestionAttributes['equation_definition']; // And if not set ?
             $answer_body.= "</th>";
         }else
