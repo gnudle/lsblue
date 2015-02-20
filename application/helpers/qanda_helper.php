@@ -1740,6 +1740,7 @@ function do_list_radio($ia)
 
     /* <PRACTICELAB> */
     $bDisplayAsArray=false;
+
     if (trim($aQuestionAttributes['display_columns'])!='' || substr($aQuestionAttributes['display_columns'], 0, 5 ) === "ARRAY")
     {
         if(substr($aQuestionAttributes['display_columns'], 0, 5 ) === "ARRAY")
@@ -1752,15 +1753,7 @@ function do_list_radio($ia)
         }
         else
         {
-            $bDisplayAsArray=true;
-            if(!strlen(trim(str_replace( "&nbsp;", "",$aQuestionAttributes['equation_definition']), " \t\n\r\0\x0B\xC2\xA0")))
-            {
-                $iAnswerWidth=0;
-            }
-            else
-            {
-                $iAnswerWidth=20;
-            }
+
             $dcols = $aQuestionAttributes['display_columns']; // ANother string set diplay column, but to 1 column ;)
         }
     /* </PRACTICELAB> */
@@ -1770,6 +1763,18 @@ function do_list_radio($ia)
         $dcols= 1;
     }
 
+    if(($dcols== 1 && trim($aQuestionAttributes['equation_definition'])!="") || ($bDisplayAsArray && $iAnswerWidth==20 ))
+    {
+        $bDisplayAsArray=true;
+        if(!strlen(trim(str_replace( "&nbsp;", "",$aQuestionAttributes['equation_definition']), " \t\n\r\0\x0B\xC2\xA0")))
+        {
+            $iAnswerWidth=0;
+        }
+        else
+        {
+            $iAnswerWidth=20;
+        }
+    }
     if (trim($aQuestionAttributes['other_replace_text'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']])!='')
     {
         $othertext=$aQuestionAttributes['other_replace_text'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']];
