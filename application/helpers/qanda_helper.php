@@ -2425,11 +2425,15 @@ function do_multiplechoice($ia)
     {
         $dcols = 1;
     }
-
+    $bDisplayAsArray=false;
     if( ( $dcols==1 && trim($aQuestionAttributes['equation_definition']) ) || substr($aQuestionAttributes['display_columns'], 0, 5 ) === "ARRAY" )
     {
         $bDisplayAsArray=true;
-        if(substr($aQuestionAttributes['display_columns'], 0, 6 ) === "ARRAY_")
+        if(!strlen(trim(str_replace( "&nbsp;", "",$aQuestionAttributes['equation_definition']), " \t\n\r\0\x0B\xC2\xA0")))
+        {
+            $iAnswerWidth=0;
+        }
+        elseif(substr($aQuestionAttributes['display_columns'], 0, 6 ) === "ARRAY_")
         {
             $aTemp=explode("_",$aQuestionAttributes['display_columns']);
             $iAnswerWidth=isset($aTemp[1]) ? (float)$aTemp[1]:20; // Default width of header like array , can be set with ARRAY_50 for example (in %)
@@ -2437,14 +2441,7 @@ function do_multiplechoice($ia)
         }
         else
         {
-            if(!strlen(trim(str_replace( "&nbsp;", "",$aQuestionAttributes['equation_definition']), " \t\n\r\0\x0B\xC2\xA0")))
-            {
-                $iAnswerWidth=0;
-            }
-            else
-            {
-                $iAnswerWidth=20;
-            }
+            $iAnswerWidth=20;
         }
     }
 
