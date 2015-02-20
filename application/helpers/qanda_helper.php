@@ -2491,7 +2491,7 @@ function do_multiplechoice($ia)
 
             $answer_cols.='<col width="'.$iCellWidth.'%" class="col-answers">';
 
-            $answer_body .= "<td>\n";
+            $answer_body .= "<td id='javatbd{$myfname}' >\n";
             $answer_body .= '   <input class="checkbox" type="checkbox" name="'.$myfname.'" id="answer'.$myfname.'" value="Y"';
             if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]))
             {
@@ -2518,7 +2518,7 @@ function do_multiplechoice($ia)
             $myfname = $ia[1].'other';
             
             $answer_head .= "<th><label for=\"answer{$myfname}\" class=\"answertext\">{$othertext}</label></th>";
-            $answer_body .= "<td>\n";
+            $answer_body .= "<td id='javatbd{$myfname}' >\n";
             $answer_body .= "<input class=\"text ".$kpclass."\" type=\"text\" name=\"$myfname\" id=\"answer$myfname\" value=\"";
             if (isset($_SESSION['survey_'.Yii::app()->getConfig('surveyID')][$myfname]))
             {
