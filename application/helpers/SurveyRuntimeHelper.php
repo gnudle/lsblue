@@ -933,13 +933,13 @@ class SurveyRuntimeHelper {
                 /* <PRACTICELAB> */
                 if($question['type']=="L" && (trim($aTempAttributeValues['equation_definition']) || substr($aTempAttributeValues['display_columns'], 0, 5 ) === "ARRAY"))
                 {
-                    $question['class'].=" array-flexible-row";
-                    $question['text']="";
+                    $question['class'].=" array-flexible-row array-oneline";
+                    //$question['text']="";
                 }
                 if($question['type']=="M" && (trim($aTempAttributeValues['equation_definition']) || substr($aTempAttributeValues['display_columns'], 0, 5 ) === "ARRAY"))
                 {
-                    $question['class'].=" array-multi-flexi";
-                    $question['text']="";
+                    $question['class'].=" array-multi-flexi array-oneline";
+                    //$question['text']="";
                 }
                 /* </PRACTICELAB> */
                 $answer = $qa[1];
