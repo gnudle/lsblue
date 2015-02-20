@@ -1740,17 +1740,27 @@ function do_list_radio($ia)
 
     /* <PRACTICELAB> */
     $bDisplayAsArray=false;
-    if (trim($aQuestionAttributes['display_columns'])!='') {
+    if (trim($aQuestionAttributes['display_columns'])!='' || substr($aQuestionAttributes['display_columns'], 0, 5 ) === "ARRAY")
+    {
         if(substr($aQuestionAttributes['display_columns'], 0, 5 ) === "ARRAY")
         {
             $dcols= 0;// Just needed for testing
             $bDisplayAsArray=true;
             $aTemp=explode("_",$aQuestionAttributes['display_columns']);
-            $iAnswerWidth=isset($aTemp[1]) ? (float)$aTemp[1]:20; // Default width of header like array , can be set with ARRAY_50 for example (in %)
+            $iAnswerWidth=(isset($aTemp[1]) && (float)$aTemp[1]>=0) ? (float)$aTemp[1]:20; // Default width of header like array , can be set with ARRAY_50 for example (in %)
             $iAnswerWidth=($iAnswerWidth<100) ? $iAnswerWidth : 100; // Max 100%
         }
         else
         {
+            $bDisplayAsArray=true;
+            if(!strlen(trim(str_replace( "&nbsp;", "",$aQuestionAttributes['equation_definition']), " \t\n\r\0\x0B\xC2\xA0")))
+            {
+                $iAnswerWidth=0;
+            }
+            else
+            {
+                $iAnswerWidth=20;
+            }
             $dcols = $aQuestionAttributes['display_columns']; // ANother string set diplay column, but to 1 column ;)
         }
     /* </PRACTICELAB> */
@@ -1759,11 +1769,7 @@ function do_list_radio($ia)
     {
         $dcols= 1;
     }
-    //$bDisplayAsArray=false;
-    if($dcols==1 && trim($aQuestionAttributes['equation_definition'])){
-        $bDisplayAsArray=true;
-        $iAnswerWidth=20; // Default width of header like array , can be set with ARRAY_50 for example (in %)
-    }
+
     if (trim($aQuestionAttributes['other_replace_text'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']])!='')
     {
         $othertext=$aQuestionAttributes['other_replace_text'][$_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang']];
@@ -1779,12 +1785,21 @@ function do_list_radio($ia)
     /* <PRACTICELAB> */
     if($bDisplayAsArray)
     {
-
-        $answer_head ="\n<td>&nbsp;</td>";
-        $answer_cols='<col width="'.$iAnswerWidth.'%" class="col-answers">';
-        $answer_body = '<th class="answertext">';
-        $answer_body.=  $aQuestionAttributes['equation_definition']; // And if not set ?
-        $answer_body.= "</th>";
+        if($iAnswerWidth)
+            $answer_head ="\n<td>&nbsp;</td>";
+        else
+            $answer_head ="";
+        if($iAnswerWidth)
+            $answer_cols='<col width="'.$iAnswerWidth.'%" class="col-answers">';
+        else
+            $answer_cols='';
+        if($iAnswerWidth){
+            $answer_body = '<th class="answertext">';
+            $answer_body.=  $aQuestionAttributes['equation_definition']; // And if not set ?
+            $answer_body.= "</th>";
+        }else{
+            $answer_body = '';
+        }
         /* Evaluate with of each columns */
         $iCellWidth=(100-$iAnswerWidth)/$anscount;
         $iCellWidth=($iCellWidth>0) ? $iCellWidth : 0; // Min width to 0.
@@ -2416,7 +2431,14 @@ function do_multiplechoice($ia)
         }
         else
         {
-            $iAnswerWidth=20;
+            if(!strlen(trim(str_replace( "&nbsp;", "",$aQuestionAttributes['equation_definition']), " \t\n\r\0\x0B\xC2\xA0")))
+            {
+                $iAnswerWidth=0;
+            }
+            else
+            {
+                $iAnswerWidth=20;
+            }
         }
     }
 
@@ -2473,11 +2495,22 @@ function do_multiplechoice($ia)
     {
         $answer = '<input type="hidden" name="MULTI'.$ia[1].'" value="'.$anscount."\" />\n\n";
 
-        $answer_head ="\n<td>&nbsp;</td>";
-        $answer_cols='<col width="'.$iAnswerWidth.'%" class="col-answers">';
-        $answer_body = '<th class="answertext">';
-        $answer_body.= $aQuestionAttributes['equation_definition']; // And if not set ?
-        $answer_body.= "</th>";
+        if($iAnswerWidth)
+            $answer_head ="\n<td>&nbsp;</td>";
+        else
+            $answer_head ="";
+        if($iAnswerWidth)
+            $answer_cols='<col width="'.$iAnswerWidth.'%" class="col-answers">';
+        else
+            $answer_cols ="";
+
+        if($iAnswerWidth){
+            $answer_body = '<th class="answertext">';
+            $answer_body.= $aQuestionAttributes['equation_definition']; // And if not set ?
+            $answer_body.= "</th>";
+        }else
+            $answer_body ="";
+
         /* Evaluate with of each columns */
         $iCellWidth=(100-$iAnswerWidth)/$anscount;
         $iCellWidth=($iCellWidth>0) ? $iCellWidth : 0; // Min width to 0.
@@ -2489,7 +2522,7 @@ function do_multiplechoice($ia)
 
             $answer_head .= "<th><label for=\"answer$ia[1]{$ansrow['title']}\" class=\"answertext\">".$ansrow['question']."</label></th>";
 
-            $answer_cols.='<col width="'.$iCellWidth.'%" class="col-answers">';
+            $answer_cols.='<col width="'.$iCellWidth.'%" class="">';
 
             $answer_body .= "<td id='javatbd{$myfname}' >\n";
             $answer_body .= '   <input class="checkbox" type="checkbox" name="'.$myfname.'" id="answer'.$myfname.'" value="Y"';
@@ -2516,7 +2549,8 @@ function do_multiplechoice($ia)
         if ($other == 'Y')
         {
             $myfname = $ia[1].'other';
-            
+            $answer_cols.='<col width="'.$iCellWidth.'%" class="col-answers col-other">';
+
             $answer_head .= "<th><label for=\"answer{$myfname}\" class=\"answertext\">{$othertext}</label></th>";
             $answer_body .= "<td id='javatbd{$myfname}' >\n";
             $answer_body .= "<input class=\"text ".$kpclass."\" type=\"text\" name=\"$myfname\" id=\"answer$myfname\" value=\"";
@@ -2546,13 +2580,13 @@ function do_multiplechoice($ia)
                 $answer_body .= htmlspecialchars($dispVal,ENT_QUOTES);
             }
 
-            $answer_body .= "\" />\n";
+            $answer_body .= "\" /></td>\n";
             $inputnames[]=$myfname;
         }
         $answer .= "\n<table class=\"question subquestions-list questions-list array_multiple-opt\" summary=\"An array type question\" >\n"
         . '<colgroup class="col-responses">'.$answer_cols.'</colgroup>'
         . '<thead><tr>'.$answer_head.'</tr></thead>'
-        . '<body><tbody><tr class="array2 answers-list radio-list">'.$answer_body.'</tr></body>'
+        . '<tbody><tr class="array2 answers-list radio-list">'.$answer_body.'</tr></body>'
         . "</table>";
     }else{
     /* </PRACTICELAB> */
