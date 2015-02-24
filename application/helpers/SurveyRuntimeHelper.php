@@ -1161,7 +1161,7 @@ class SurveyRuntimeHelper {
 		echo "\n\n<!-- PRESENT THE INDEX -->\n";
 		echo CHtml::openTag('div', array('id' => 'index'));
 			echo CHtml::openTag('div', array('class' => 'container'));
-				echo CHtml::tag('h2', array(), $clang->gT("Question index"));
+				echo CHtml::tag('h2', array(), $clang->gT("Contents"));
 					foreach ($_SESSION[$LEMsessid]['grouplist'] as $key => $group)
 					{
 //						echo '<script>';
