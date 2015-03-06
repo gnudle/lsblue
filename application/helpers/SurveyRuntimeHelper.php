@@ -514,7 +514,7 @@ class SurveyRuntimeHelper {
                         //Automatically redirect the page to the "url" setting for the survey
                         header("Location: {$thissurvey['surveyls_url']}");
                     }
-                    elseif(trim($thissurvey['surveyls_endtext']) == '')
+                    elseif(trim($thissurvey['surveyls_url']) == '')
                     {
                         $sToken=(isset($_SESSION['survey_'.$surveyid]['token']))?$_SESSION['survey_'.$surveyid]['token']:"";
                         header("Location: {$aPracticelabVar['headerlocationurl']}{$aPracticelabVar['submitscript']}s={$surveyid}&t={$sToken}");
