@@ -282,14 +282,14 @@ class UploaderController extends SurveyController {
 		$header = getHeader($meta);
 
 		echo $header;
-
+		echo "\n</head>\n";
 		$fn = $param['fieldname'];
 		$qid = $param['qid'];
         $minfiles = sanitize_int($param['minfiles']);
         $maxfiles = sanitize_int($param['maxfiles']);
 		$qidattributes=getQuestionAttributeValues($qid);
 
-		$body = '
+		$body = '<body class="uploader">
 		        <div id="notice"></div>
 		        <input type="hidden" id="ia"                value="'.$fn.'" />
                 <input type="hidden" id="'.$fn.'_minfiles"          value="'.$minfiles.'" />

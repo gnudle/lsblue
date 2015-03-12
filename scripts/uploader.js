@@ -129,7 +129,6 @@ function doFileUpload(){
             $('#'+fieldname+'_licount').val(count);
 
             var image_extensions = new Array("gif", "jpeg", "jpg", "png", "swf", "psd", "bmp", "tiff", "jp2", "iff", "bmp", "xbm", "ico");
-
             if (metadata.success)
             {
                 $('#notice').html('<p class="success">'+metadata.msg+'</p>');
@@ -175,7 +174,7 @@ function doFileUpload(){
                 else
                     $('#uploadstatus').html(translt.errorMaxReached);
 
-                if (filecount >= maxfiles)
+                if (filecount > maxfiles)
                     $('#notice').html('<p class="success">'+translt.errorTooMuch+'</p>');
             }
             else
