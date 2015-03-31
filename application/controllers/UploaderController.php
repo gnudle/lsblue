@@ -165,7 +165,7 @@ class UploaderController extends SurveyController {
 		                        "name"          => rawurlencode(basename($filename)),
 		                        "ext"           => $ext,
 		                        "filename"      => $randfilename,
-		                        "msg"           => $clang->gT("The file has been successfuly uploaded.")
+		                        "msg"           => $clang->gT("Your upload is complete.")
 		                    );
 		            echo ls_json_encode($return);
 		            // TODO : unlink this file since this is just a preview
@@ -205,7 +205,7 @@ class UploaderController extends SurveyController {
 		                "name"    => rawurlencode(basename($filename)),
 		                "ext"     => $ext,
 		                "filename"      => $randfilename,
-		                "msg"     => $clang->gT("The file has been successfuly uploaded.")
+		                "msg"     => $clang->gT("Your upload is complete.")
 		            );
 
 		            echo ls_json_encode($return);
