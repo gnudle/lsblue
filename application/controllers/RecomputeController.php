@@ -92,7 +92,8 @@ class RecomputeController extends LSYii_Controller {
         }
         if(!$sToken && !$iResponseId && $bDoNext && $this->bIsAdmin)
         {
-            $oResponse=Survey_dynamic::model($iSurveyId)->find("submitdate IS NOT NULL",array("order"=>"id"));
+            $oResponse=Survey_dynamic::model($iSurveyId)->find(array('select'=>'id',"condition"=>"submitdate IS NOT NULL","order"=>"id"));
+
             if($oResponse)
                 $iResponseId=$oResponse->id;
             else
