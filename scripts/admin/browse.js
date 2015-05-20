@@ -8,7 +8,7 @@
 * is derivative of works licensed under the GNU General Public License or
 * other free or open source software licenses.
 * See COPYRIGHT.php for copyright notices and details.
-*
+*updateanswers
 * $Id: browse.js 10251 2011-06-10 17:33:49Z tpartner $
 */
 $(document).ready(function(){
@@ -146,10 +146,13 @@ $(document).ready(function(){
 function addUpdateResponse()
 {
     var docUrl=document.URL;
-    var jsonUrl="/q/recompute";// Need to use LS.url from plugin
     var aUrl=docUrl.split('/');
     var surveyid=aUrl[aUrl.indexOf("surveyid")+1];
     var controllers=aUrl[aUrl.indexOf("admin")+1];
+    if(typeof recomputeUrl!=='string')
+        return;
+    var jsonUrl=recomputeUrl;
+
     if($('table.detailbrowsetable').length>0)// Browse one response
     {
         // Find the response id

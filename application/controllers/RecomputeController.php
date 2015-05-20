@@ -225,63 +225,65 @@ class RecomputeController extends LSYii_Controller {
             }
             foreach($aOldAnswers as $column=>$value)
             {
-
-                $sColumnName=viewHelper::getFieldCode($aFieldMap[$column],array('LEMcompat'=>true));
-                if (in_array($column,$aInsertArray) && isset($aFieldMap[$column]))
+                if(isset($aFieldMap[$column]))
                 {
-                    $bRelevance=true;
-                    $sRelevance=isset($aFieldMap[$column]['relevance'])?trim($aFieldMap[$column]['relevance']):1;
-                    $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$sRelevance."}");
-                    if(($bDoRelevance || ($aFieldMap[$column]['type'] == '*' && $bDoRecompute)) && $sRelevance!="" && $sRelevance!="1" )
+                    $sColumnName=viewHelper::getFieldCode($aFieldMap[$column],array('LEMcompat'=>true));
+                    if (in_array($column,$aInsertArray) && isset($aFieldMap[$column]))
                     {
-                        // We need to fix column for multiple question : todo : attribute filter
-                        if(isset($_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]) && $_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]!=$column)
+                        $bRelevance=true;
+                        $sRelevance=isset($aFieldMap[$column]['relevance'])?trim($aFieldMap[$column]['relevance']):1;
+                        $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$sRelevance."}");
+                        if(($bDoRelevance || ($aFieldMap[$column]['type'] == '*' && $bDoRecompute)) && $sRelevance!="" && $sRelevance!="1" )
                         {
-                            $sParentSGQ=$_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column];
-                            $aParentSGQ=explode('X',$sParentSGQ);
-                            if(isset($aParentSGQ[2]))
+                            // We need to fix column for multiple question : todo : attribute filter
+                            if(isset($_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]) && $_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column]!=$column)
                             {
-                                $oParentQuestion=Questions::model()->find('qid=:qid and language=:language',array(':qid'=>$aParentSGQ[2],':language'=>$thissurvey['language']));
-                                if($oParentQuestion)
+                                $sParentSGQ=$_SESSION['survey_'.$surveyid]['fieldnamesInfo'][$column];
+                                $aParentSGQ=explode('X',$sParentSGQ);
+                                if(isset($aParentSGQ[2]))
                                 {
-                                    $sRelevance=trim($oParentQuestion->relevance);
-                                    $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$sRelevance."}");
+                                    $oParentQuestion=Questions::model()->find('qid=:qid and language=:language',array(':qid'=>$aParentSGQ[2],':language'=>$thissurvey['language']));
+                                    if($oParentQuestion)
+                                    {
+                                        $sRelevance=trim($oParentQuestion->relevance);
+                                        $bRelevance= (bool)LimeExpressionManager::ProcessString("{".$sRelevance."}");
+                                    }
                                 }
                             }
-                        }
-                        if(!$bRelevance)
-                        {
-                            if(!is_null($oResponse->$column))
+                            if(!$bRelevance)
                             {
-                                $updatedValues['old'][$sColumnName]=$oResponse->$column;
-                                $updatedValues['new'][$sColumnName]=null;
-                                if($oResponse->$column){
-                                    $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>NULL";
+                                if(!is_null($oResponse->$column))
+                                {
+                                    $updatedValues['old'][$sColumnName]=$oResponse->$column;
+                                    $updatedValues['new'][$sColumnName]=null;
+                                    if($oResponse->$column){
+                                        $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>NULL";
+                                    }
                                 }
+                                $oResponse->$column= null;
+                                // Set relevanceStatus to false
+                                $_SESSION['survey_'.$surveyid][$column]=NULL;
+                                $_SESSION['survey_'.$surveyid]['relevanceStatus'][$aFieldMap[$column]['qid']]=false;
                             }
-                            $oResponse->$column= null;
-                            // Set relevanceStatus to false
-                            $_SESSION['survey_'.$surveyid][$column]=NULL;
-                            $_SESSION['survey_'.$surveyid]['relevanceStatus'][$aFieldMap[$column]['qid']]=false;
-                        }
-                        else
-                        {
-                            $_SESSION['survey_'.$surveyid]['relevanceStatus'][$aFieldMap[$column]['qid']]=true;
-                        }
-                    }
-                    if ($bDoRecompute && $aFieldMap[$column]['type'] == '*' && $bRelevance)
-                    {
-                        $oldVal=$oResponse->$column;
-                        $newVal=$oResponse->$column=LimeExpressionManager::ProcessString($aFieldMap[$column]['question'],$aFieldMap[$column]['qid'],array(),false,3,1,false,true,true);
-                        if($oldVal!=$newVal)
-                        {
-                            if(!is_null($oldVal))
-                                $updatedValues['old'][$sColumnName]=$oldVal;
                             else
-                                $updatedValues['old'][$sColumnName]="NULL";
-                            $updatedValues['new'][$sColumnName]=$newVal;
-                            $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>".$updatedValues['new'][$sColumnName];
-                            $_SESSION['survey_'.$surveyid][$column]=$newVal;
+                            {
+                                $_SESSION['survey_'.$surveyid]['relevanceStatus'][$aFieldMap[$column]['qid']]=true;
+                            }
+                        }
+                        if ($bDoRecompute && $aFieldMap[$column]['type'] == '*' && $bRelevance)
+                        {
+                            $oldVal=$oResponse->$column;
+                            $newVal=$oResponse->$column=LimeExpressionManager::ProcessString($aFieldMap[$column]['question'],$aFieldMap[$column]['qid'],array(),false,3,1,false,true,true);
+                            if($oldVal!=$newVal)
+                            {
+                                if(!is_null($oldVal))
+                                    $updatedValues['old'][$sColumnName]=$oldVal;
+                                else
+                                    $updatedValues['old'][$sColumnName]="NULL";
+                                $updatedValues['new'][$sColumnName]=$newVal;
+                                $updatedInfoArray[$sColumnName]=$updatedValues['old'][$sColumnName]."=>".$updatedValues['new'][$sColumnName];
+                                $_SESSION['survey_'.$surveyid][$column]=$newVal;
+                            }
                         }
                     }
                 }

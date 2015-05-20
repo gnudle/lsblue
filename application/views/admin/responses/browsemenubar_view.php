@@ -113,3 +113,8 @@
         </div>
     </div>
 </div>
+<?php
+$recomputeUrl=Yii::app()->createUrl("recompute");
+Yii::app()->clientScript->registerScript('recomputeUrl',"var recomputeUrl='{$recomputeUrl}';\n",CClientScript::POS_BEGIN);
+
+?>
