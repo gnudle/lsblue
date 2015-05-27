@@ -194,22 +194,22 @@ class dataentry extends Survey_Common_Action
                 : array_combine($aFieldnames, $fieldvalues));
                 foreach ($datefields as $datefield)
                 {
-                    if (is_null(@$fielddata[ $datefield ])) {
+                    if (empty($fielddata[ $datefield ]) || $fielddata[$datefield] == '{question_not_shown}') {
                         unset($fielddata[ $datefield ]);
                     }
                 }
 
                 foreach ($numericfields as $numericfield)
                 {
-                    if ($fielddata[ $numericfield ] == '') {
+                    if (is_null($fielddata[ $numericfield ]) || $fielddata[$numericfield] == '' || $fielddata[$numericfield] == '{question_not_shown}') {
                         unset($fielddata[ $numericfield ]);
                     }
                 }
 
-                if (isset($fielddata['submitdate']) && $fielddata['submitdate'] == 'NULL') {
+                if (isset($fielddata['submitdate']) && ($fielddata['submitdate'] == 'NULL' || $fielddata['submitdate'] == '{question_not_shown}') ) {
                     unset ($fielddata['submitdate']);
                 }
-                if ($fielddata['lastpage'] == '') $fielddata['lastpage'] = '0';
+                if (empty($fielddata['lastpage'])) $fielddata['lastpage'] = '0';
 
                 $recordexists = false;
                 if (isset($fielddata['id'])) {
@@ -223,20 +223,25 @@ class dataentry extends Survey_Common_Action
                             continue;
                         }
                         if (Yii::app()->request->getPost('insert') == "replace") {
-                            $result = $survey->deleteSomeRecords(array('id' => $fielddata['id']));
+                            $result = $survey->deleteAll("id=:id",array(':id' => $fielddata['id']));
+                            $recordexists = false;
+                        }
+                        if (Yii::app()->request->getPost('insert') == "renumber") {
+                            unset($fielddata['id']);
                             $recordexists = false;
                         }
                     }
                 }
 
-                if (Yii::app()->request->getPost('insert') == "renumber") {
-                    unset($fielddata['`id`']);
-                }
-
-                if (isset($fielddata['`id`'])) {
+                if (isset($fielddata['id'])) {
                     switchMSSQLIdentityInsert("survey_$surveyid", true);
                 }
-
+                foreach($fielddata as $key=>$value)
+                {
+                    if($value=='{question_not_shown}')
+                        unset($fielddata[$key]);
+                }
+;
                 $result = $survey->insertRecords($fielddata);
 
                 if (isset($fielddata['id'])) {
@@ -2403,6 +2408,7 @@ class dataentry extends Survey_Common_Action
             $fieldvalues[]="";
         }
 
+
         // Sometimes columns with nothing in them get added by excel
         while ( count($fieldnames) < count($fieldvalues) &&
         trim( $fieldvalues[count($fieldvalues)-1] ) == "" )
@@ -2412,10 +2418,10 @@ class dataentry extends Survey_Common_Action
 
         // Make this safe for DB (*after* we undo first excel's
         // and then our escaping).
-        foreach ($fieldvalues as &$sValue)
-        {
-            if ($sValue=='{question_not_shown}') $sValue=null;
-        }
+        //~ foreach ($fieldvalues as &$sValue)
+        //~ {
+            //~ if ($sValue=='{question_not_shown}') $sValue=null;
+        //~ }
 
         return $fieldvalues;
     }
